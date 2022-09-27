@@ -4,7 +4,6 @@ import Chat from '../../components/Chat'
 import styled from 'styled-components'
 import Media from '../../utils/media'
 
-
 const HomeChat = styled.div`
   background-color: #a7bcff;
   height: 100vh;
@@ -12,7 +11,6 @@ const HomeChat = styled.div`
   align-items: center;
   justify-content: center;
 `
-
 const HomeContainer = styled.div`
   border: 1px solid white;
   border-radius: 10px;

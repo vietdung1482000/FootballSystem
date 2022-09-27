@@ -1,5 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../../firebase';
+
 
 const FormContainer = styled.div`
     background-image: url("https://res.cloudinary.com/dgei1mnlr/image/upload/v1663305598/Caps2/bg_nyjhye.png");
@@ -14,7 +18,6 @@ const FormContainer = styled.div`
     align-items: center;
     justify-content: center;
 `
-
 const FormWrapper = styled.div`
     width: 350px;
     height: auto;
@@ -96,7 +99,7 @@ const FormWrapper = styled.div`
     }
 `
 const Button = styled.button`
-    width: 330px;
+    width: 350px;
     background-color: #7b96ec;
     color: white;
     padding: 10px;
@@ -111,20 +114,38 @@ const Button = styled.button`
 `
 
 export default function Login() {
+
+    const [err, setErr] = useState(false);
+    const navigate = useNavigate();
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const email = e.target[0].value;
+        const password = e.target[1].value;
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate("/");
+        } catch (err) {
+            setErr(true);
+        }
+    };
+
     return (
         <FormContainer>
             <FormWrapper>
                 <span className="logo">Sign In</span>
                 <span className="title">Login to manage your account</span>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <input type="email" placeholder="email" />
                     <input type="password" placeholder="password" />
                     <div className="checkbox">
                         <input type="checkbox" value="lsRememberMe" id="rememberMe" /> <label for="rememberMe">Remember me</label>
                     </div>
                     <Button>Sign In</Button>
+                    {err && <span>Something went wrong!</span>}
                 </form>
-                <p>You don't have a account? <a href="/signup">Sign Up</a></p>
+                <p>You don't have a account? <Link to="/register">Register</Link></p>
                 <p><a href="/register">Forget password?</a></p>
             </FormWrapper>
         </FormContainer>

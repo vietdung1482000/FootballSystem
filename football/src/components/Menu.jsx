@@ -25,6 +25,7 @@ const MenuTop = styled.div`
       text-align: center;
       color: #FFFFFF;
       margin-left: 300px;
+      cursor: pointer;
       p{
         position: absolute;
         left: 320px;
@@ -44,6 +45,7 @@ const MenuTop = styled.div`
       text-decoration: none;
       color: #000000;
       margin-left: 15px;
+      cursor: pointer;
     }
     .list_menu {
       margin-left: 5px;
@@ -107,10 +109,10 @@ export default function Menu() {
   return (
     <MenuTop>
       <div className="container">
-        <a className="symbol" href="#">
+        <a className="symbol" to="/">
           <p>F</p>
         </a>
-        <a className="logo" href="#" alt="">Footbal</a>
+        <a className="logo" to="/" alt="">Footbal</a>
         <div className="list_menu">
           <ul className="list_item">
             <li className="item">

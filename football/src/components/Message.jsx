@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import styled from 'styled-components'
+import { AuthContext } from '../context/AuthContext'
+import { ChatContext } from '../context/ChatContext'
 
 const MessagePage = styled.div`
   display: flex;
@@ -55,16 +57,34 @@ const MessagePage = styled.div`
   }
 
 `
-export default function Message() {
+export default function Message({ message }) {
+
+  const { currentUser } = useContext(AuthContext)
+  const { data } = useContext(ChatContext)
+
+
+  const ref = useRef()
+
+  useEffect(() => {
+    ref.current?.scrollIntoView({ behavior: "smooth" })
+  }, [message]);
+
   return (
-    <MessagePage className='owner'>
+    <MessagePage ref={ref} className={`${message.senderId === currentUser.uid && "owner"}`}>
       <div className="messageInfo">
-        <img src="https://i.pinimg.com/564x/ee/de/19/eede196025d0807f66352d9b119e6437.jpg" alt="" />
+        <img
+          src={
+            message.senderId === currentUser.uid
+              ? currentUser.photoURL
+              : data.user.photoURL
+          }
+          alt=""
+        />
         <span>just now</span>
       </div>
       <div className="messageContent">
-        <p>hellloo</p>
-        <img src="https://i.pinimg.com/564x/ee/de/19/eede196025d0807f66352d9b119e6437.jpg" alt="" />
+        <p>{message.text}</p>
+        {message.img && <img src={message.img} alt="" />}
       </div>
     </MessagePage>
   )

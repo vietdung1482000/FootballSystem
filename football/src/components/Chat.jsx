@@ -5,6 +5,8 @@ import Add from '../img/add.png'
 import More from '../img/more.png'
 import Messages from './Messages'
 import Input from './Input'
+import { useContext } from 'react'
+import { ChatContext } from '../context/ChatContext'
 
 const ChatPage = styled.div`
   flex: 2;
@@ -32,10 +34,13 @@ const ChatPage = styled.div`
 `
 
 export default function Chat() {
+
+  const { data } = useContext(ChatContext)
+
   return (
     <ChatPage>
       <div className="chatInfo">
-        <span>dungvv</span>
+        <span>{data.user?.displayName}</span>
         <div className="chatIcons">
           <img src={Cam} alt="" />
           <img src={Add} alt="" />

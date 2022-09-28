@@ -145,21 +145,21 @@ export default function Register() {
     return (
         <FormContainer>
             <FormWrapper>
-                <span className="logo">Create your account</span>
-                <span className="title">Create an account to manage</span>
+                <span className="logo">Tạo tài khoản của bạn</span>
+                <span className="title">Tạo tài khoản cá nhân</span>
                 <form onSubmit={handleSubmit}>
-                    <input type="text" placeholder="your name" />
-                    <input type="email" placeholder="email" />
-                    <input type="password" placeholder="password" />
+                    <input type="text" placeholder="Tên của bạn" />
+                    <input type="email" placeholder="Nhập địa chỉ email" />
+                    <input type="password" placeholder="Nhập mật khẩu" />
                     <input style={{ display: "none" }} type="file" id="file" />
                     <label htmlFor="file">
                         <img src={addAvatar} alt="" />
                         <span>Add an avatar</span>
                     </label>
                     <Button>Sign Up</Button>
-                    {err && <span>Something went wrong!</span>}
+                    {err && <span>Đã xảy ra lỗi!</span>}
                 </form>
-                <p>You do have a account? <Link to="/register">Sign In</Link></p>
+                <p>Đã có sẵn tài khoản? <Link to="/register">Đăng nhập</Link></p>
             </FormWrapper>
         </FormContainer>
     )

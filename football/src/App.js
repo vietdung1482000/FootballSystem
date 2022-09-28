@@ -2,6 +2,7 @@ import Menu from "./components/Menu";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import HomePage from './pages/HomePage/HomePage'
 import {
   BrowserRouter,
   Routes,
@@ -10,6 +11,7 @@ import {
 } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import SelectModule from "./components/SelectModule";
 
 function App() {
 
@@ -25,8 +27,8 @@ function App() {
 
   return (
     <div className="app">
-      <Menu />
       <BrowserRouter>
+      <Menu />
         <Routes>
           <Route path="/">
             <Route index element={
@@ -36,6 +38,8 @@ function App() {
             } />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="home" element={<HomePage />} />
+            <Route path="selectModule" element={<SelectModule />} />
           </Route>
         </Routes>
       </BrowserRouter>

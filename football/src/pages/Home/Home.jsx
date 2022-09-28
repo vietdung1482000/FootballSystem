@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Media from '../../utils/media'
 
 const HomeChat = styled.div`
-  background-color: #a7bcff;
+  /* background-color: #a7bcff; */
   height: 100vh;
   display: flex;
   align-items: center;

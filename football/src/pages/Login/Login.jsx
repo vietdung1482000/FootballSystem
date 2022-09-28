@@ -87,20 +87,21 @@ const FormWrapper = styled.div`
         align-items: center;
         text-align: center;
         a {
-            color: #5d5b8d;
+            color: #000000;
             font-weight: bold;
             font-family: 'Poppins';
             font-style: normal;
             line-height: 24px;
+            text-decoration: none;
         }
         a:hover {
-            color: #000000;
+            color: #119468;
         }
     }
 `
 const Button = styled.button`
     width: 350px;
-    background-color: #7b96ec;
+    background: #119468;
     color: white;
     padding: 10px;
     font-weight: bold;
@@ -125,7 +126,7 @@ export default function Login() {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            navigate("/");
+            navigate("/home");
         } catch (err) {
             setErr(true);
         }
@@ -134,19 +135,19 @@ export default function Login() {
     return (
         <FormContainer>
             <FormWrapper>
-                <span className="logo">Sign In</span>
-                <span className="title">Login to manage your account</span>
+                <span className="logo">Đăng Nhập</span>
+                <span className="title">Đăng nhập để quản lý tài khoản của bạn</span>
                 <form onSubmit={handleSubmit}>
                     <input type="email" placeholder="email" />
                     <input type="password" placeholder="password" />
                     <div className="checkbox">
-                        <input type="checkbox" value="lsRememberMe" id="rememberMe" /> <label for="rememberMe">Remember me</label>
+                        <input type="checkbox" value="lsRememberMe" id="rememberMe" /> <label for="rememberMe">Ghi Nhớ Mật Khẩu</label>
                     </div>
-                    <Button>Sign In</Button>
-                    {err && <span>Something went wrong!</span>}
+                    <Button>Đăng Nhập</Button>
+                    {err && <span>Đã xảy ra lỗi!</span>}
                 </form>
-                <p>You don't have a account? <Link to="/register">Register</Link></p>
-                <p><a href="/register">Forget password?</a></p>
+                <p>Bạn chưa có tài khoản? <Link to="/register">Đăng Ký</Link></p>
+                <p><Link to="/">Quên Mật Khẩu?</Link></p>
             </FormWrapper>
         </FormContainer>
     )

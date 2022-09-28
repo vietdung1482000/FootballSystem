@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link  } from 'react-router-dom';
 
 const MenuTop = styled.div`
   width: 100%;
   .container {
     width: 100%;
-    position: fixed;
+    /* position: fixed; */
     display: flex;
     background: white;
 
@@ -109,26 +110,26 @@ export default function Menu() {
   return (
     <MenuTop>
       <div className="container">
-        <a className="symbol" to="/">
+        <Link className="symbol" to="/home">
           <p>F</p>
-        </a>
-        <a className="logo" to="/" alt="">Footbal</a>
+        </Link>
+        <Link className="logo" to="/home" alt="">Football</Link>
         <div className="list_menu">
           <ul className="list_item">
             <li className="item">
-              <a className="link" href="#">Home Page</a>
+              <Link className="link" to="/home">Trang Chủ</Link>
             </li>
             <li className="item">
-              <a className="link" href="#">Match</a>
+              <Link className="link" to="/match">Thi Đấu</Link>
             </li>
           </ul>
         </div>
         <div className="Btn">
           <button className="item">
-            <a href="http://google.com">Sign In</a>
+            <Link to="/login">Đăng Nhập</Link>
           </button>
           <button className="item">
-            <a href="http://google.com">Sign Up</a>
+            <Link to="/selectModule">Đăng Ký</Link>
           </button>
         </div>
       </div>

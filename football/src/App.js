@@ -2,7 +2,8 @@ import Menu from "./components/Menu";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import HomePage from './pages/HomePage/HomePage'
+import HomePage from './pages/HomePage/HomePage';
+import LandingPage from "./pages/LandingPage/LandingPage";
 import {
   BrowserRouter,
   Routes,
@@ -12,6 +13,7 @@ import {
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import SelectModule from "./components/SelectModule";
+import RegisterBusiness from "./pages/Register/RegisterBusiness";
 
 function App() {
 
@@ -27,8 +29,10 @@ function App() {
 
   return (
     <div className="app">
+      
       <BrowserRouter>
       <Menu />
+      <LandingPage />
         <Routes>
           <Route path="/">
             <Route index element={
@@ -40,6 +44,7 @@ function App() {
             <Route path="register" element={<Register />} />
             <Route path="home" element={<HomePage />} />
             <Route path="selectModule" element={<SelectModule />} />
+            <Route path="resbusiness" element={<RegisterBusiness />} />
           </Route>
         </Routes>
       </BrowserRouter>

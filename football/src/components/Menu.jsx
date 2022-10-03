@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { Link  } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import isEmpty from "lodash"
 
 const MenuTop = styled.div`
   width: 100%;
@@ -107,7 +109,12 @@ const MenuTop = styled.div`
 `
 
 export default function Menu() {
+
+  const { currentUser } = useContext(AuthContext)
+  console.log(currentUser)
+
   return (
+    
     <MenuTop>
       <div className="container">
         <Link className="symbol" to="/home">
@@ -124,14 +131,25 @@ export default function Menu() {
             </li>
           </ul>
         </div>
+
+
+
         <div className="Btn">
-          <button className="item">
-            <Link to="/login">Đăng Nhập</Link>
-          </button>
-          <button className="item">
-            <Link to="/selectModule">Đăng Ký</Link>
-          </button>
+          {!isEmpty(currentUser)
+            ?
+            <div>
+              <button className="item"><Link to="/login">Đăng Nhập</Link></button>
+              <button className="item"><Link to="/selectModule">Đăng Ký</Link></button>
+            </div>
+            :
+            <div style={{ display: "flex" }}>
+              <h1 style={{ fontSize: "14px", marginRight: "15px", cursor: "pointer" }}>{currentUser?.displayName}</h1>
+              <img style={{ width: "30px", height: "30px", border: "1px solid #000", borderRadius: "100%", cursor: "pointer" }} src={currentUser?.photoURL} alt="" />
+            </div>
+          }
         </div>
+
+
       </div>
     </MenuTop>
   )

@@ -100,7 +100,7 @@ export default function SelectModule() {
                     <Link to="/register">
                         <img src={USER} alt="" />
                     </Link>
-                    <Link to="/register">
+                    <Link to="/resbusiness">
                         <img src={BO} alt="" />
                     </Link>
                 </div>

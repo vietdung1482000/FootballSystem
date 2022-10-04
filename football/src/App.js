@@ -29,10 +29,10 @@ function App() {
 
   return (
     <div className="app">
-      
+
       <BrowserRouter>
-      <Menu />
-      <LandingPage />
+        <Menu />
+        {/* <LandingPage /> */}
         <Routes>
           <Route path="/">
             <Route index element={

@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import isEmpty from "lodash"
+import { signOut } from 'firebase/auth'
+import { auth } from '../firebase';
 
 const MenuTop = styled.div`
   width: 100%;
@@ -104,6 +105,39 @@ const MenuTop = styled.div`
         background-color: #27ae60;
       }
 
+      .userInfo {
+        display: flex;
+        position: relative;
+        /* display: inline-block; */
+        h1{
+          font-size: 14px;
+          margin-right: 15px;
+          cursor: pointer;
+        }
+
+        img {
+          width: 30px;
+          height: 30px;
+          border: 1px solid #000;
+          border-radius: 100%;
+          cursor: pointer;
+        }
+
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          top: 40px;
+          left: 40px;
+          z-index: 1;
+          cursor: pointer;
+        }
+
+        &:hover .dropdown-content {
+          display: block;
+        }
+
+      }
+
     }
   }
 `
@@ -135,16 +169,19 @@ export default function Menu() {
 
 
         <div className="Btn">
-          {!isEmpty(currentUser)
+          {currentUser === null
             ?
             <div>
               <button className="item"><Link to="/login">Đăng Nhập</Link></button>
               <button className="item"><Link to="/selectModule">Đăng Ký</Link></button>
             </div>
             :
-            <div style={{ display: "flex" }}>
-              <h1 style={{ fontSize: "14px", marginRight: "15px", cursor: "pointer" }}>{currentUser?.displayName}</h1>
-              <img style={{ width: "30px", height: "30px", border: "1px solid #000", borderRadius: "100%", cursor: "pointer" }} src={currentUser?.photoURL} alt="" />
+            <div className="userInfo">
+              <h1>{currentUser?.displayName}</h1>
+              <img src={currentUser?.photoURL} alt="" />
+              <div className="dropdown-content">
+                <button onClick={() => signOut(auth)}>logout</button>
+              </div>
             </div>
           }
         </div>

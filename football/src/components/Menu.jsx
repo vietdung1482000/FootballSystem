@@ -56,6 +56,7 @@ const MenuTop = styled.div`
       .list_item {
         display: flex;
         font-family: 'Poppins';
+        margin-top: 15px;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
@@ -148,17 +149,20 @@ export default function Menu() {
   console.log(currentUser)
 
   return (
-    
+
     <MenuTop>
-      <div className="container">
+      <div className="container align-items-center">
         <Link className="symbol" to="/home">
-          <p>F</p>
+          <div className='bases__margin--left20'>F</div>
         </Link>
         <Link className="logo" to="/home" alt="">Football</Link>
         <div className="list_menu">
-          <ul className="list_item">
+          <ul className="list_item ">
             <li className="item">
               <Link className="link" to="/home">Trang Chủ</Link>
+            </li>
+            <li className="item">
+              <Link className="link" to="/detail">Sân bóng</Link>
             </li>
             <li className="item">
               <Link className="link" to="/match">Thi Đấu</Link>

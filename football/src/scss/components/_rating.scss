@@ -1,0 +1,27 @@
+.components {
+    &__rating {
+        border: 1px solid rgba(35, 35, 36, 0.322) !important;
+        border-radius: 25px;
+
+        &-comment {
+            width: 1270px;
+            &_input {
+                padding: 15px;
+                border: unset;
+                &:focus {
+                    border: unset;
+                    outline: unset !important;
+                }
+            }
+        }
+
+        &-button {
+            width: 169px;
+            height: 35px;
+            background: #119468;
+            border-radius: 25px;
+            color: white;
+            margin: 10px 15px 20px 0;
+        }
+    }
+}

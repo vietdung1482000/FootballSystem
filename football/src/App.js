@@ -35,19 +35,19 @@ function App() {
         <Menu />
         {/* <LandingPage /> */}
         <Routes>
-          <Route path="/">
+          <Route path="chat">
             <Route index element={
               <ProtectedRoute>
                 <Home />
               </ProtectedRoute>
             } />
+          </Route>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="detail" element={<DetailPage />} />
             <Route path="home" element={<HomePage />} />
             <Route path="selectModule" element={<SelectModule />} />
             <Route path="resbusiness" element={<RegisterBusiness />} />
-          </Route>
         </Routes>
       </BrowserRouter>
     </div>

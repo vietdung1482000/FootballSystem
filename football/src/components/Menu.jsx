@@ -28,11 +28,11 @@ const MenuTop = styled.div`
       align-items: center;
       text-align: center;
       color: #FFFFFF;
-      margin-left: 300px;
+      margin-left: 250px;
       cursor: pointer;
       p{
         position: absolute;
-        left: 320px;
+        left: 270px;
         top: -30px;
       }
     }
@@ -81,7 +81,7 @@ const MenuTop = styled.div`
     .Btn {
       display: flex;
       position: absolute;
-      right: 200px;
+      right: 150px;
       top: 15px;      
       
       button {

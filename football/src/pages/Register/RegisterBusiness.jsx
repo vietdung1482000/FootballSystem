@@ -103,9 +103,6 @@ const ResBusiness = styled.div`
 
         }
 
-
-
-
         .bg {
             position: absolute;
             height: 680px;

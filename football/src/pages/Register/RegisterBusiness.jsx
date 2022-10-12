@@ -11,7 +11,7 @@ const ResBusiness = styled.div`
         .form {
             position: absolute;
             width: 670px;
-            height: 900px;
+            height: auto;
             left: 325px;
             top: 68px;
             z-index: 99;
@@ -33,6 +33,7 @@ const ResBusiness = styled.div`
                     align-items: center;
                     color: #FFFFFF;
                     margin-left: 30px;
+                    margin-top: 15px;
                 }
             }
 
@@ -101,9 +102,6 @@ const ResBusiness = styled.div`
             }
 
         }
-
-
-
 
         .bg {
             position: absolute;

@@ -152,14 +152,14 @@ export default function Menu() {
 
     <MenuTop>
       <div className="container align-items-center">
-        <Link className="symbol" to="/home">
+        <Link className="symbol" to="/">
           <div className='bases__margin--left20'>F</div>
         </Link>
-        <Link className="logo" to="/home" alt="">Football</Link>
+        <Link className="logo" to="/" alt="">Football</Link>
         <div className="list_menu">
           <ul className="list_item ">
             <li className="item">
-              <Link className="link" to="/home">Trang Chủ</Link>
+              <Link className="link" to="/">Trang Chủ</Link>
             </li>
             <li className="item">
               <Link className="link" to="/detail">Sân bóng</Link>

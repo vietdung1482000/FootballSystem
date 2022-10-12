@@ -22,8 +22,8 @@ const SelectM = styled.div`
 
             p {
                 position: absolute;
-                left: 95px;
-                top: 0;
+                left: 70px;
+                top: 10px;
                 z-index: 999;
 
                 font-family: 'Poppins';
@@ -46,11 +46,11 @@ const SelectM = styled.div`
             background: #FFFFFF;
             box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
             border-radius: 30px;
-            
+            display: flex;
             img {
+                width: 300px;
+                height: 300px;
                 margin-top: 80px;
-                width: 130px;
-                height: 189px;
                 padding: 80px;
                 cursor: pointer;
             }

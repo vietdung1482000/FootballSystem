@@ -1,0 +1,35 @@
+.components {
+    &__suggestionFootball {
+        width: 300px;
+        height: 439px;
+        background: url('../../img/football.png') ;
+        background-size: cover;
+        box-shadow: none !important;
+        .information{
+            height: 185px;
+            width: 290px;
+            margin-left: 14px;
+            margin-bottom: 14px;
+            border-bottom-left-radius: 2rem;
+            border-bottom-right-radius: 2rem;
+            background:  rgba(5, 35, 25, 0.8) !important;
+            border-radius: 0px 0px 25px 25px;
+            padding-left: 30px;
+            .title{
+                color: #ffffff;
+                font-weight: 700;
+                font-size: 20px;
+                line-height: 30px;
+            }
+            .button{
+                width: 230px;
+                border-radius:  25px;
+                height: 45px;
+                background: linear-gradient(91.04deg, #119468 0%, #F2D25E 100%);
+                color: white;
+                font-weight: 700;
+                font-size: 16px;
+            }
+        }
+    }
+}

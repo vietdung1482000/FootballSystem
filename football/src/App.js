@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import HomePage from './pages/HomePage/HomePage';
 import LandingPage from "./pages/LandingPage/LandingPage";
+import DetailPage from './pages/Detail/Detail'
 import {
   BrowserRouter,
   Routes,
@@ -43,7 +44,8 @@ function App() {
           </Route>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="" element={<HomePage />} />
+            <Route path="detail" element={<DetailPage />} />
+            <Route path="home" element={<HomePage />} />
             <Route path="selectModule" element={<SelectModule />} />
             <Route path="resbusiness" element={<RegisterBusiness />} />
         </Routes>

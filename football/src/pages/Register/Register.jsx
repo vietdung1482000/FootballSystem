@@ -21,7 +21,7 @@ const FormContainer = styled.div`
     justify-content: center;
 `
 const FormWrapper = styled.div`
-    width: 350px;
+    width: auto;
     height: auto;
     background-color: white;
     padding: 20px 60px;

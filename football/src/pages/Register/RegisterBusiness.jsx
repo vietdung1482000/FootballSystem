@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import BG from '../../img/bg.png'
 import addAvatar from '../../img/addAvatar.png';
+import { useNavigate } from 'react-router-dom';
+import { collection, addDoc } from "firebase/firestore"
+import { db } from "../../firebase";
 
 const ResBusiness = styled.div`
     width: 100%;
@@ -58,7 +61,6 @@ const ResBusiness = styled.div`
                     border-radius: 30px;
                 }
                 form {
-                    display: flex;
                     width: 100%;
                     margin-left: 10px;
                     padding: 10px;
@@ -71,11 +73,11 @@ const ResBusiness = styled.div`
                         float: right;
                     }
                     input {
-                        padding: 20px;
+                        padding: 15px;
                         background: #FFFFFF;
                         box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
                         border-radius: 30px;
-                        margin: 25px;
+                        margin: 20px;
                     }
 
                     textarea {
@@ -134,6 +136,51 @@ const Button = styled.button`
 
 
 export default function RegisterBusiness() {
+
+    // const db = getFirestore()
+    const [err, setErr] = useState(false);
+    const navigate = useNavigate();
+
+    const [nameField, setNameField] = useState("");
+    const [phone, setPhone] = useState("");
+    const [infoField,setInfoField] = useState("");
+    // const file = e.target[3].files[0];
+    const [nameSingleField,setNameSingleField] = useState("");
+    const [timeOpen, setTimeOpen] = useState("");
+    const [timeClose, setTimeClose] = useState("");
+    const [address, setAddress] = useState("");
+    const [detail, setDetail] = useState("")
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const colRef = collection(db, "business")
+        await addDoc(colRef, {
+            nameField: nameField,
+            phone: phone,
+            infoField: infoField,
+            nameSingleField: nameSingleField,
+            timeOpen: timeOpen,
+            timeClose: timeClose,
+            address: address,
+            detail: detail
+        })
+        .then(()=> {
+            alert("Register success <3");
+            navigate("/login");
+        })
+        .catch(err => {
+            alert(err.message)
+        })
+        setNameField('')
+        setPhone('')
+        setInfoField('')
+        setNameSingleField('')
+        setTimeOpen('')
+        setTimeClose('')
+        setAddress('')
+        setDetail('')
+    };
+
     return (
         <ResBusiness>
             <div className="resBusiness">
@@ -143,11 +190,11 @@ export default function RegisterBusiness() {
                     </div>
                     <div className="content">
                         <p>Nhập thông tin sân bóng</p>
-                        <form >
+                        <form onSubmit={handleSubmit}>
                             <div className="left">
-                                <input type="text" placeholder="Tên sân bóng" />
-                                <input type="email" placeholder="Số điện thoại" />
-                                <textarea placeholder='Giới thiệu' width="48" height="48" />
+                                <input type="text" placeholder="Tên sân bóng" onChange={(e)=> setNameField(e.target.value)} value={nameField} />
+                                <input type="text" placeholder="Số điện thoại" onChange={(e)=> setPhone(e.target.value)} value={phone} />
+                                <textarea placeholder='Giới thiệu' width="48" height="48" type="text" onChange={(e)=> setInfoField(e.target.value)} value={infoField} />
                                 <input style={{ display: "none" }} type="file" id="file" />
                                 <div className="lg">
                                     <label htmlFor="file">
@@ -156,24 +203,17 @@ export default function RegisterBusiness() {
                                 </div>
                             </div>
 
-
                             <div className="right">
-                                <input type="email" placeholder="Tên từng sân" />
-                                <input type="text" placeholder="Thời gian mở" />
-                                <input type="text" placeholder="Thời gian đóng" />
-                                <input type="password" placeholder="Địa chỉ" />
-                                {/* <div class="custom-select" style={{ width: "200px" }}>
-                                    <select>
-                                        <option value="0">Loại Sân</option>
-                                        <option value="1">Sân 5</option>
-                                        <option value="1">Sân 7</option>
-                                        <option value="1">Sân 10</option>
-                                    </select>
-                                </div> */}
+                                <input type="text" placeholder="Tên từng sân" onChange={(e)=> setNameSingleField(e.target.value)} value={nameSingleField} />
+                                <input type="text" placeholder="Thời gian mở" onChange={(e)=> setTimeOpen(e.target.value)} value={timeOpen} />
+                                <input type="text" placeholder="Thời gian đóng" onChange={(e)=> setTimeClose(e.target.value)} value={timeClose} />
+                                <input type="text" placeholder="Địa chỉ" onChange={(e)=> setAddress(e.target.value)} value={address} />
                             </div>
+
+                            <textarea type="text" onChange={(e)=> setDetail(e.target.value)} value={detail} className="_detail" placeholder='Chi tiết' id="" cols="60" rows="10"></textarea> <br />
+                            <Button>Hoàn Tất</Button>
+                            {err && <span>Đã xảy ra lỗi!</span>}
                         </form>
-                        <textarea className="_detail" placeholder='Chi tiết' id="" cols="60" rows="10"></textarea> <br />
-                        <Button>Hoàn Tất</Button>
                     </div>
                 </div>
                 <div className="bg">

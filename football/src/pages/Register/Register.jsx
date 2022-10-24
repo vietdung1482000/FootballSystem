@@ -133,6 +133,7 @@ export default function Register() {
                         });
 
                         await setDoc(doc(db, "userChats", res.user.uid), {});
+                        alert("Register success <3")
                         navigate("/login");
                     });
                 }

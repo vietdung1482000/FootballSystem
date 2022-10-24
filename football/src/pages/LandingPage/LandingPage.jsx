@@ -1,9 +1,9 @@
-import React from 'react'
-import Box from '../../components/Box'
+import * as React from 'react';
 import styled from 'styled-components'
 import Location from '../../img/location.png'
 import Calender from '../../img/calendar.png'
 import Match from '../../img/archery-match.png'
+import SuggestionFootball from '../../components/layout/SuggestionFootball'
 
 const Landing = styled.div`
   width: 100%;
@@ -30,8 +30,8 @@ const Landing = styled.div`
       width: 50%;
       border: none;
       padding: 10px;
-      margin-top: 5px;
-      margin-left: 8px;
+      margin-top: 2px;
+      margin-left: 15px;
     }
 
     button {
@@ -102,27 +102,55 @@ const Landing = styled.div`
   }
 
   ._suggest{
-    margin-left: 250px;
     h1{
-      font-family: 'Poppins';
-      font-style: normal;
-      font-weight: 600;
-      font-size: 40px;
-      line-height: 60px;
-      display: flex;
-      align-items: center;
-      text-transform: capitalize;
-      
-      color: #2C3131;
+      margin-left: 250px;
+      margin-top: 50px;
     }
-    ._Card {
+
+    ._card {
+      margin-left: auto;
       display: flex;
+      width: 100%;
+      cursor: pointer;
+      ._cardImg {
+        width: 25%;
+      }
     }
+
   }
 
 `
 
 export default function LandingPage() {
+
+  const tempDataSuggest = [
+    {
+      tensan: 'sân bóng nguyễn hữu thọ',
+      location: ' 250 Nguyễn hữu thọ',
+      rate: 5
+    },
+    {
+      tensan: 'sân bóng nguyễn hữu thọ',
+      location: ' 250 Nguyễn hữu thọ',
+      rate: 4
+    },
+    {
+      tensan: 'sân bóng nguyễn hữu thọ',
+      location: ' 250 Nguyễn hữu thọ',
+      rate: 3
+    },
+    {
+      tensan: 'sân bóng nguyễn hữu thọ',
+      location: ' 250 Nguyễn hữu thọ',
+      rate: 5
+    },
+    {
+      tensan: 'sân bóng nguyễn hữu thọ',
+      location: ' 250 Nguyễn hữu thọ',
+      rate: 5
+    },
+  ]
+
   return (
     <Landing>
       <div className="_title">
@@ -159,11 +187,14 @@ export default function LandingPage() {
       </div>
       <div className="_suggest">
         <h1>Gợi ý sân bóng</h1>
-        <div className="_Card">
-          <Box />
-          <Box />
-          <Box />
-          <Box />
+        <div id="football" className="_card">
+          {tempDataSuggest.map((data, index) => {
+            return (
+                <div className="_cardImg" key={index}>
+                  <SuggestionFootball detail={data} />
+                </div>
+            )
+          })}
         </div>
       </div>
     </Landing>

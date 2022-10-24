@@ -12,6 +12,7 @@ const HomeStyle = styled.div`
       width: 60%;
       text-align: center;
       margin-top: 150px;
+      margin-left: 80px;
       font-family: 'Poppins';
       font-style: normal;
       font-weight: 700;
@@ -49,6 +50,7 @@ const HomeStyle = styled.div`
 
 const Button = styled.button`
     margin-top: 75px;
+    margin-left: 45px;
     width: 300px;
     color: white;
     padding: 10px;

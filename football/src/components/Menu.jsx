@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
@@ -91,6 +91,8 @@ const MenuTop = styled.div`
         width: 100px;
         height: 40px;
         margin-right: 20px;
+        color: #FFFFFF;
+        text-transform: capitalize;
         cursor: pointer;
         a{
           color: white;
@@ -127,7 +129,7 @@ const MenuTop = styled.div`
         .dropdown-content {
           display: none;
           position: absolute;
-          top: 40px;
+          top: 30px;
           left: 40px;
           z-index: 1;
           cursor: pointer;

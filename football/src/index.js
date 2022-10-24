@@ -7,12 +7,17 @@ import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './context/AuthContext';
 import { ChatContextProvider } from './context/ChatContext';
 
+import { Provider } from "react-redux";
+import {store} from './store/store'
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthContextProvider>
     <ChatContextProvider>
       <React.StrictMode>
-        <App />
+        <Provider store={ store }>
+          <App />
+        </Provider>
       </React.StrictMode>
     </ChatContextProvider>
   </AuthContextProvider>

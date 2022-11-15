@@ -1,5 +1,9 @@
+import { useState } from 'react';
 import Modal from 'react-modal'
 import { useForm } from "react-hook-form";
+import DatePicker from "react-datepicker";
+import { db } from '../firebase'
+
 import {
     ModalCancel,
     ModalSubmit,
@@ -12,14 +16,15 @@ import {
     customStyles
 } from '../StyledComponent/index'
 
-
 function FormModal(props) {
     const { register, handleSubmit } = useForm();
+    const [startDate, setStartDate] = useState(new Date());
 
-    const onSubmit = data => {
+    const onSubmit = async data => {
         if (data.Name && data.Date && data.Time) {
             props.onModalSubmit(data)
             props.openModal()
+            alert("bạn đã đăng ký thành công !!!")
         }
     }
 
@@ -31,34 +36,48 @@ function FormModal(props) {
             style={customStyles}
             contentLabel="Example Modal"
         >
-            <ModalHeader>Create Appointment</ModalHeader>
+            <ModalHeader>Book A Football Field</ModalHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <ModalBody>
-
                     <InputContainer>
-                        <InputSpan>Name:</InputSpan>
-                        <InputField {...register("Name")}></InputField>
+                        <InputSpan>Tên:</InputSpan>
+                        <InputField placeholder='Enter Name' {...register("Name", { required: 'error' })}></InputField>
                     </InputContainer>
                     <InputContainer>
-                        <InputSpan>Gender:</InputSpan>
-                        <InputField {...register("Gender")}></InputField>
+                        <InputSpan>Gmail:</InputSpan>
+                        <InputField placeholder='Enter Gmail' {...register("Gmail", { required: 'error' })}></InputField>
                     </InputContainer>
                     <InputContainer>
-                        <InputSpan>Age:</InputSpan>
-                        <InputField {...register("Age")}></InputField>
+                        <InputSpan>Điện Thoại:</InputSpan>
+                        <InputField placeholder='Enter Phone' {...register("PhoneUser", { required: 'this is requiredd' })}></InputField>
+                    </InputContainer>
+                    <p>-------------------------------------------</p>
+                    <h4 style={{fontSize: "24px", marginBottom: "20px"}}>Sân Bóng</h4>
+                    <InputContainer>
+                        <InputSpan>Tên Sân:</InputSpan>
+                        <InputField placeholder='Enter Name field' {...register("NameField", { required: 'this is requiredd' })}></InputField>
                     </InputContainer>
                     <InputContainer>
-                        <InputSpan>Date:</InputSpan>
-                        <InputField {...register("Date")} type="number" min="1" max="31" placeholder="Type a number 1 - 31"></InputField>
+                        <InputSpan>Điện Thoại:</InputSpan>
+                        <InputField placeholder='Enter Phone' {...register("Phone", { required: 'this is requiredd' })}></InputField>
                     </InputContainer>
                     <InputContainer>
-                        <InputSpan>Time:</InputSpan>
-                        <InputField {...register("Time")} type="number" min="1" max="12" placeholder="Type a number 1 - 12"></InputField>
+                        <InputSpan>Địa Chỉ:</InputSpan>
+                        <InputField placeholder='Enter Address' {...register("Address", { required: 'this is requiredd' })}></InputField>
+                    </InputContainer>
+                    <InputContainer>
+                        <InputSpan>Ngày Đặt:</InputSpan>
+                        {/* <DatePicker selected={startDate} {...register("Date", { required: 'this is requiredd' })} min="1" max="31" onChange={(date) => setStartDate(date)} /> */}
+                        <InputField {...register("Date", { required: 'this is requiredd' })} min="1" max="31" placeholder="Type a number 1 - 31"></InputField>
+                    </InputContainer>
+                    <InputContainer>
+                        <InputSpan>Thời Gian Đặt:</InputSpan>
+                        <InputField {...register("Time", { required: 'this is requiredd' })} min="1" max="24" type="number" placeholder="Type a number 1 - 24"></InputField>
                     </InputContainer>
                 </ModalBody>
                 <ModalFooter>
                     <ModalSubmit>Submit</ModalSubmit>
-                    <ModalCancel onClick={props.openModal}>Cancel</ModalCancel>
+                    <ModalCancel onClick={props.openModal}>X</ModalCancel>
                 </ModalFooter>
             </form>
         </Modal>

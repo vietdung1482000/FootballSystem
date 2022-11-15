@@ -5,7 +5,7 @@ import Appointment  from './AppointmentComponent';
 import { DateDataContainer, DateContainer, DateApointmentContainer } from '../StyledComponent/index';
 
 function DateComponent(props) {
-    const appointment = _.orderBy(props.userData, ['time'], ['asc']).map((data) => <Appointment Name={data.data.Name} Time={data.data.Time} />);
+    const appointment = _.orderBy(props.userData, ['time'], ['asc']).map((data) => <Appointment NameField={data.data.NameField} Name={data.data.Name} Time={data.data.Time} />);
     return (
         <DateDataContainer>
             <DateContainer>

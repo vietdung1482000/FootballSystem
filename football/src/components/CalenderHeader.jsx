@@ -26,16 +26,21 @@ function CalenderHeader(props) {
   return (
     <CalenderHeaderContainer>
       <DropdownContainer>
-        <Dropdown
-          options={yearOptions}
-          onChange={onYearSelect}
-          value={props.defaultYear}
-        />
-        <Dropdown
-          options={monthOptions}
-          onChange={onMonthSelect}
-          value={props.defaultMonth}
-        />
+        <div className='dropdownYear'>
+          <Dropdown
+            options={yearOptions}
+            onChange={onYearSelect}
+            value={props.defaultYear}
+          />
+        </div>
+
+        <div className='dropdownMonth'>
+          <Dropdown
+            options={monthOptions}
+            onChange={onMonthSelect}
+            value={props.defaultMonth}
+          />
+        </div>
       </DropdownContainer>
       <AppointmentButton onClick={openModal}>Create Appointment</AppointmentButton>
     </CalenderHeaderContainer>

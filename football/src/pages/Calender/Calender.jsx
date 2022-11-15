@@ -7,15 +7,7 @@ import CalenderHeader from '../../components/CalenderHeader'
 import DateComponent from '../../components/DateContainer'
 import * as actionCreators from '../../store/action/index'
 import FormModal from '../../components/FormModal'
-import {
-    CalenderDateDayContainerActive,
-    CalenderDateDayContainerDisable,
-    CalenderDateContainer,
-    CalenderWeekDayContainer,
-    CalenderWeekContainer,
-    CalendarContainerBody,
-    CalendarContainer,
-} from '../../StyledComponent/index'
+import { CalenderDateDayContainerActive, CalenderDateDayContainerDisable, CalenderDateContainer, CalenderWeekDayContainer, CalenderWeekContainer, CalendarContainerBody, CalendarContainer} from '../../StyledComponent/index'
 
 import { weekArray, gridArray } from '../../constant/index'
 import { useParams } from "react-router-dom"

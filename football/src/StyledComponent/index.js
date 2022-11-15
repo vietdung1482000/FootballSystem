@@ -34,6 +34,7 @@ export const CalendarContainerBody = styled.div`
 export const CalenderWeekContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  margin-top: 50px;
 `
 
 export const CalenderWeekDayContainer = styled.div`
@@ -62,7 +63,7 @@ export const CalenderDateDayContainerActive = styled.div`
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 0px;
-    background: transparent; /* make scrollbar transparent */
+    background: transparent;
   }
 `
 
@@ -79,7 +80,7 @@ export const ModalBody = styled.div`
 export const InputContainer = styled.div`
   width: 100%;
   display: flex;
-  margin: 15px 0px;
+  margin: 25px 0px;
   height: 30px;
   align-items: center;
 `
@@ -109,13 +110,21 @@ export const ModalSubmit = styled.button`
   height: 40px;
   background: #228c22;
   color: #fff;
+
+  &:hover {
+    background: #119468;
+  }
 `
 
 export const ModalCancel = styled.button`
   width: 40%;
   height: 40px;
-  background: #f68a06;
+  background: red;
   color: #fff;
+
+  &:hover {
+    background: #d63031;
+  }
 `
 
 export const AppointmentContainer = styled.div`
@@ -149,6 +158,21 @@ export const CalenderHeaderContainer = styled.div`
 
 export const DropdownContainer = styled.div`
     display: flex;
+    color: #000;
+    cursor: pointer;
+    .dropdownYear {
+      background-color: #fff;
+      position: fixed;
+      padding: 10px;
+      border: 1px solid black;
+    }
+    .dropdownMonth {
+      position: fixed;
+      left: 50px;
+      padding: 10px;
+      border: 1px solid black;
+      margin-left: 20px;
+    }
 `
 
 export const AppointmentButton = styled.button`

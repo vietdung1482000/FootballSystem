@@ -4,7 +4,7 @@ import { AppointmentContainer } from '../StyledComponent/index'
 function AppointmentComponent(props) {
     return (
         <AppointmentContainer>
-            {props.Name} - Time: {props.Time}: 00
+            {props.Name} - {props.Time} {(props.Time) > 12 ? 'PM' : 'AM'} - {props.NameField}
         </AppointmentContainer>
     )
 }

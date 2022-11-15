@@ -148,7 +148,7 @@ const MenuTop = styled.div`
 export default function Menu() {
 
   const { currentUser } = useContext(AuthContext)
-  console.log(currentUser)
+  console.log("currentUser", currentUser)
 
   return (
 

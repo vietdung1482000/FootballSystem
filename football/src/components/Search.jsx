@@ -103,7 +103,7 @@ export default function Search() {
         });
       }
     } catch (err) {}
-
+    console.log("user",user)
     setUser(null)
     setUserName("")
 

@@ -152,15 +152,15 @@ export default function Register() {
                     <input type="text" placeholder="Tên của bạn" />
                     <input type="email" placeholder="Nhập địa chỉ email" />
                     <input type="password" placeholder="Nhập mật khẩu" />
-                    <input style={{ display: "none" }} type="file" id="file" />
-                    <label htmlFor="file">
+                    <input type="file" id="file" />
+                    {/* <label htmlFor="file">
                         <img src={addAvatar} alt="" />
                         <span>Add an avatar</span>
-                    </label>
+                    </label> */}
                     <Button>Sign Up</Button>
                     {err && <span>Đã xảy ra lỗi!</span>}
                 </form>
-                <p>Đã có sẵn tài khoản? <Link to="/register">Đăng nhập</Link></p>
+                <p>Đã có sẵn tài khoản? <Link to="/login">Đăng nhập</Link></p>
             </FormWrapper>
         </FormContainer>
     )

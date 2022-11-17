@@ -15,17 +15,54 @@ import {
     ModalHeader,
     customStyles
 } from '../StyledComponent/index'
+import { addDoc, collection } from 'firebase/firestore';
 
 function FormModal(props) {
     const { register, handleSubmit } = useForm();
     const [startDate, setStartDate] = useState(new Date());
 
-    const onSubmit = async data => {
-        if (data.Name && data.Date && data.Time) {
-            props.onModalSubmit(data)
-            props.openModal()
-            alert("bạn đã đăng ký thành công !!!")
-        }
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone,setPhone] = useState("");
+    // const file = e.target[3].files[0];
+    const [nameField,setNameField] = useState("");
+    const [phoneBusiness,setPhoneBusiness] = useState("");
+    const [address, setAddress] = useState("");
+    const [presetDate, setPresetDate] = useState("");
+    const [presetTime, setPresetTime] = useState("");
+
+
+    const onSubmit = async (data) => {
+        // if (data.Name && data.Date && data.Time) {
+        //     props.onModalSubmit(data)
+        //     props.openModal()
+        //     alert("bạn đã đăng ký thành công !!!")
+        // }
+        const colRef = collection(db, "datsan")
+        await addDoc(colRef, {
+            name: name,
+            email: email,
+            phone: phone,
+            nameField: nameField,
+            phoneBusiness: phoneBusiness,
+            address: address,
+            presetDate: presetDate,
+            presetTime: presetTime
+        })
+        .then(()=> {
+            alert("Register success <3");
+        })
+        .catch(err => {
+            alert(err.message)
+        })
+        setName('')
+        setEmail('')
+        setPhone('')
+        setNameField('')
+        setPhoneBusiness('')
+        setAddress('')
+        setPresetDate('')
+        setPresetTime('')
     }
 
     return (
@@ -41,38 +78,38 @@ function FormModal(props) {
                 <ModalBody>
                     <InputContainer>
                         <InputSpan>Tên:</InputSpan>
-                        <InputField placeholder='Enter Name' {...register("Name", { required: 'error' })}></InputField>
+                        <input placeholder='Enter Name' onChange={(e)=> setName(e.target.value)} value={name}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Gmail:</InputSpan>
-                        <InputField placeholder='Enter Gmail' {...register("Gmail", { required: 'error' })}></InputField>
+                        <input placeholder='Enter Gmail' onChange={(e)=> setEmail(e.target.value)} value={email}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Điện Thoại:</InputSpan>
-                        <InputField placeholder='Enter Phone' {...register("PhoneUser", { required: 'this is requiredd' })}></InputField>
+                        <input placeholder='Enter Phone' onChange={(e)=> setPhone(e.target.value)} value={phone}></input>
                     </InputContainer>
                     <p>-------------------------------------------</p>
                     <h4 style={{fontSize: "24px", marginBottom: "20px"}}>Sân Bóng</h4>
                     <InputContainer>
                         <InputSpan>Tên Sân:</InputSpan>
-                        <InputField placeholder='Enter Name field' {...register("NameField", { required: 'this is requiredd' })}></InputField>
+                        <input placeholder='Enter Name field' onChange={(e)=> setNameField(e.target.value)} value={nameField}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Điện Thoại:</InputSpan>
-                        <InputField placeholder='Enter Phone' {...register("Phone", { required: 'this is requiredd' })}></InputField>
+                        <input placeholder='Enter Phone' onChange={(e)=> setPhoneBusiness(e.target.value)} value={phoneBusiness}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Địa Chỉ:</InputSpan>
-                        <InputField placeholder='Enter Address' {...register("Address", { required: 'this is requiredd' })}></InputField>
+                        <input placeholder='Enter Address' onChange={(e)=> setAddress(e.target.value)} value={address}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Ngày Đặt:</InputSpan>
                         {/* <DatePicker selected={startDate} {...register("Date", { required: 'this is requiredd' })} min="1" max="31" onChange={(date) => setStartDate(date)} /> */}
-                        <InputField {...register("Date", { required: 'this is requiredd' })} min="1" max="31" placeholder="Type a number 1 - 31"></InputField>
+                        <input type="number" onChange={(e)=> setPresetDate(e.target.value)} value={presetDate} placeholder="Type a number 1 - 31"></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Thời Gian Đặt:</InputSpan>
-                        <InputField {...register("Time", { required: 'this is requiredd' })} min="1" max="24" type="number" placeholder="Type a number 1 - 24"></InputField>
+                        <input type="number" onChange={(e)=> setPresetTime(e.target.value)} value={presetTime} placeholder="Type a number 1 - 24"></input>
                     </InputContainer>
                 </ModalBody>
                 <ModalFooter>

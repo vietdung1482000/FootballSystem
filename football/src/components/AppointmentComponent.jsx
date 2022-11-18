@@ -8,7 +8,7 @@ function AppointmentComponent(props) {
 
     useEffect(()=> {
         const getItemFromFirebase = [];
-        const subItem = db.collection("datsan").onSnap
+        // const subItem = db.collection("datsan").onSnap
     })
     return (
         <AppointmentContainer>

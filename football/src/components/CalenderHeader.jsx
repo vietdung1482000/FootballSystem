@@ -3,7 +3,9 @@ import Dropdown from 'react-dropdown'
 import {
   CalenderHeaderContainer,
   DropdownContainer,
-  AppointmentButton
+  AppointmentButton,
+  MatchButton,
+  GroupBtn
 } from '../StyledComponent/index'
 
 import { yearOptions, monthOptions } from '../constant/index'
@@ -42,7 +44,10 @@ function CalenderHeader(props) {
           />
         </div>
       </DropdownContainer>
-      <AppointmentButton onClick={openModal}>Create Appointment</AppointmentButton>
+      <GroupBtn>
+        <AppointmentButton onClick={openModal}>Create Appointment</AppointmentButton>
+        <MatchButton onClick={openModal}>Match</MatchButton>
+      </GroupBtn>
     </CalenderHeaderContainer>
   )
 }

@@ -169,6 +169,9 @@ export default function Menu() {
             <li className="item">
               <Link className="link" to="/match">Thi Đấu</Link>
             </li>
+            <li className="item">
+              <Link className="link" to="/calender">Lịch Thi Đấu</Link>
+            </li>
           </ul>
         </div>
 

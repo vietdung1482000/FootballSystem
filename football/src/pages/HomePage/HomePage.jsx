@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react';
 import styled from 'styled-components'
-import BG from '../../img/bg.png'
-
+import BG from '../../img/bg.png';
 const HomeStyle = styled.div`
   width: 100%;
   

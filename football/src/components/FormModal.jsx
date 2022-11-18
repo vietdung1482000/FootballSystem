@@ -15,16 +15,20 @@ import {
     ModalHeader,
     customStyles
 } from '../StyledComponent/index'
+import PaypalCheckoutButton from './PaypalButton';
 
 function FormModal(props) {
     const { register, handleSubmit } = useForm();
     const [startDate, setStartDate] = useState(new Date());
+    const product = {
+        description: "test",
+        price: 19
+      };
 
     const onSubmit = async data => {
         if (data.Name && data.Date && data.Time) {
             props.onModalSubmit(data)
             props.openModal()
-            alert("bạn đã đăng ký thành công !!!")
         }
     }
 
@@ -37,7 +41,7 @@ function FormModal(props) {
             contentLabel="Example Modal"
         >
             <ModalHeader>Book A Football Field</ModalHeader>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form >
                 <ModalBody>
                     <InputContainer>
                         <InputSpan>Tên:</InputSpan>
@@ -52,7 +56,7 @@ function FormModal(props) {
                         <InputField placeholder='Enter Phone' {...register("PhoneUser", { required: 'this is requiredd' })}></InputField>
                     </InputContainer>
                     <p>-------------------------------------------</p>
-                    <h4 style={{fontSize: "24px", marginBottom: "20px"}}>Sân Bóng</h4>
+                    <h4 style={{ fontSize: "24px", marginBottom: "20px" }}>Sân Bóng</h4>
                     <InputContainer>
                         <InputSpan>Tên Sân:</InputSpan>
                         <InputField placeholder='Enter Name field' {...register("NameField", { required: 'this is requiredd' })}></InputField>
@@ -76,7 +80,9 @@ function FormModal(props) {
                     </InputContainer>
                 </ModalBody>
                 <ModalFooter>
-                    <ModalSubmit>Submit</ModalSubmit>
+                    <div className="paypal-button-container">
+                        <PaypalCheckoutButton product={product}  test ={handleSubmit(onSubmit)}/>
+                    </div>
                     <ModalCancel onClick={props.openModal}>X</ModalCancel>
                 </ModalFooter>
             </form>

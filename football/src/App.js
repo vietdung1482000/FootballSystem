@@ -13,7 +13,7 @@ import RegisterBusiness from "./pages/Register/RegisterBusiness";
 import Footer from "./components/Footer";
 import Calender from "./pages/Calender/Calender";
 import moment from 'moment';
-
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 function App() {
 
   const { currentUser } = useContext(AuthContext);
@@ -28,29 +28,34 @@ function App() {
 
   return (
     <div className="app">
+      <PayPalScriptProvider
+        options={{ "client-id": 'AX_hA27L2deyQ_ejBbJ3XoU-feZ6_I3-gkjgm_7wuSWQYp1HmQVC-bNCLrprUn88PaXAxTCOwjKRwy7i' }}
+      >
+        <BrowserRouter>
+          <Menu />
+          <Routes>
+            <Route path="" element={<HomePage />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="selectModule" element={<SelectModule />} />
+            <Route path="resbusiness" element={<RegisterBusiness />} />
+            <Route path="match" element={<LandingPage />} />
+            <Route path="detail" element={<DetailPage />} />
+            <Route path="chat">
+              <Route index element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              } />
+            </Route>
+            <Route path="/year/:year/month/:month" element={<Calender />} />
+            <Route path="calender" element={<Calender />} />
+          </Routes>
+          {/* <Footer /> */}
+        </BrowserRouter>
+      </PayPalScriptProvider>
 
-      <BrowserRouter>
-        <Menu />
-        <Routes>
-          <Route path="" element={<HomePage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="selectModule" element={<SelectModule />} />
-          <Route path="resbusiness" element={<RegisterBusiness />} />
-          <Route path="match" element={<LandingPage />} />
-          <Route path="detail" element={<DetailPage />} />
-          <Route path="chat">
-            <Route index element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            } />
-          </Route>
-          <Route path="/year/:year/month/:month" element={<Calender />} />
-          <Route path="calender" element={<Calender />} />
-        </Routes>
-        {/* <Footer /> */}
-      </BrowserRouter>
+
     </div>
   );
 }

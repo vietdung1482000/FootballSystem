@@ -11,6 +11,7 @@ import { CalenderDateDayContainerActive, CalenderDateDayContainerDisable, Calend
 
 import { weekArray, gridArray } from '../../constant/index'
 import { useParams } from "react-router-dom"
+import MatchModal from '../../components/MatchModal';
 
 function Calender() {
 
@@ -21,6 +22,7 @@ function Calender() {
     const [selectedYear, setSelectedYear] = useState(2022);
     const [selectedMonth, setSelectedMonth] = useState(0);
     const [modalState, setModalState] = useState(false);
+    const [matchModal, setMatchModal] = useState(false)
 
     const { addAppointment } = bindActionCreators(actionCreators, dispatch)
 
@@ -52,6 +54,9 @@ function Calender() {
         setModalState(!modalState)
     }
 
+    const openModalMatch = () => {
+        setMatchModal(!matchModal)
+    }
     const onModalSubmit = data => {
         const date = data.Date + '-' + (selectedMonth + 1) + '-' + selectedYear
         const dataByDate = {
@@ -71,6 +76,7 @@ function Calender() {
                     defaultYear={selectedYear.toString()}
                     defaultMonth={(selectedMonth + 1).toString()}
                     openModal={openModal}
+                    openMatchModal={openModalMatch}
                 />
                 <CalendarContainerBody>
                     <CalenderWeekContainer>
@@ -99,6 +105,12 @@ function Calender() {
             <FormModal
                 modalState={modalState}
                 openModal={openModal}
+                onModalSubmit={onModalSubmit}
+                dateRange={endIndex}
+            />
+            <MatchModal
+                modalState={matchModal}
+                openModal={openModalMatch}
                 onModalSubmit={onModalSubmit}
                 dateRange={endIndex}
             />

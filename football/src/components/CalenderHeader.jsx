@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Dropdown from 'react-dropdown'
 import {
   CalenderHeaderContainer,
@@ -12,6 +12,15 @@ import { yearOptions, monthOptions } from '../constant/index'
 
 
 function CalenderHeader(props) {
+  // const [modalIsOpen, setIsOpen] = useState(false);
+
+  // function openModalMatch() {
+  //   setIsOpen(true);
+  // }
+
+  // function closeModalMatch() {
+  //   setIsOpen(false);
+  // }
 
   const onYearSelect = (date) => {
     props.onYearSelect(date)
@@ -23,6 +32,10 @@ function CalenderHeader(props) {
 
   const openModal = () => {
     props.openModal()
+  }
+
+  const openModalMatch = () => {
+    props.openMatchModal()
   }
 
   return (
@@ -46,7 +59,7 @@ function CalenderHeader(props) {
       </DropdownContainer>
       <GroupBtn>
         <AppointmentButton onClick={openModal}>Create Appointment</AppointmentButton>
-        <MatchButton onClick={openModal}>Match</MatchButton>
+        <MatchButton onClick={openModalMatch}>Match</MatchButton>
       </GroupBtn>
     </CalenderHeaderContainer>
   )

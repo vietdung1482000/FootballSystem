@@ -33,11 +33,6 @@ function FormModal(props) {
 
 
     const onSubmit = async (data) => {
-        // if (data.Name && data.Date && data.Time) {
-        //     props.onModalSubmit(data)
-        //     props.openModal()
-        //     alert("bạn đã đăng ký thành công !!!")
-        // }
         const colRef = collection(db, "datsan")
         await addDoc(colRef, {
             name: name,

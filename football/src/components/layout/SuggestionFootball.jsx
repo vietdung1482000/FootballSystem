@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import HoverRating from '../HoverRating';
 import location from '../../img/icon/location.svg'
+import { db } from "../../firebase"
 
 export default function SuggestionFootball(props) {
+
+
+    const handleBook = () => {
+
+    }
+
     return (
         <div className="components__suggestionFootball d-flex align-items-end ">
             <div className='information '>
@@ -11,7 +18,7 @@ export default function SuggestionFootball(props) {
                     <HoverRating value={props.detail.rate} />
                     <div className='bases__font--14 bases__text--normal bases__padding--vertical10'> <img src={location} alt="" className='bases__filter--white' />&ensp; {props.detail.location}</div>
                 </div>
-                <button className="button">Book</button>
+                <button onClick={handleBook} className="button">Book</button>
             </div>
         </div>
     );

@@ -4,6 +4,9 @@ import Location from '../../img/location.png'
 import Calender from '../../img/calendar.png'
 import Match from '../../img/archery-match.png'
 import SuggestionFootball from '../../components/layout/SuggestionFootball'
+import { useState } from 'react';
+import { db } from '../../firebase';
+import { useEffect } from 'react';
 
 const Landing = styled.div`
   width: 100%;
@@ -69,6 +72,7 @@ const Landing = styled.div`
       ._box {
         width: 350px;
         padding: 25px;
+        margin-left: 22px;
         img {
           width: 50px;
           height: 50px;
@@ -102,19 +106,17 @@ const Landing = styled.div`
   }
 
   ._suggest{
+    margin-left: 200px;
     h1{
-      margin-left: 250px;
+      margin-left: 30px;
       margin-top: 50px;
     }
 
     ._card {
-      margin-left: auto;
       display: flex;
-      width: 100%;
+      flex-wrap: wrap;
       cursor: pointer;
-      ._cardImg {
-        width: 25%;
-      }
+      ._cardImg {}
     }
 
   }
@@ -122,6 +124,7 @@ const Landing = styled.div`
 `
 
 export default function LandingPage() {
+
 
   const tempDataSuggest = [
     {
@@ -149,6 +152,21 @@ export default function LandingPage() {
       location: ' 250 Nguyễn hữu thọ',
       rate: 5
     },
+    {
+      tensan: 'sân bóng nguyễn hữu thọ',
+      location: ' 250 Nguyễn hữu thọ',
+      rate: 5
+    },
+    {
+      tensan: 'sân bóng nguyễn hữu thọ',
+      location: ' 250 Nguyễn hữu thọ',
+      rate: 5
+    },
+    {
+      tensan: 'sân bóng nguyễn hữu thọ',
+      location: ' 250 Nguyễn hữu thọ',
+      rate: 5
+    },
   ]
 
   return (
@@ -157,15 +175,16 @@ export default function LandingPage() {
         FOOTBALL <br />
         NỀN TẢNG ĐẶT SÂN - TÌM ĐỐI
       </div>
+
       <div className="_input">
         <input type="text" placeholder='Nhập tên sân bóng' />
         <button>Tìm kiếm</button>
       </div>
+
       <div className="_service">
         <div className="_titleService">
           <h1>Dịch vụ của FootBall</h1>
           <div className="_grBox">
-
             <div className="_box">
               <img src={Location} alt="" />
               <h4>Tìm kiếm và đặt một sân bóng trực tuyến</h4>
@@ -181,18 +200,18 @@ export default function LandingPage() {
               <h4>Tạo một đội, tìm một trận đấu dễ dàng</h4>
               <p>Thông tin tòa gần vị trí của bạn nhất, đặt phòng trực tuyến, thuận tiện, dễ dàng</p>
             </div>
-
           </div>
         </div>
       </div>
+
       <div className="_suggest">
         <h1>Gợi ý sân bóng</h1>
         <div id="football" className="_card">
           {tempDataSuggest.map((data, index) => {
             return (
-                <div className="_cardImg" key={index}>
-                  <SuggestionFootball detail={data} />
-                </div>
+              <div className="_cardImg" key={index}>
+                <SuggestionFootball detail={data} />
+              </div>
             )
           })}
         </div>

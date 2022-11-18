@@ -15,28 +15,31 @@ import {
     ModalHeader,
     customStyles
 } from '../StyledComponent/index'
-import PaypalCheckoutButton from './PaypalButton';
 import { addDoc, collection } from 'firebase/firestore';
 
-function FormModal(props) {
+function MatchModal(props) {
     const { register, handleSubmit } = useForm();
     const [startDate, setStartDate] = useState(new Date());
-    const product = {
-        description: "test",
-        price: 19
-      };
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [phone,setPhone] = useState("");
+    const [phone, setPhone] = useState("");
     // const file = e.target[3].files[0];
-    const [nameField,setNameField] = useState("");
-    const [phoneBusiness,setPhoneBusiness] = useState("");
+    const [nameField, setNameField] = useState("");
+    const [phoneBusiness, setPhoneBusiness] = useState("");
     const [address, setAddress] = useState("");
     const [presetDate, setPresetDate] = useState("");
     const [presetTime, setPresetTime] = useState("");
 
+    // const [modalIsOpen, setIsOpen] = useState(false);
 
+    // function openModalMatch() {
+    //   setIsOpen(true);
+    // }
+
+    // function closeModalMatch() {
+    //   setIsOpen(false);
+    // }
     const onSubmit = async (data) => {
         const colRef = collection(db, "datsan")
         await addDoc(colRef, {
@@ -49,12 +52,12 @@ function FormModal(props) {
             presetDate: presetDate,
             presetTime: presetTime
         })
-        .then(()=> {
-            alert("Register success <3");
-        })
-        .catch(err => {
-            alert(err.message)
-        })
+            .then(() => {
+                alert("Register success <3");
+            })
+            .catch(err => {
+                alert(err.message)
+            })
         setName('')
         setEmail('')
         setPhone('')
@@ -73,49 +76,47 @@ function FormModal(props) {
             style={customStyles}
             contentLabel="Example Modal"
         >
-            <ModalHeader>Book A Football Field</ModalHeader>
-            <form >
+            <ModalHeader>Match</ModalHeader>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <ModalBody>
                     <InputContainer>
                         <InputSpan>Tên:</InputSpan>
-                        <input placeholder='Enter Name' onChange={(e)=> setName(e.target.value)} value={name}></input>
+                        <input placeholder='Enter Name' onChange={(e) => setName(e.target.value)} value={name}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Gmail:</InputSpan>
-                        <input placeholder='Enter Gmail' onChange={(e)=> setEmail(e.target.value)} value={email}></input>
+                        <input placeholder='Enter Gmail' onChange={(e) => setEmail(e.target.value)} value={email}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Điện Thoại:</InputSpan>
-                        <input placeholder='Enter Phone' onChange={(e)=> setPhone(e.target.value)} value={phone}></input>
+                        <input placeholder='Enter Phone' onChange={(e) => setPhone(e.target.value)} value={phone}></input>
                     </InputContainer>
                     <p>-------------------------------------------</p>
                     <h4 style={{ fontSize: "24px", marginBottom: "20px" }}>Sân Bóng</h4>
                     <InputContainer>
                         <InputSpan>Tên Sân:</InputSpan>
-                        <input placeholder='Enter Name field' onChange={(e)=> setNameField(e.target.value)} value={nameField}></input>
+                        <input placeholder='Enter Name field' onChange={(e) => setNameField(e.target.value)} value={nameField}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Điện Thoại:</InputSpan>
-                        <input placeholder='Enter Phone' onChange={(e)=> setPhoneBusiness(e.target.value)} value={phoneBusiness}></input>
+                        <input placeholder='Enter Phone' onChange={(e) => setPhoneBusiness(e.target.value)} value={phoneBusiness}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Địa Chỉ:</InputSpan>
-                        <input placeholder='Enter Address' onChange={(e)=> setAddress(e.target.value)} value={address}></input>
+                        <input placeholder='Enter Address' onChange={(e) => setAddress(e.target.value)} value={address}></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Ngày Đặt:</InputSpan>
                         {/* <DatePicker selected={startDate} {...register("Date", { required: 'this is requiredd' })} min="1" max="31" onChange={(date) => setStartDate(date)} /> */}
-                        <input type="number" onChange={(e)=> setPresetDate(e.target.value)} value={presetDate} placeholder="Type a number 1 - 31"></input>
+                        <input type="number" onChange={(e) => setPresetDate(e.target.value)} value={presetDate} placeholder="Type a number 1 - 31"></input>
                     </InputContainer>
                     <InputContainer>
                         <InputSpan>Thời Gian Đặt:</InputSpan>
-                        <input type="number" onChange={(e)=> setPresetTime(e.target.value)} value={presetTime} placeholder="Type a number 1 - 24"></input>
+                        <input type="number" onChange={(e) => setPresetTime(e.target.value)} value={presetTime} placeholder="Type a number 1 - 24"></input>
                     </InputContainer>
                 </ModalBody>
                 <ModalFooter>
-                    <div className="paypal-button-container">
-                        <PaypalCheckoutButton product={product}  test ={handleSubmit(onSubmit)}/>
-                    </div>
+                    <ModalSubmit>Submit</ModalSubmit>
                     <ModalCancel onClick={props.openModal}>X</ModalCancel>
                 </ModalFooter>
             </form>
@@ -123,4 +124,4 @@ function FormModal(props) {
     )
 }
 
-export default FormModal
+export default MatchModal

@@ -9,7 +9,8 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-
+import InputLabel from "@mui/material/InputLabel";
+import NativeSelect from "@mui/material/NativeSelect";
 import {
   ModalCancel,
   ModalSubmit,
@@ -40,7 +41,6 @@ function MatchModal(props) {
   const [job, setJob] = useState("");
   const [type, setType] = useState("");
   const { currentUser } = useContext(AuthContext);
-
   const onSubmit = async (data) => {
     const colRef = collection(db, "datsan");
     await addDoc(colRef, {
@@ -109,7 +109,7 @@ function MatchModal(props) {
           <FormLabel id="demo-radio-buttons-group-label">Nghề Nghiệp</FormLabel>
           <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="Sinh Viên"
+            defaultValue=""
             name="radio-buttons-group"
           >
             <FormControlLabel
@@ -152,15 +152,45 @@ function MatchModal(props) {
     getData();
   }, []);
 
-
-
   const LoadName = () => {
-    data.map((item) => {
-        console.log("abc",typeof item.data.age);
+    return data.map((item) => {
+      if (item.data.age?.age || item.data.job?.job) {
+        const resultAge = item.data.age?.age.toString();
+        const resultJob = item.data.job?.job.toString();
+        if (age.age === resultAge && job.job === resultJob) {
+          return (
+            <>
+            <InputContainer>
+              <InputLabel>Tên Đội</InputLabel>
+              <NativeSelect defaultValue="">
+                <option value={name}  onChange={(e) => setName({ type: e.target.value })} >{item.data.name}</option>
+              </NativeSelect>
+            </InputContainer>
+            </>
+            
+            
+          );
+        }
+        return "";
+      }
     });
   };
-//   console.log("abc", typeof age);
-
+  const loadDataSan = () => {
+    return data.map((item) => {
+    
+          if ( presetDate ===  item.data.presetDate &&  presetTime === item.data.presetTime) {
+            return (
+              <InputContainer>
+                <InputLabel>Tên Đội</InputLabel>
+                <NativeSelect defaultValue="">
+                  <option onChange={(e) => setType({ type: e.target.value })} >{item.data.name}</option>
+                </NativeSelect>
+              </InputContainer>
+            );
+          }
+          return "";
+      });
+  }
   return (
     <Modal
       isOpen={props.modalState}
@@ -172,7 +202,7 @@ function MatchModal(props) {
       <ModalHeader>Match</ModalHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalBody>
-            {LoadName()}
+          {LoadName()}
           <InputContainer>
             <InputSpan>Tên:</InputSpan>
             <input
@@ -191,13 +221,10 @@ function MatchModal(props) {
               value={currentUser.phoneNumber}
             ></input>
           </InputContainer>
-          {
-             data.map((item) => {
-           
-          })
-        }
+          {data.map((item) => {})}
           {abc()}
           <p>-------------------------------------------</p>
+        
           <h4 style={{ fontSize: "24px", marginBottom: "20px" }}>Sân Bóng</h4>
           <InputContainer>
             <InputSpan>Tên Sân:</InputSpan>
@@ -242,6 +269,7 @@ function MatchModal(props) {
               placeholder="Type a number 1 - 24"
             ></input>
           </InputContainer>
+          {loadDataSan()}
         </ModalBody>
         <ModalFooter>
           <ModalSubmit>Submit</ModalSubmit>

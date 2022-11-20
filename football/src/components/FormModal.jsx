@@ -44,6 +44,7 @@ function FormModal(props) {
   const [age, setAge] = useState("");
   const [job, setJob] = useState("");
   const [type, setType] = useState("");
+
   const onSubmit = async (data) => {
     const colRef = collection(db, "datsan");
     await addDoc(colRef, {
@@ -232,10 +233,10 @@ function FormModal(props) {
           {abc()}
         </ModalBody>
         <ModalFooter>
-          {/* <ModalSubmit>Submit</ModalSubmit> */}
-          <div className="paypal-button-container">
+          <ModalSubmit>Submit</ModalSubmit>
+          {/* <div className="paypal-button-container">
             <PaypalCheckoutButton product={product} test={handleSubmit(onSubmit)} />
-          </div>
+          </div> */}
           <ModalCancel onClick={props.openModal}>X</ModalCancel>
         </ModalFooter>
       </form>

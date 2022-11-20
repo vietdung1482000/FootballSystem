@@ -11,14 +11,48 @@ import next from '../../img/next.png'
 import left from '../../img/left.png'
 import up from '../../img/up.png'
 import down from '../../img/down.png'
-import * as React from 'react';
-
+import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { db } from "../../firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function DetailPage() {
     const [state, setState] = React.useState({
         isShowDetailRate: false,
     });
     const { isShowDetailRate } = state;
+    const { business_id } = useParams();
+    const [data, setData] = useState([]);
+    const [dataDetail, setDataDetail] = useState([]);
+    const [isSucess, setIsSucess] = useState();
+
+    const getData = () => {
+        const getFootBallData = collection(db, "business");
+
+        getDocs(getFootBallData)
+            .then(response => {
+                const datsans = response.docs.map(doc => ({
+                    data: doc.data(),
+                    id: doc.id,
+                }))
+                setData(datsans)
+                setIsSucess(true)
+            })
+            .catch(error => console.log(error.message))
+    }
+    useEffect(() => {
+        getData()
+    }, []);
+
+    useEffect(() => {
+        if (isSucess) {
+            data.map((item) => {
+                if (item.id === business_id) {
+                    setDataDetail(item.data)
+                }
+            })
+        }
+    }, [isSucess]);
 
     const tempDataSuggest = [
         {
@@ -99,9 +133,9 @@ export default function DetailPage() {
             <div className="d-flex">
                 <img src={detail} alt="" className='bases__height--450 bases__width--650' />
                 <div className="bases__margin--left50 ">
-                    <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">Sân bóng đá Trưng Vương</div>
+                    <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">{dataDetail.nameField}</div>
                     <div className="d-flex bases__padding--top10">
-                        <HoverRating value={5} />
+                        <HoverRating value={dataDetail.rate} />
                         <img src={isShowDetailRate ? up : down} onClick={handleShowDetailRate} alt="" className="bases__height--30 pages__detail-icon" />
 
                     </div>
@@ -141,12 +175,12 @@ export default function DetailPage() {
 
                     </div>}
 
-                    <div className="bases__padding--top15"> <img src={location} alt="" />&ensp; 403 Trưng Nữ Vương, Hòa Thuận Nam, Hải Châu, Đà Nẵng</div>
+                    <div className="bases__padding--top15"> <img src={location} alt="" />&ensp; {dataDetail.address}</div>
                     <div className="bases__padding--top15"> <img src={phone} alt="" />&ensp; 090 423 94 85</div>
-                    <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; 5:00 - 21:00</div>
+                    <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; {dataDetail.timeOpen} -{dataDetail.timeClose}</div>
                     <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
-                    <div>Sân Trưng Vương Đà Nẵng là sân bóng cỏ nhân tạo, đang là một sân chơi lớn dành cho các bạn sinh viên và những người đi làm. Đây là loại sân đảm bảo hoạt động vui chơi của mọi đối tượng và thân thiện với môi trường.</div>
-                    <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">120.000 VND</span> </div>
+                    <div>{dataDetail.detail}</div>
+                    <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">{dataDetail.price}&ensp; ({dataDetail.extra_price}) </span> </div>
                     <button className="pages__detail-button bases__margin--top15">Đặt sân</button>
                 </div>
             </div>

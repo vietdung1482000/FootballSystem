@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import Calender from "./pages/Calender/Calender";
 import moment from 'moment';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import Football from "./pages/Detail/Football";
 function App() {
 
   const { currentUser } = useContext(AuthContext);
@@ -40,7 +41,8 @@ function App() {
             <Route path="selectModule" element={<SelectModule />} />
             <Route path="resbusiness" element={<RegisterBusiness />} />
             <Route path="match" element={<LandingPage />} />
-            <Route path="detail" element={<DetailPage />} />
+            <Route path="football-pitches" element={< Football/>} />
+            <Route path="detail/:business_id" element={<DetailPage />} />
             <Route path="chat">
               <Route index element={
                 <ProtectedRoute>

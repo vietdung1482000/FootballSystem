@@ -164,7 +164,7 @@ export default function Menu() {
               <Link className="link" to="/">Trang Chủ</Link>
             </li>
             <li className="item">
-              <Link className="link" to="/detail">Sân bóng</Link>
+              <Link className="link" to="/football-pitches">Sân bóng</Link>
             </li>
             <li className="item">
               <Link className="link" to="/match">Thi Đấu</Link>

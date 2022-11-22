@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { AuthContext } from '../context/AuthContext'
 import { ChatContext } from '../context/ChatContext'
+import {  collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 const MessagePage = styled.div`
   display: flex;
@@ -62,6 +64,7 @@ export default function Message({ message }) {
   const { currentUser } = useContext(AuthContext)
   const { data } = useContext(ChatContext)
 
+  const [data1, setData1] = useState([]);
 
   const ref = useRef()
 
@@ -69,6 +72,31 @@ export default function Message({ message }) {
     ref.current?.scrollIntoView({ behavior: "smooth" })
   }, [message]);
 
+  const getData = () => {
+    const getdataDatSan = collection(db, "ghepdoi");
+    getDocs(getdataDatSan)
+      .then((response) => {
+        const datsans = response.docs.map((doc) => ({
+          data1: doc.data(),
+          id: doc.id,
+        }));
+        setData1(datsans);
+      })
+      .catch((error) => console.log(error.message));
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const confirm = () => {
+    <>
+      {data1.map((item) => {
+        if(item.data1.createWith === currentUser.uid && item.data1.createWith === ""){
+          <h1> xin chào</h1>
+        }
+      })}
+    </>
+  }
   return (
     <MessagePage ref={ref} className={`${message.senderId === currentUser.uid && "owner"}`}>
       <div className="messageInfo">
@@ -84,6 +112,7 @@ export default function Message({ message }) {
       </div>
       <div className="messageContent">
         <p>{message.text}</p>
+        {confirm()}
         {message.img && <img src={message.img} alt="" />}
       </div>
     </MessagePage>

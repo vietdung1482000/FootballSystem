@@ -28,7 +28,9 @@ export default function DetailPage() {
 
     const getData = () => {
         const getFootBallData = collection(db, "business");
-
+        /* collection(db, "business").doc(business_id).update({
+                 "rating" : FieldValue.arrayUnion([data])
+             }) */
         getDocs(getFootBallData)
             .then(response => {
                 const datsans = response.docs.map(doc => ({

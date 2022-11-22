@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import { db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 const PaypalCheckoutButton = (props) => {
-  const { product, test } = props;
+  const { product, check } = props;
 
   const [paidFor, setPaidFor] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (paidFor) {
+      if (check) {
+        check(paidFor);
+      }
+    }
+  }, [paidFor]);
+
+  
 
   const handleApprove = (orderId) => {
     // Call backend function to fulfill order
@@ -20,7 +32,6 @@ const PaypalCheckoutButton = (props) => {
 
   if (paidFor) {
     // Display success message, modal or redirect user to success page
-    test();
   }
 
   if (error) {

@@ -23,6 +23,7 @@ function Calender() {
     const [selectedMonth, setSelectedMonth] = useState(0);
     const [modalState, setModalState] = useState(false);
     const [matchModal, setMatchModal] = useState(false)
+    const [closeModal, setCloseModal] = useState(false)
 
     const { addAppointment } = bindActionCreators(actionCreators, dispatch)
 
@@ -39,6 +40,16 @@ function Calender() {
         setSelectedYear(parseInt(defaultYear))
         setSelectedMonth(parseInt(defaultMonth) - 1)
     }, [year, month])
+
+    useEffect(() => {
+        if (closeModal) {
+            setModalState(false)
+        }
+    }, [closeModal])
+
+    const onChangeModal = (value) => {
+        setCloseModal(value)
+    }
 
     const onYearSelect = (year) => {
         const { value } = year
@@ -57,6 +68,7 @@ function Calender() {
     const openModalMatch = () => {
         setMatchModal(!matchModal)
     }
+
     const onModalSubmit = data => {
         const date = data.Date + '-' + (selectedMonth + 1) + '-' + selectedYear
         const dataByDate = {
@@ -107,6 +119,7 @@ function Calender() {
                 openModal={openModal}
                 onModalSubmit={onModalSubmit}
                 dateRange={endIndex}
+                onChangeModal={(value) => {onChangeModal(value)}}
             />
             <MatchModal
                 modalState={matchModal}

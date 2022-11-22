@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
@@ -35,7 +35,6 @@ function FormModal(props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  // const file = e.target[3].files[0];
   const [nameField, setNameField] = useState("");
   const [phoneBusiness, setPhoneBusiness] = useState("");
   const [address, setAddress] = useState("");
@@ -44,40 +43,45 @@ function FormModal(props) {
   const [age, setAge] = useState("");
   const [job, setJob] = useState("");
   const [type, setType] = useState("");
+  const [submit, setSubmit] = useState(false);
+  const [data, setData] = useState({});
+  const [check, setCheck] = useState(false);
 
-  const onSubmit = async (data) => {
+  useEffect(() => {
+    if (props.modalState) {
+      setSubmit(false);
+      setName("");
+      setEmail("");
+      setPhone("");
+      setNameField("");
+      setPhoneBusiness("");
+      setAddress("");
+      setPresetDate("");
+      setPresetTime("");
+      setAge("");
+      setJob("");
+      setType("");
+    }
+  }, [props.modalState]);
+
+  useEffect(() => {
+    if (check) {
+      onSubmit();
+    }
+  }, [check]);
+
+  const onSubmit = async () => {
     const colRef = collection(db, "datsan");
-    await addDoc(colRef, {
-      name: currentUser.displayName,
-      email: currentUser.email,
-      phone: currentUser.phoneNumber,
-      nameField: nameField,
-      phoneBusiness: phoneBusiness,
-      address: address,
-      presetDate: presetDate,
-      presetTime: presetTime,
-      age: age,
-      job: job,
-      type: type,
-      createBy: currentUser.uid,
-    })
+    await addDoc(colRef, data)
       .then(() => {
-        alert("Register success <3");
+        setCheck(false)
+        if (props.onChangeModal) {
+          props.onChangeModal(true)
+        }
       })
       .catch((err) => {
         alert(err.message);
       });
-    setName("");
-    setEmail("");
-    setPhone("");
-    setNameField("");
-    setPhoneBusiness("");
-    setAddress("");
-    setPresetDate("");
-    setPresetTime("");
-    setAge("");
-    setJob("");
-    setType("");
   };
 
   const abc = () => {
@@ -141,8 +145,186 @@ function FormModal(props) {
         </>
       );
     }
-
   };
+
+  const submitForm = () => {
+    setData({
+      name: currentUser.displayName,
+      email: currentUser.email,
+      phone: currentUser.phoneNumber,
+      nameField: nameField,
+      phoneBusiness: phoneBusiness,
+      address: address,
+      presetDate: presetDate,
+      presetTime: presetTime,
+      age: age,
+      job: job,
+      type: type,
+      createBy: currentUser.uid,
+    });
+    setSubmit(true)
+  }
+
+  const onChangeVl = (value) => {
+    setCheck(value)
+  }
+  const renderBodyModal = () => {
+    if (submit === false) {
+      return <>
+        <InputContainer>
+          <InputLabel>Loại</InputLabel>
+          <NativeSelect defaultValue={10} onChange={(e) => setType({ type: e.target.value })}>
+            <option value={10} onChange={(e) => setType({ type: e.target.value })}>Đơn</option>
+            <option value={20} onChange={(e) => setType({ type: e.target.value })} >Ghép Đội</option>
+          </NativeSelect>
+        </InputContainer>
+        <InputContainer>
+          <InputSpan>Tên:</InputSpan>
+          <input
+            placeholder="Enter Name"
+            value={currentUser.displayName}
+          ></input>
+        </InputContainer>
+        <InputContainer>
+          <InputSpan>Gmail:</InputSpan>
+          <input
+            placeholder="Enter Gmail"
+            value={currentUser.email}
+          ></input>
+        </InputContainer>
+        <InputContainer>
+          <InputSpan>Điện Thoại:</InputSpan>
+          <input
+            placeholder="Enter Phone"
+            onChange={(e) => setPhone(e.target.value)}
+            value={currentUser.phoneNumber}
+          ></input>
+        </InputContainer>
+        <p>-------------------------------------------</p>
+        <h4 style={{ fontSize: "24px", marginBottom: "20px" }}>Sân Bóng</h4>
+        <InputContainer>
+          <InputSpan>Tên Sân:</InputSpan>
+          <input
+            placeholder="Enter Name field"
+            onChange={(e) => setNameField(e.target.value)}
+            value={nameField}
+          ></input>
+        </InputContainer>
+        <InputContainer>
+          <InputSpan>Điện Thoại:</InputSpan>
+          <input
+            placeholder="Enter Phone"
+            onChange={(e) => setPhoneBusiness(e.target.value)}
+            value={phoneBusiness}
+          ></input>
+        </InputContainer>
+        <InputContainer>
+          <InputSpan>Địa Chỉ:</InputSpan>
+          <input
+            placeholder="Enter Address"
+            onChange={(e) => setAddress(e.target.value)}
+            value={address}
+          ></input>
+        </InputContainer>
+        <InputContainer>
+          <InputSpan>Ngày Đặt:</InputSpan>
+          {/* <DatePicker selected={startDate} {...register("Date", { required: 'this is requiredd' })} min="1" max="31" onChange={(date) => setStartDate(date)} /> */}
+          <input
+            type="number"
+            onChange={(e) => setPresetDate(e.target.value)}
+            value={presetDate}
+            placeholder="Type a number 1 - 31"
+          ></input>
+        </InputContainer>
+        <InputContainer>
+          <InputSpan>Thời Gian Đặt:</InputSpan>
+          <input
+            type="number"
+            onChange={(e) => setPresetTime(e.target.value)}
+            value={presetTime}
+            placeholder="Type a number 1 - 24"
+          ></input>
+        </InputContainer>
+        {abc()}
+      </>
+    } else {
+      return <>
+
+        <h4 className="bases__margin--top50 bases__padding--left100" >Thông tin thanh toán</h4>
+        <div className="container bases__padding--left150 bases__margin--bottom50">
+          <div className="row">
+
+            <div className="col-3 bases__text--bold base__text--16">
+              Tên Sân
+            </div>
+
+            <div className="col">
+              {nameField}
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-3 bases__text--bold base__text--16">
+              Địa chỉ
+            </div>
+            <div className="col">
+              {address}
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-3 bases__text--bold base__text--16">
+              Ngày đặt
+            </div>
+            <div className="col">
+             Ngày {presetDate} vào lúc {presetTime} giờ
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-3 bases__text--bold base__text--16">
+              Giá
+            </div>
+            <div className="col">
+              250.000 vnd
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-3 bases__text--bold base__text--16">
+              Người đặt
+            </div>
+            <div className="col">
+              {currentUser.displayName}
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-3 bases__text--bold base__text--16">
+              email
+            </div>
+            <div className="col">
+              {currentUser.email}
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-3 bases__text--bold base__text--16">
+              Số điện thoại liên hệ
+            </div>
+            <div className="col">
+              {currentUser.phoneNumber ? currentUser.phoneNumber : phone}
+            </div>
+          </div>
+        </div>
+
+        <div className="paypal-button-container d-flex justify-content-center">
+          <PaypalCheckoutButton product={product} check={(value) => { onChangeVl(value) }} />
+          <button className="button-cancle bases__margin--left50" onClick={props.openModal}>Cancle</button>
+        </div>
+      </>
+    }
+  }
 
   const { currentUser } = useContext(AuthContext)
   return (
@@ -154,92 +336,17 @@ function FormModal(props) {
     //   contentLabel="Example Modal"
     >
       <ModalHeader>Book A Football Field</ModalHeader>
-      <form>
-        <ModalBody>
-          <InputContainer>
-            <InputLabel>Loại</InputLabel>
-            <NativeSelect defaultValue={10} onChange={(e) => setType({ type: e.target.value })}>
-              <option value={10} onChange={(e) => setType({ type: e.target.value })}>Đơn</option>
-              <option value={20} onChange={(e) => setType({ type: e.target.value })} >Ghép Đội</option>
-            </NativeSelect>
-          </InputContainer>
-          <InputContainer>
-            <InputSpan>Tên:</InputSpan>
-            <input
-              placeholder="Enter Name"
-              value={currentUser.displayName}
-            ></input>
-          </InputContainer>
-          <InputContainer>
-            <InputSpan>Gmail:</InputSpan>
-            <input
-              placeholder="Enter Gmail"
-              value={currentUser.email}
-            ></input>
-          </InputContainer>
-          <InputContainer>
-            <InputSpan>Điện Thoại:</InputSpan>
-            <input
-              placeholder="Enter Phone"
-              onChange={(e) => setPhone(e.target.value)}
-              value={currentUser.phoneNumber}
-            ></input>
-          </InputContainer>
-          <p>-------------------------------------------</p>
-          <h4 style={{ fontSize: "24px", marginBottom: "20px" }}>Sân Bóng</h4>
-          <InputContainer>
-            <InputSpan>Tên Sân:</InputSpan>
-            <input
-              placeholder="Enter Name field"
-              onChange={(e) => setNameField(e.target.value)}
-              value={nameField}
-            ></input>
-          </InputContainer>
-          <InputContainer>
-            <InputSpan>Điện Thoại:</InputSpan>
-            <input
-              placeholder="Enter Phone"
-              onChange={(e) => setPhoneBusiness(e.target.value)}
-              value={phoneBusiness}
-            ></input>
-          </InputContainer>
-          <InputContainer>
-            <InputSpan>Địa Chỉ:</InputSpan>
-            <input
-              placeholder="Enter Address"
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
-            ></input>
-          </InputContainer>
-          <InputContainer>
-            <InputSpan>Ngày Đặt:</InputSpan>
-            {/* <DatePicker selected={startDate} {...register("Date", { required: 'this is requiredd' })} min="1" max="31" onChange={(date) => setStartDate(date)} /> */}
-            <input
-              type="number"
-              onChange={(e) => setPresetDate(e.target.value)}
-              value={presetDate}
-              placeholder="Type a number 1 - 31"
-            ></input>
-          </InputContainer>
-          <InputContainer>
-            <InputSpan>Thời Gian Đặt:</InputSpan>
-            <input
-              type="number"
-              onChange={(e) => setPresetTime(e.target.value)}
-              value={presetTime}
-              placeholder="Type a number 1 - 24"
-            ></input>
-          </InputContainer>
-          {abc()}
-        </ModalBody>
-        <ModalFooter>
-          <ModalSubmit>Submit</ModalSubmit>
-          {/* <div className="paypal-button-container">
-            <PaypalCheckoutButton product={product} test={handleSubmit(onSubmit)} />
-          </div> */}
-          <ModalCancel onClick={props.openModal}>X</ModalCancel>
-        </ModalFooter>
-      </form>
+      <ModalBody>
+        {renderBodyModal()}
+      </ModalBody>
+      <ModalFooter>
+        {!submit ?
+          <>
+            <ModalSubmit onClick={submitForm} >Submit</ModalSubmit>
+            <ModalCancel onClick={props.openModal}>X</ModalCancel>
+          </>
+          : <></>}
+      </ModalFooter>
     </Modal>
   );
 }

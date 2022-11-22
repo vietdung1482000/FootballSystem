@@ -12,6 +12,14 @@ body {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
   }
+
+  .button-cancle{
+    background-color: red !important;
+    color: white !important;
+    border-radius: 5px !important;
+    height: 50px !important;
+    width: 150px!important;
+  }
   
 
 @import 'bases/index';

@@ -151,7 +151,7 @@ export default function DetailPage() {
                 <div className="bases__margin--left50 ">
                     <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">{dataDetail.nameField}</div>
                     <div className="d-flex bases__padding--top10">
-                        <HoverRating value={dataDetail.rate} />
+                        <HoverRating value={parseInt(dataDetail.rate)} />
                         <img src={isShowDetailRate ? up : down} onClick={handleShowDetailRate} alt="" className="bases__height--30 pages__detail-icon" />
 
                     </div>

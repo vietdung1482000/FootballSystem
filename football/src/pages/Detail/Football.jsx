@@ -48,7 +48,7 @@ export default function Football() {
                 </div>
                 <span className='bases__text--bold' >Giá:  <span className='bases__text--red bases__text--bold'>&ensp; {foootball.data.price}</span> </span>
                 <span className='bases__text--bold' >Phụ Giá: <span className='bases__text--red bases__text--bold'>&ensp;  {foootball.data.extra_price} </span> </span>
-                <HoverRating value={foootball.data.rate} />
+                <HoverRating value={parseInt(foootball.data.rate)} />
                 <div className='bases__font--14 bases__text--normal bases__padding--vertical10'> <img src={location} alt="" />&ensp; {foootball.data.address}</div>
                 <Link to={`/detail/${foootball.id}`}>
                   <button className="button">Book</button>

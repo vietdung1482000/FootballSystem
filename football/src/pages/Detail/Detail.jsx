@@ -161,7 +161,7 @@ export default function DetailPage() {
                                 Sân bóng
                             </div>
                             <div className="col">
-                                <HoverRating />
+                                <HoverRating value={4} />
                             </div>
                         </div>
                         <div className="row">
@@ -169,7 +169,7 @@ export default function DetailPage() {
                                 Dịch vụ
                             </div>
                             <div className="col">
-                                <HoverRating />
+                                <HoverRating value={4}/>
                             </div>
                         </div>
                         <div className="row">
@@ -177,7 +177,7 @@ export default function DetailPage() {
                                 Nước uống
                             </div>
                             <div className="col">
-                                <HoverRating />
+                                <HoverRating value={4}/>
                             </div>
                         </div>
                         <div className="row">
@@ -185,7 +185,7 @@ export default function DetailPage() {
                                 An ninh
                             </div>
                             <div className="col">
-                                <HoverRating />
+                                <HoverRating value={4}/>
                             </div>
                         </div>
 

@@ -111,6 +111,7 @@ export default function Rating(props) {
 
     const postData = () => {
         const data = dataDetail.rating;
+        const sumpRate = ((Number(dataRate.anninh) + Number(dataRate.dichvu) + Number(dataRate.nuocuong) + Number(dataRate.sanbong)) / 4);
         const newRate = {
             ...dataRate,
             sumRate: ((Number(dataRate.anninh) + Number(dataRate.dichvu) + Number(dataRate.nuocuong) + Number(dataRate.sanbong)) / 4),
@@ -121,7 +122,8 @@ export default function Rating(props) {
         const FootBallData = doc(db, "business", props.business_id)
 
         updateDoc(FootBallData, {
-            rating: dataUpdate
+            rating: dataUpdate,
+            rate: (Number(sumpRate) + Number(dataDetail.rate)) / 2
         }).then(() => {
             setIsSuccess(true)
         })
@@ -131,8 +133,8 @@ export default function Rating(props) {
         <div className="components__rating">
             {modalAlert()}
             <div className='d-flex bases__margin--top15 bases__margin--left15'>
-                <img src={avatar} alt="" className='bases__avatar' />
-                <div className='bases__font--20 bases__margin--left10'> Quang tèo</div>
+                <img src={currentUser.photoURL ?? avatar} alt="" className='bases__avatar' />
+                <div className='bases__font--20 bases__margin--left10'> {currentUser.displayName}</div>
             </div>
             <div className="container bases__margin--top10 bases__margin--left16">
                 <div className="row">

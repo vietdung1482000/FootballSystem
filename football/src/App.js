@@ -1,4 +1,3 @@
-import Menu from "./components/Menu";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
@@ -15,6 +14,7 @@ import Calender from "./pages/Calender/Calender";
 import moment from 'moment';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Football from "./pages/Detail/Football";
+import MenuHeader from "./components/MenuHeader";
 function App() {
 
   const { currentUser } = useContext(AuthContext);
@@ -33,7 +33,7 @@ function App() {
         options={{ "client-id": 'AX_hA27L2deyQ_ejBbJ3XoU-feZ6_I3-gkjgm_7wuSWQYp1HmQVC-bNCLrprUn88PaXAxTCOwjKRwy7i' }}
       >
         <BrowserRouter>
-          <Menu />
+          <MenuHeader />
           <Routes>
             <Route path="" element={<HomePage />} />
             <Route path="login" element={<Login />} />

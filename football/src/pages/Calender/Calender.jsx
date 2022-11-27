@@ -12,6 +12,7 @@ import { CalenderDateDayContainerActive, CalenderDateDayContainerDisable, Calend
 import { weekArray, gridArray } from '../../constant/index'
 import { useParams } from "react-router-dom"
 import MatchModal from '../../components/MatchModal';
+import { Box } from '@mui/material';
 
 function Calender() {
 
@@ -80,7 +81,9 @@ function Calender() {
     };
 
     return (
-        <>
+        <Box  sx={{
+          marginTop:"100px"
+          }}>
             <CalendarContainer>
                 <CalenderHeader
                     onYearSelect={onYearSelect}
@@ -127,7 +130,7 @@ function Calender() {
                 onModalSubmit={onModalSubmit}
                 dateRange={endIndex}
             />
-        </>
+        </Box>
     )
 }
 

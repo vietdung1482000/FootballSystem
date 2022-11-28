@@ -57,6 +57,11 @@ function App() {
         </BrowserRouter>
       </PayPalScriptProvider>
 
+      {/* //      list ảnh thông tin sân bóng, 
+//      log ra thông tin ở calender,
+//      trên menu có lịch thi đấu chỉ xuất hiện của mỗi sân
+//      thêm cái thông tin ở trên cái calender
+//      tìm kiếm sân bóng */}
 
     </div>
   );

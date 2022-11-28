@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import Dropdown from 'react-dropdown'
 import {
   CalenderHeaderContainer,
@@ -7,20 +7,10 @@ import {
   MatchButton,
   GroupBtn
 } from '../StyledComponent/index'
-
 import { yearOptions, monthOptions } from '../constant/index'
 
 
 function CalenderHeader(props) {
-  // const [modalIsOpen, setIsOpen] = useState(false);
-
-  // function openModalMatch() {
-  //   setIsOpen(true);
-  // }
-
-  // function closeModalMatch() {
-  //   setIsOpen(false);
-  // }
 
   const onYearSelect = (date) => {
     props.onYearSelect(date)

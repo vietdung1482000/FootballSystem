@@ -162,7 +162,9 @@ export default function RegisterBusiness() {
             timeOpen: timeOpen,
             timeClose: timeClose,
             address: address,
-            detail: detail
+            detail: detail,
+            raing: [],
+            rate: 5
         })
         .then(()=> {
             alert("Register success <3");

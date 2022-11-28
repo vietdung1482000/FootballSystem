@@ -5,6 +5,7 @@ import StarIcon from '@mui/icons-material/Star';
 
 
 export default function HoverRating(props) {
+    const {handleChangeDataRate} = props;
     const [value, setValue] = React.useState(2);
     const [hover, setHover] = React.useState(-1);
 
@@ -21,7 +22,7 @@ export default function HoverRating(props) {
                 value={props.value}
                 precision={1}
                 onChange={(event, newValue) => {
-                    setValue(newValue);
+                    handleChangeDataRate(newValue);
                 }}
                 onChangeActive={(event, newHover) => {
                     setHover(newHover);
@@ -33,5 +34,5 @@ export default function HoverRating(props) {
 }
 
 HoverRating.defaultProps = {
-    value: 4
+    value: 0
 }

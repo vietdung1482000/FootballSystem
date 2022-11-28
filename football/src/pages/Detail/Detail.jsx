@@ -25,10 +25,10 @@ export default function DetailPage() {
     const [data, setData] = useState([]);
     const [dataDetail, setDataDetail] = useState([]);
     const [isSucess, setIsSucess] = useState();
+    const [recall, setRecallData] = useState(false);
 
     const getData = () => {
         const getFootBallData = collection(db, "business");
-
         getDocs(getFootBallData)
             .then(response => {
                 const datsans = response.docs.map(doc => ({
@@ -49,10 +49,26 @@ export default function DetailPage() {
             data.map((item) => {
                 if (item.id === business_id) {
                     setDataDetail(item.data)
+                    setIsSucess(false)
                 }
             })
         }
     }, [isSucess]);
+
+    useEffect(() => {
+        if (recall) {
+            recallData()
+        }
+    }, [recall]);
+
+    const recallData = () => {
+        getData()
+        setRecallData(false)
+    }
+
+    const handleChageRate = (value) => {
+        setRecallData(value)
+    }
 
     const tempDataSuggest = [
         {
@@ -126,16 +142,16 @@ export default function DetailPage() {
         slider.scrollLeft = slider.scrollLeft + 300
     }
 
+
     return (
         <div className="pages__detail bases__margin--horizontal110">
             <div className=" bases__margin--top130 bases__margin--bottom30 bases__font--35 bases__text--bold"> Thông tin sân bóng</div>
-
             <div className="d-flex">
                 <img src={detail} alt="" className='bases__height--450 bases__width--650' />
                 <div className="bases__margin--left50 ">
                     <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">{dataDetail.nameField}</div>
                     <div className="d-flex bases__padding--top10">
-                        <HoverRating value={dataDetail.rate} />
+                        <HoverRating value={parseInt(dataDetail.rate)} />
                         <img src={isShowDetailRate ? up : down} onClick={handleShowDetailRate} alt="" className="bases__height--30 pages__detail-icon" />
 
                     </div>
@@ -145,7 +161,7 @@ export default function DetailPage() {
                                 Sân bóng
                             </div>
                             <div className="col">
-                                <HoverRating />
+                                <HoverRating value={4} />
                             </div>
                         </div>
                         <div className="row">
@@ -153,7 +169,7 @@ export default function DetailPage() {
                                 Dịch vụ
                             </div>
                             <div className="col">
-                                <HoverRating />
+                                <HoverRating value={4}/>
                             </div>
                         </div>
                         <div className="row">
@@ -161,7 +177,7 @@ export default function DetailPage() {
                                 Nước uống
                             </div>
                             <div className="col">
-                                <HoverRating />
+                                <HoverRating value={4}/>
                             </div>
                         </div>
                         <div className="row">
@@ -169,7 +185,7 @@ export default function DetailPage() {
                                 An ninh
                             </div>
                             <div className="col">
-                                <HoverRating />
+                                <HoverRating value={4}/>
                             </div>
                         </div>
 
@@ -237,46 +253,24 @@ export default function DetailPage() {
 
             <div className=" bases__margin--top80 bases__margin--bottom30 bases__font--35 bases__text--bold"> Đánh giá sân bóng</div>
             <div>
-                <Rating />
+                <Rating business_id={business_id} handleRecall={(value) => handleChageRate(value)} />
 
-                <div className="bases__border--gray-radius bases__margin--top30">
-                    <div className='d-flex bases__margin--top15 bases__margin--left15'>
-                        <img src={avatar} alt="" className='bases__avatar' />
-                        <div className='bases__font--20 bases__margin--left10'>
-                            <div> Quang tèo</div>
-                            <HoverRating />
+                {dataDetail.rating && dataDetail.rating.map((item) => {
+                    return (
+                        <div className="bases__border--gray-radius bases__margin--top30">
+                            <div className='d-flex bases__margin--top15 bases__margin--left15'>
+                                <img src={item.avatarUser ?? avatar} alt="" className='bases__avatar' />
+                                <div className='bases__font--20 bases__margin--left10'>
+                                    <div> {item.rateByUser}</div>
+                                    <HoverRating value={parseInt(item.sumRate)} />
+                                </div>
+                            </div>
+                            <div className="bases__margin--vertical20 bases__margin--left30">
+                                {item.comment}
+                            </div>
                         </div>
-                    </div>
-                    <div className="bases__margin--vertical20 bases__margin--left30">
-                        Sân đẹp chất lượng tốt
-                    </div>
-                </div>
-
-                <div className="bases__border--gray-radius bases__margin--top30">
-                    <div className='d-flex bases__margin--top15 bases__margin--left15'>
-                        <img src={avatar} alt="" className='bases__avatar' />
-                        <div className='bases__font--20 bases__margin--left10'>
-                            <div> Quang tèo</div>
-                            <HoverRating />
-                        </div>
-                    </div>
-                    <div className="bases__margin--vertical20 bases__margin--left30">
-                        Sân đẹp chất lượng tốt
-                    </div>
-                </div>
-
-                <div className="bases__border--gray-radius bases__margin--top30">
-                    <div className='d-flex bases__margin--top15 bases__margin--left15'>
-                        <img src={avatar} alt="" className='bases__avatar' />
-                        <div className='bases__font--20 bases__margin--left10'>
-                            <div> Quang tèo</div>
-                            <HoverRating />
-                        </div>
-                    </div>
-                    <div className="bases__margin--vertical20 bases__margin--left30">
-                        Sân đẹp chất lượng tốt
-                    </div>
-                </div>
+                    )
+                })}
 
             </div>
 

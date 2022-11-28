@@ -12,6 +12,7 @@ import { CalenderDateDayContainerActive, CalenderDateDayContainerDisable, Calend
 import { weekArray, gridArray } from '../../constant/index'
 import { Link, useParams } from "react-router-dom"
 import MatchModal from '../../components/MatchModal';
+import { Box } from '@mui/material';
 
 
 import next from '../../img/next.png'
@@ -155,6 +156,7 @@ function Calender() {
     const [selectedMonth, setSelectedMonth] = useState(0);
     const [modalState, setModalState] = useState(false);
     const [matchModal, setMatchModal] = useState(false)
+    const [closeModal, setCloseModal] = useState(false)
 
     const { addAppointment } = bindActionCreators(actionCreators, dispatch)
 
@@ -171,6 +173,16 @@ function Calender() {
         setSelectedYear(parseInt(defaultYear))
         setSelectedMonth(parseInt(defaultMonth) - 1)
     }, [year, month])
+
+    useEffect(() => {
+        if (closeModal) {
+            setModalState(false)
+        }
+    }, [closeModal])
+
+    const onChangeModal = (value) => {
+        setCloseModal(value)
+    }
 
     const onYearSelect = (year) => {
         const { value } = year
@@ -189,6 +201,7 @@ function Calender() {
     const openModalMatch = () => {
         setMatchModal(!matchModal)
     }
+
     const onModalSubmit = data => {
         const date = data.Date + '-' + (selectedMonth + 1) + '-' + selectedYear
         const dataByDate = {
@@ -200,7 +213,9 @@ function Calender() {
     };
 
     return (
-        <>
+        <Box  sx={{
+          marginTop:"100px"
+          }}>
             <CalendarContainer>
                 <div className="pages__detail bases__margin--horizontal110">
                     <div className=" bases__margin--top130 bases__margin--bottom30 bases__font--35 bases__text--bold"> Thông tin sân bóng</div>
@@ -368,6 +383,7 @@ function Calender() {
                 openModal={openModal}
                 onModalSubmit={onModalSubmit}
                 dateRange={endIndex}
+                onChangeModal={(value) => {onChangeModal(value)}}
             />
             <MatchModal
                 modalState={matchModal}
@@ -375,7 +391,7 @@ function Calender() {
                 onModalSubmit={onModalSubmit}
                 dateRange={endIndex}
             />
-        </>
+        </Box>
     )
 }
 

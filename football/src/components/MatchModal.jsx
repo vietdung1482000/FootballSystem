@@ -29,20 +29,21 @@ function MatchModal(props) {
   const [data, setData] = useState([]);
 
   const [name, setName] = useState("");
+  const [name1, setName1] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   // const file = e.target[3].files[0];
   const [nameField, setNameField] = useState("");
   const [phoneBusiness, setPhoneBusiness] = useState("");
   const [address, setAddress] = useState("");
-  const [presetDate, setPresetDate] = useState("");
-  const [presetTime, setPresetTime] = useState("");
+  const [presetDate1, setPresetDate1] = useState("");
+  const [presetTime1, setPresetTime1] = useState("");
   const [age, setAge] = useState("");
   const [job, setJob] = useState("");
-  const [type, setType] = useState("");
+  const [confirm, setconfirm] = useState("");
   const { currentUser } = useContext(AuthContext);
   const onSubmit = async (data) => {
-    const colRef = collection(db, "datsan");
+    const colRef = collection(db, "ghepdoi");
     await addDoc(colRef, {
       name: currentUser.displayName,
       email: currentUser.email,
@@ -50,12 +51,14 @@ function MatchModal(props) {
       nameField: nameField,
       phoneBusiness: phoneBusiness,
       address: address,
-      presetDate: presetDate,
-      presetTime: presetTime,
+      presetDate1: presetDate1,
+      presetTime1: presetTime1,
       age: age,
       job: job,
-      type: type,
       createBy: currentUser.uid,
+      name1: name1,
+      confirm: "",
+      createWith: createWith,
     })
       .then(() => {
         alert("Register success <3");
@@ -69,10 +72,11 @@ function MatchModal(props) {
     setNameField("");
     setPhoneBusiness("");
     setAddress("");
-    setPresetDate("");
-    setPresetTime("");
+    setPresetDate1("");
+    setPresetTime1("");
     setAge("");
     setJob("");
+    setName1("")
   };
 
   const abc = () => {
@@ -152,40 +156,29 @@ function MatchModal(props) {
     getData();
   }, []);
 
+
+    let createWith = ""
+     data.map((item) => {
+      if(name1.name === item.data.name){
+        createWith = item.data.createBy
+      }
+      return createWith;
+    });
+
   const LoadName = () => {
-    // return data.map((item) => {
-    //   if (item.data.age?.age || item.data.job?.job) {
-    //     const resultAge = item.data.age?.age.toString();
-    //     const resultJob = item.data.job?.job.toString();
-    //     if (age.age === resultAge && job.job === resultJob) {
-    //       return (
-    //         <>
-    //         <InputContainer>
-    //           <InputLabel>Tên Đội</InputLabel>
-    //           <NativeSelect defaultValue="">
-    //             <option value={name}  onChange={(e) => setName({ type: e.target.value })} >{item.data.name}</option>
-    //           </NativeSelect>
-    //         </InputContainer>
-    //         </>
-
-
-    //       );
-    //     }
-    //     return "";
-    //   }
-    // });
     return (
       <>
         <InputContainer>
           <InputLabel>Tên Đội</InputLabel>
-          <NativeSelect defaultValue="">
+          <NativeSelect   onChange={(e) => setName1({ name: e.target.value })}>
             {
               data.map((item) => {
                 if (item.data.age?.age || item.data.job?.job) {
+                  console.log('item', item);
                   const resultAge = item.data.age?.age.toString();
                   const resultJob = item.data.job?.job.toString();
                   if (age.age === resultAge && job.job === resultJob) {
-                    return <option value={name} onChange={(e) => setName({ type: e.target.value })} >{item.data.name}</option>
+                    return <option value ={item.data.name}>{item.data.name}</option>
                   }
                   else {
                     return ''
@@ -198,22 +191,42 @@ function MatchModal(props) {
       </>
     )
   };
-  const loadDataSan = () => {
-    return data.map((item) => {
-
-      if (presetDate === item.data.presetDate && presetTime === item.data.presetTime) {
-        return (
-          <InputContainer>
-            <InputLabel>Tên Đội</InputLabel>
-            <NativeSelect defaultValue="">
-              <option onChange={(e) => setType({ type: e.target.value })} >{item.data.name}</option>
-            </NativeSelect>
-          </InputContainer>
-        );
-      }
-      return "";
-    });
-  }
+  const Loadsan = () => {
+    return (
+      <>
+        <InputContainer>
+          <InputLabel>Ngay Đặt</InputLabel>
+          <NativeSelect defaultValue="" onChange={(e) => setPresetDate1({ presetDate: e.target.value })}>
+            {
+              data.map((item) => {
+                  if (name1.name === item.data.name) {
+                    return <option value={item.data.presetDate}  >{item.data.presetDate}</option>
+                  }
+                  else {
+                    return ''
+                }
+              })
+            }
+          </NativeSelect>
+        </InputContainer>
+        <InputContainer>
+          <InputLabel>Giờ Đặt</InputLabel> 
+          <NativeSelect defaultValue="" onChange={(e) => setPresetTime1({ presetTime: e.target.value })}>
+            {
+              data.map((item) => {
+                  if (name1.name === item.data.name) {
+                    return <option value={item.data.presetTime} >{item.data.presetTime}</option>
+                  }
+                  else {
+                    return ''
+                }
+              })
+            }
+          </NativeSelect>
+        </InputContainer>
+      </>
+    )
+  };
   return (
     <Modal
       isOpen={props.modalState}
@@ -247,7 +260,6 @@ function MatchModal(props) {
           {data.map((item) => { })}
           {abc()}
           <p>-------------------------------------------</p>
-
           <h4 style={{ fontSize: "24px", marginBottom: "20px" }}>Sân Bóng</h4>
           <InputContainer>
             <InputSpan>Tên Sân:</InputSpan>
@@ -273,26 +285,7 @@ function MatchModal(props) {
               value={address}
             ></input>
           </InputContainer>
-          <InputContainer>
-            <InputSpan>Ngày Đặt:</InputSpan>
-            {/* <DatePicker selected={startDate} {...register("Date", { required: 'this is requiredd' })} min="1" max="31" onChange={(date) => setStartDate(date)} /> */}
-            <input
-              type="number"
-              onChange={(e) => setPresetDate(e.target.value)}
-              value={presetDate}
-              placeholder="Type a number 1 - 31"
-            ></input>
-          </InputContainer>
-          <InputContainer>
-            <InputSpan>Thời Gian Đặt:</InputSpan>
-            <input
-              type="number"
-              onChange={(e) => setPresetTime(e.target.value)}
-              value={presetTime}
-              placeholder="Type a number 1 - 24"
-            ></input>
-          </InputContainer>
-          {loadDataSan()}
+         {Loadsan(  )}
         </ModalBody>
         <ModalFooter>
           <ModalSubmit>Submit</ModalSubmit>

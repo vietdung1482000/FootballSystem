@@ -15,6 +15,9 @@ import moment from 'moment';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Football from "./pages/Detail/Football";
 import MenuHeader from "./components/MenuHeader";
+import { CssBaseline } from "@mui/material";
+import "./App.css";
+
 function App() {
 
   const { currentUser } = useContext(AuthContext);
@@ -33,6 +36,7 @@ function App() {
         options={{ "client-id": 'AX_hA27L2deyQ_ejBbJ3XoU-feZ6_I3-gkjgm_7wuSWQYp1HmQVC-bNCLrprUn88PaXAxTCOwjKRwy7i' }}
       >
         <BrowserRouter>
+        <CssBaseline />
           <MenuHeader />
           <Routes>
             <Route path="" element={<HomePage />} />

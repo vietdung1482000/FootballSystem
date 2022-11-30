@@ -179,6 +179,8 @@ export const AppointmentButton = styled.button`
     border: 1px solid black;
     background: #228c22;
     color: #fff;
+    height: 30px;
+
 `
 
 export const MatchButton = styled.button`
@@ -186,6 +188,7 @@ export const MatchButton = styled.button`
     background: #228c22;
     color: #fff;
     margin-left: 15px;
+    height: 30px;
 `
 
 export const GroupBtn = styled.div`

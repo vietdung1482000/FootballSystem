@@ -124,12 +124,6 @@ function Calender() {
                 dateRange={endIndex}
                 onChangeModal={(value) => {onChangeModal(value)}}
             />
-            <MatchModal
-                modalState={matchModal}
-                openModal={openModalMatch}
-                onModalSubmit={onModalSubmit}
-                dateRange={endIndex}
-            />
         </Box>
     )
 }

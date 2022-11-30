@@ -116,14 +116,6 @@ function Calender() {
                     </CalenderDateContainer>
                 </CalendarContainerBody>
             </CalendarContainer>
-
-            <FormModal
-                modalState={modalState}
-                openModal={openModal}
-                onModalSubmit={onModalSubmit}
-                dateRange={endIndex}
-                onChangeModal={(value) => {onChangeModal(value)}}
-            />
         </Box>
     )
 }

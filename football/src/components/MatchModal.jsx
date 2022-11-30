@@ -372,7 +372,7 @@ console.log('age', age);
   };
   return (
     <div>
-      <p onClick={handleClickOpen}>Match</p>
+      <p onClick={handleClickOpen}>Ghép Đội</p>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"

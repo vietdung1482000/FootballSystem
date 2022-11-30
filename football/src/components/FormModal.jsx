@@ -412,28 +412,8 @@ function FormModal(props) {
 
   const { currentUser } = useContext(AuthContext);
   return (
-    // <Modal
-    //   isOpen={props.modalState}
-    //   ariaHideApp={false}
-    //   onRequestClose={props.openModal}
-    // //   style={customStyles}
-    // //   contentLabel="Example Modal"
-    // >
-    //   <ModalHeader>Book A Football Field</ModalHeader>
-    //   <ModalBody>
-    //     {renderBodyModal()}
-    //   </ModalBody>
-    //   <ModalFooter>
-    //     {!submit ?
-    //       <>
-    //         <ModalSubmit onClick={submitForm} >Submit</ModalSubmit>
-    //         <ModalCancel onClick={props.openModal}>X</ModalCancel>
-    //       </>
-    //       : <></>}
-    //   </ModalFooter>
-    // </Modal>
     <div>
-      <p onClick={handleClickOpen}>Match</p>
+      <p onClick={handleClickOpen}>Đặt Sân</p>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -443,7 +423,7 @@ function FormModal(props) {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Đăng Kí Ghép Đội
+          Đặt Sân
         </BootstrapDialogTitle>
         <DialogContent dividers>{renderBodyModal()}</DialogContent>
       </BootstrapDialog>

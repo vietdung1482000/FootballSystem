@@ -35,6 +35,7 @@ import {
   TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import Choice from "./Choice";
 const product = {
   description: "test",
   price: 19,
@@ -133,10 +134,30 @@ function FormModal(props) {
         <>
           <FormControl className="bases__margin--bottom10 w-100">
             <FormLabel>Chọn Tuổi</FormLabel>
+            {/* <Choice
+              items={[
+                {
+                  id: 'radio_1',
+                  text: '12 đến 17 Tuổi',
+                  value: '12',
+                },
+                {
+                  id: 'radio_2',
+                  text: '18 đến 25 Tuổi',
+                  value: '18',
+                },
+                {
+                  id: 'radio_3',
+                  text: 'Khác',
+                  value: 'Khác',
+                },
+              ]}
+              type="radio"
+            /> */}
             <RadioGroup
               defaultValue=""
               row
-              onChange={(e) => setAge({ age: e.target.value })}
+              onChange={(e) => console.log(e.target.value)}
             >
               <FormControlLabel
                 value="12"

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import {  useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 import Radio from "@mui/material/Radio";
@@ -120,8 +120,8 @@ function MatchModal(props) {
     setJob("");
     setName1("");
   };
-console.log('job', job);
-console.log('age', age);
+  // console.log('job', job);
+  // console.log('age', age);
 
   const CheckBox = () => {
     return (
@@ -205,15 +205,12 @@ console.log('age', age);
             defaultValue=""
             onChange={(e) => setName1({ name: e.target.value })}
           >
-               {data.map((item) => {
+            {data.map((item) => {
               if (item.data.age?.age || item.data.job?.job) {
                 const resultAge = item.data.age?.age.toString();
                 const resultJob = item.data.job?.job.toString();
-                if (age.age === resultAge && job.job === resultJob) {
-                  console.log('item.data.name', item.data.name);
-                  return (
-                    <MenuItem value={item.data.name}>{item.data.name}</MenuItem>
-                  );
+                if (age.age === resultAge) {
+                   <MenuItem value={item.data.name} >{item.data.name}</MenuItem>
                 } else {
                   return "";
                 }
@@ -222,11 +219,34 @@ console.log('age', age);
               }
             })}
           </Select>
+
+          {/* <select defaultValue="" onChange={(e) => setName1({ name: e.target.value })} value={name} name="cars" id="cars">
+            {data.map((item) => {
+              if (item.data.age?.age || item.data.job?.job) {
+                const resultAge = item.data.age?.age.toString();
+                const resultJob = item.data.job?.job.toString();
+                if (age.age === resultAge && job.job === resultJob) {
+                  console.log('item.data.name', item.data.name);
+                  return (
+                    <option value={item.data.name}>{item.data.name}</option>
+                  );
+                } else {
+                  return "";
+                }
+              } else {
+                return "";
+              }
+            })}
+          </select> */}
+
           <FormHelperText></FormHelperText>
         </FormControl>
       </>
     );
   };
+
+  console.log(name1);
+
   const LoadGioDatSan = () => {
     return (
       <>

@@ -31,8 +31,6 @@ export default function Messages() {
         }
     }, [data.chatId])
 
-    console.log(messages);
-
     return (
         <MessageS>
             {messages.map((m) => (

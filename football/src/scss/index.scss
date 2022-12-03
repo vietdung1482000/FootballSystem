@@ -1,34 +1,37 @@
-
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-      monospace;
-  }
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  .button-cancle{
-    background-color: red !important;
-    color: white !important;
-    border-radius: 5px !important;
-    height: 50px !important;
-    width: 150px!important;
-  }
+.no-scroll {
+  overflow: hidden !important;
+}
 
-  .button-oke{
-    background-color: green !important;
-    color: white !important;
-    border-radius: 5px !important;
-    height: 50px !important;
-    width: 150px!important;
-  }
-  
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.button-cancle {
+  background-color: red !important;
+  color: white !important;
+  border-radius: 5px !important;
+  height: 50px !important;
+  width: 150px !important;
+}
+
+.button-oke {
+  background-color: green !important;
+  color: white !important;
+  border-radius: 5px !important;
+  height: 50px !important;
+  width: 150px !important;
+}
+
 
 @import 'bases/index';
 @import 'components/index';

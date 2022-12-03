@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components'
 import { db } from '../../firebase'
 import { collection, getDocs, } from 'firebase/firestore';
 import HoverRating from '../../components/HoverRating';
 import location from '../../img/icon/location.svg'
 import { Link } from 'react-router-dom';
+import { Loading } from '../../components/layout/Loading';
 
 export default function Football() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getData = () => {
+    setLoading(true);
     const getFootBallData = collection(db, 'business')
     getDocs(getFootBallData)
       .then(response => {
@@ -18,8 +20,8 @@ export default function Football() {
           id: doc.id,
         }))
         setData(datsans)
+        setLoading(false);
       })
-      .catch(error => console.log(error.message))
   }
   useEffect(() => {
     getData()
@@ -27,6 +29,7 @@ export default function Football() {
 
   return (
     <div>
+      <Loading loader={loading} />
       <div className="_home">
         <div className="_title">
           <div className="components__item-banner mx-auto" style={{ backgroundImage: 'url(https://seoulecohome.com.vn/wp-content/uploads/kich-thuoc-san-bong-5-nguoi_1641288174.jpg)' }}>
@@ -51,7 +54,7 @@ export default function Football() {
                 <HoverRating value={parseInt(foootball.data.rate)} />
                 <div className='bases__font--14 bases__text--normal bases__padding--vertical10'> <img src={location} alt="" />&ensp; {foootball.data.address}</div>
                 <Link to={`/detail/${foootball.id}`}>
-                  <button className="button">Book</button>
+                  <button className="button">Đặt sân</button>
                 </Link>
               </div>
             </div>

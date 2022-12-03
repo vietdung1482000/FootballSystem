@@ -245,7 +245,6 @@ function MatchModal(props) {
     );
   };
 
-  console.log(name1);
 
   const LoadGioDatSan = () => {
     return (
@@ -392,7 +391,7 @@ function MatchModal(props) {
   };
   return (
     <div>
-      <p onClick={handleClickOpen}>Ghép Đội</p>
+      <button onClick={handleClickOpen} className="pages__detail-button bases__margin--top15 bases__margin--right30">Ghép Đội</button>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"

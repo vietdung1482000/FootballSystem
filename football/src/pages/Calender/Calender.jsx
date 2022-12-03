@@ -1,87 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { useDispatch } from "react-redux";
-import { bindActionCreators } from "redux";
 import $ from 'jquery';
+import location from '../../img/icon/location.svg'
+import phone from '../../img/icon/phone.svg'
+import clock from '../../img/icon/clock.svg'
+import detail from '../../img/detail.png'
 
-import CalenderHeader from '../../components/CalenderHeader'
-import DateComponent from '../../components/DateContainer'
-import * as actionCreators from '../../store/action/index'
+
 import FormModal from '../../components/FormModal'
-import { CalenderDateDayContainerActive, CalenderDateDayContainerDisable, CalenderDateContainer, CalenderWeekDayContainer, CalenderWeekContainer, CalendarContainerBody, CalendarContainer } from '../../StyledComponent/index'
-
-import { weekArray, gridArray } from '../../constant/index'
 import { useParams } from "react-router-dom"
 import MatchModal from '../../components/MatchModal';
-import { Box } from '@mui/material';
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import {
+    TextField,
+} from "@mui/material";
+import HoverRating from '../../components/HoverRating';
+import { Loading } from '../../components/layout/Loading';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 function Calender() {
+    const [presetDate, setPresetDate] = useState(new Date());
+    const [isSucess, setIsSucess] = useState(false);
+    const [data, setData] = useState([]);
+    const [dataDetail, setDataDetail] = useState([]);
+    const { business_id } = useParams();
+    const [loading, setLoading] = useState(false);
 
-    const dispatch = useDispatch()
-
-    const { year, month } = useParams();
-
-    const [selectedYear, setSelectedYear] = useState(2022);
-    const [selectedMonth, setSelectedMonth] = useState(0);
-    const [modalState, setModalState] = useState(false);
-    const [matchModal, setMatchModal] = useState(false);
-    const [closeModal, setCloseModal] = useState(false);
-    const [datetest, setDatetest] = useState(new Date());
-
-    const { addAppointment } = bindActionCreators(actionCreators, dispatch)
-
-    const startOfDay = moment().year(selectedYear).month(selectedMonth).startOf("month").format('ddd');
-    const monthSize = parseInt(moment().year(selectedYear).month(selectedMonth).endOf("month").format('DD'));
-
-    const startIndex = weekArray.indexOf(startOfDay)
-    const endIndex = startIndex + monthSize;
+    const getData = () => {
+        setLoading(true);
+        const getFootBallData = collection(db, "business");
+        getDocs(getFootBallData)
+            .then(response => {
+                const datsans = response.docs.map(doc => ({
+                    data: doc.data(),
+                    id: doc.id,
+                }))
+                setData(datsans)
+                setIsSucess(true)
+                setLoading(false);
+            })
+            .catch(error => console.log(error.message))
+    }
+    useEffect(() => {
+        getData()
+    }, []);
 
     useEffect(() => {
-        const defaultYear = year || moment().format('YYYY')
-        const defaultMonth = month || moment().format('MM')
-
-        setSelectedYear(parseInt(defaultYear))
-        setSelectedMonth(parseInt(defaultMonth) - 1)
-    }, [year, month])
-
-    useEffect(() => {
-        if (closeModal) {
-            setModalState(false)
+        if (isSucess) {
+            data.map((item) => {
+                if (item.id === business_id) {
+                    setDataDetail(item.data)
+                    setIsSucess(false)
+                }
+            })
         }
-    }, [closeModal])
-
-    const onChangeModal = (value) => {
-        setCloseModal(value)
-    }
-
-    const onYearSelect = (year) => {
-        const { value } = year
-        setSelectedYear(parseInt(value))
-    }
-
-    const onMonthSelect = (month) => {
-        const { value } = month
-        setSelectedMonth(parseInt(value - 1))
-    }
-
-    const openModal = () => {
-        setModalState(!modalState)
-    }
-
-    const openModalMatch = () => {
-        setMatchModal(!matchModal)
-    }
-
-    const onModalSubmit = data => {
-        const date = data.Date + '-' + (selectedMonth + 1) + '-' + selectedYear
-        const dataByDate = {
-            date,
-            time: data.Time,
-            data: data
-        }
-        addAppointment(dataByDate)
-    };
-
+    }, [isSucess]);
 
     $(function ($) {
         function SchedulePlan(element) {
@@ -174,139 +150,158 @@ function Calender() {
         }
     });
 
+    const tempdataSan = [
+        {
+            tensan: 'san A',
+        },
+        {
+            tensan: 'san B',
+        },
+        {
+            tensan: 'san C',
+        },
+        {
+            tensan: 'san D',
+        },
+    ];
+
+    const tempdataSanB = [
+        {
+            tensan: 'san A',
+            gio: '19:00',
+            nguoidat: 'quang'
+        },
+        {
+            tensan: 'san B',
+            gio: '18  :00',
+            nguoidat: 'minh'
+        },
+        {
+            tensan: 'san C',
+            gio: '16:30',
+            nguoidat: 'kha',
+        },
+        {
+            tensan: 'san D',
+            gio: '17:00',
+            nguoidat: 'ngoc',
+        },
+    ]
+
     return (
-        // <Box  sx={{
-        //   marginTop:"100px"
-        //   }}>
-        //     <CalendarContainer>
-        //         <CalenderHeader
-        //             onYearSelect={onYearSelect}
-        //             onMonthSelect={onMonthSelect}
-        //             defaultYear={selectedYear.toString()}
-        //             defaultMonth={(selectedMonth + 1).toString()}
-        //             openModal={openModal}
-        //             openMatchModal={openModalMatch}
-        //         />
-        //         <CalendarContainerBody>
-        //             <CalenderWeekContainer>
-        //                 {
-        //                     weekArray.map((data, i) => <CalenderWeekDayContainer key={i}>{data}</CalenderWeekDayContainer>)
-        //                 }
-        //             </CalenderWeekContainer>
-        //             <CalenderDateContainer>
-        //                 {
-        //                     gridArray.map((data, i) =>
-        //                         i >= startIndex && i < endIndex ?
-        //                             <CalenderDateDayContainerActive key={i}>
-        //                                 <DateComponent
-        //                                     date={i - startIndex + 1}
-        //                                     month={selectedMonth + 1}
-        //                                     year={selectedYear}
-        //                                 />
-        //                             </CalenderDateDayContainerActive> :
-        //                             <CalenderDateDayContainerDisable key={i}></CalenderDateDayContainerDisable>
-        //                     )
-        //                 }
-        //             </CalenderDateContainer>
-        //         </CalendarContainerBody>
-        //     </CalendarContainer>
-        // </Box>
 
         <div className='pages__calender bases__margin--top100'>
-            <div className="cd-schedule loading">
-                <div className="timeline">
-                    <ul>
-                        <li><span>05:00</span></li>
-                        <li><span>05:30</span></li>
-                        <li><span>06:00</span></li>
-                        <li><span>06:30</span></li>
-                        <li><span>07:00</span></li>
-                        <li><span>07:30</span></li>
-                        <li><span>08:00</span></li>
-                        <li><span>08:30</span></li>
-                        <li><span>09:00</span></li>
-                        <li><span>09:30</span></li>
-                        <li><span>10:00</span></li>
-                        <li><span>10:30</span></li>
-                        <li><span>11:00</span></li>
-                        <li><span>11:30</span></li>
-                        <li><span>12:00</span></li>
-                        <li><span>12:30</span></li>
-                        <li><span>13:00</span></li>
-                        <li><span>13:30</span></li>
-                        <li><span>14:00</span></li>
-                        <li><span>14:30</span></li>
-                        <li><span>15:00</span></li>
-                        <li><span>15:30</span></li>
-                        <li><span>16:00</span></li>
-                        <li><span>16:30</span></li>
-                        <li><span>17:00</span></li>
-                        <li><span>17:30</span></li>
-                        <li><span>18:00</span></li>
-                        <li><span>18:30</span></li>
-                        <li><span>19:00</span></li>
-                        <li><span>19:30</span></li>
-                        <li><span>20:00</span></li>
-                        <li><span>20:30</span></li>
-                        <li><span>21:00</span></li>
-                        <li><span>21:30</span></li>
-                    </ul>
-                </div> {/* .timeline */}
-                <div className="events">
-                    <ul className="d-flex">
 
-                        <li className="events-group">
-                            <div className="top-info"><span>Saan 1</span></div>
-                            <ul>
-                                <li className="single-event" data-start="19:30" data-end="20:30" data-event="event-1">
-                                    <a href="#0">
-                                        <em className="event-name">19:30 - 20:30</em>
-                                        <em className="event-name">Quang Teo</em>
-                                    </a>
-                                </li>
-                                <li className="single-event" data-start="11:00" data-end="12:30" data-event="event-1">
-                                    <a href="#0">
-                                        <span className="event-name">Rowing Workout</span>
-                                    </a>
-                                </li>
-                                <li className="single-event" data-start="14:00" data-end="15:15" data-event="event-1">
-                                    <a href="#0">
-                                        <em className="event-name">Yoga Level 1</em>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className="events-group">
-                            <div className="top-info"><span>san 2</span></div>
-                            <ul>
-                                <li className="single-event" data-start="05:00" data-end="06:00" data-content="event-rowing-workout" data-event="event-1">
-                                    <a href="#0">
-                                        <em className="event-name">Rowing Workout</em>
-                                    </a>
-                                </li>
-                                <li className="single-event" data-start="08:30" data-end="09:30" data-content="event-restorative-yoga" data-event="event-1">
-                                    <a href="#0">
-                                        <em className="event-name">Restorative Yoga</em>
-                                    </a>
-                                </li>
-                                <li className="single-event" data-start="13:30" data-end="15:00" data-content="event-abs-circuit" data-event="event-1">
-                                    <a href="#0">
-                                        <em className="event-name">Abs Circuit</em>
-                                    </a>
-                                </li>
-                                <li className="single-event" data-start="15:45" data-end="16:45" data-content="event-yoga-1" data-event="event-1">
-                                    <a href="#0">
-                                        <em className="event-name">Yoga Level 1</em>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+            <Loading loader={loading} />
+            <div className="d-flex bases__margin--left75 bases__margin--right75 bases__margin--bottom75">
+                <img src={detail} alt="" className='bases__height--450 bases__width--650' />
+                <div className="bases__margin--left50 ">
+                    <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">{dataDetail.nameField}</div>
+                    <div className="d-flex bases__padding--top10">
+                        <HoverRating value={parseInt(dataDetail.rate)} />
+                    </div>
 
-                    </ul>
+                    <div className="bases__padding--top15"> <img src={location} alt="" />&ensp; {dataDetail.address}</div>
+                    <div className="bases__padding--top15"> <img src={phone} alt="" />&ensp;  {dataDetail.phone}</div>
+                    <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; {dataDetail.timeOpen} -{dataDetail.timeClose}</div>
+                    <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
+                    <div>{dataDetail.detail}</div>
+                    <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">{dataDetail.price} VND &ensp;  (Cộng thêm {dataDetail.extra_price} vào các khung giờ đặc biệt) </span> </div>
+                    <div className='d-flex'>
+                        <FormModal  dataSan={dataDetail}/>
+                        <MatchModal />
+                    </div>
                 </div>
-                <div className="cover-layer" />
-            </div> {/* .cd-schedule */}
-        </div>
+            </div>
+            <div class="bases__header-table">
+                <LocalizationProvider dateAdapter={AdapterDateFns}  >
+                    <DesktopDatePicker
+                        value={presetDate}
+                        onChange={(newValue) => {
+                            setPresetDate(newValue);
+                        }}
+                        maxDate={new Date()}
+                        renderInput={(params) => <TextField className='bases__text--white' {...params} />}
+                    />
+                </LocalizationProvider>
+            </div>
+
+            <div className='pages__calender-scheduler'>
+                <div className="cd-schedule loading bases__border--gray-radius">
+                    <div className="timeline bases__padding--left10">
+                        <ul>
+                            <li><span>05:00</span></li>
+                            <li><span>05:30</span></li>
+                            <li><span>06:00</span></li>
+                            <li><span>06:30</span></li>
+                            <li><span>07:00</span></li>
+                            <li><span>07:30</span></li>
+                            <li><span>08:00</span></li>
+                            <li><span>08:30</span></li>
+                            <li><span>09:00</span></li>
+                            <li><span>09:30</span></li>
+                            <li><span>10:00</span></li>
+                            <li><span>10:30</span></li>
+                            <li><span>11:00</span></li>
+                            <li><span>11:30</span></li>
+                            <li><span>12:00</span></li>
+                            <li><span>12:30</span></li>
+                            <li><span>13:00</span></li>
+                            <li><span>13:30</span></li>
+                            <li><span>14:00</span></li>
+                            <li><span>14:30</span></li>
+                            <li><span>15:00</span></li>
+                            <li><span>15:30</span></li>
+                            <li><span>16:00</span></li>
+                            <li><span>16:30</span></li>
+                            <li><span>17:00</span></li>
+                            <li><span>17:30</span></li>
+                            <li><span>18:00</span></li>
+                            <li><span>18:30</span></li>
+                            <li><span>19:00</span></li>
+                            <li><span>19:30</span></li>
+                            <li><span>20:00</span></li>
+                            <li><span>20:30</span></li>
+                            <li><span>21:00</span></li>
+                            <li><span>21:30</span></li>
+                        </ul>
+                    </div>
+
+                    <div className="events">
+                        <ul className="d-flex">
+                            {
+                                tempdataSan.map((item, key) => {
+                                    return (
+                                        <li className="events-group" key={key}>
+                                            <div className="top-info"><span>Saan {item.tensan}</span></div>
+                                            <ul>
+                                                {tempdataSanB.map((san, index) => {
+                                                    if (san.tensan === item.tensan) {
+                                                        const time = san.gio;
+                                                        const timeArray = time.split(':');
+                                                        const timeEnd = `${parseInt(timeArray[0]) + 1}:${timeArray[1]}`
+                                                        return (
+                                                            <li key={index} className="single-event" data-start={san.gio} data-end={timeEnd} data-event="event-1">
+                                                                <a href="#0">
+                                                                    <em className="event-name">{san.gio}- {timeEnd}</em>
+                                                                    <em className="event-name">{san.nguoidat}</em>
+                                                                </a>
+                                                            </li>
+                                                        )
+                                                    }
+                                                })}
+                                            </ul>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </div>
+                    <div className="cover-layer" />
+                </div>
+            </div>
+
+        </div >
     )
 }
 

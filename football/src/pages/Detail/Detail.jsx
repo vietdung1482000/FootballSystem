@@ -14,7 +14,10 @@ import down from '../../img/down.png'
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import { db } from "../../firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import { Link } from 'react-router-dom';
+import { Loading } from '../../components/layout/Loading';
+
 
 export default function DetailPage() {
     const [state, setState] = React.useState({
@@ -26,8 +29,10 @@ export default function DetailPage() {
     const [dataDetail, setDataDetail] = useState([]);
     const [isSucess, setIsSucess] = useState();
     const [recall, setRecallData] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const getData = () => {
+        setLoading(true);
         const getFootBallData = collection(db, "business");
         getDocs(getFootBallData)
             .then(response => {
@@ -37,6 +42,10 @@ export default function DetailPage() {
                 }))
                 setData(datsans)
                 setIsSucess(true)
+                setLoading(false);
+                document.documentElement.style.scrollBehavior = 'auto';
+                setTimeout(() => window.scrollTo(0, 0), 5);
+                setTimeout(() => (document.documentElement.style.scrollBehavior = 'smooth'), 100);
             })
             .catch(error => console.log(error.message))
     }
@@ -145,6 +154,7 @@ export default function DetailPage() {
 
     return (
         <div className="pages__detail bases__margin--horizontal110">
+             <Loading loader={loading} />
             <div className=" bases__margin--top130 bases__margin--bottom30 bases__font--35 bases__text--bold"> Thông tin sân bóng</div>
             <div className="d-flex">
                 <img src={detail} alt="" className='bases__height--450 bases__width--650' />
@@ -169,7 +179,7 @@ export default function DetailPage() {
                                 Dịch vụ
                             </div>
                             <div className="col">
-                                <HoverRating value={4}/>
+                                <HoverRating value={4} />
                             </div>
                         </div>
                         <div className="row">
@@ -177,7 +187,7 @@ export default function DetailPage() {
                                 Nước uống
                             </div>
                             <div className="col">
-                                <HoverRating value={4}/>
+                                <HoverRating value={4} />
                             </div>
                         </div>
                         <div className="row">
@@ -185,7 +195,7 @@ export default function DetailPage() {
                                 An ninh
                             </div>
                             <div className="col">
-                                <HoverRating value={4}/>
+                                <HoverRating value={4} />
                             </div>
                         </div>
 
@@ -196,8 +206,10 @@ export default function DetailPage() {
                     <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; {dataDetail.timeOpen} -{dataDetail.timeClose}</div>
                     <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
                     <div>{dataDetail.detail}</div>
-                    <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">{dataDetail.price}&ensp; ({dataDetail.extra_price}) </span> </div>
-                    <button className="pages__detail-button bases__margin--top15">Đặt sân</button>
+                    <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">{dataDetail.price} VND &ensp;  (Cộng thêm {dataDetail.extra_price} vào các khung giờ đặc biệt) </span> </div>
+                    <Link to={`/calender/${business_id}`}>
+                        <button className="pages__detail-button bases__margin--top15">Đặt sân</button>
+                    </Link>
                 </div>
             </div>
 

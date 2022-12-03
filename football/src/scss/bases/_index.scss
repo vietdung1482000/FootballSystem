@@ -1,7 +1,7 @@
 .bases {
     &__p {
         &--cursor {
-            cursor: pointer;
+            cursor: pointer !important;
         }
     }
 
@@ -74,17 +74,34 @@
         }
 
         &--green {
-            color: #119468 !important;
+            background-color: #119468 !important;
         }
     }
 
-    &__border{
-        &--unset{
+    &__header-table {
+        margin-left: 75px !important;
+        margin-right: 75px !important;
+        margin-bottom: -33px !important;
+        background-color: #119468 !important;
+        .MuiInputBase-input {
+            color: white !important;
+            width: 40% !important;
+            font-size: 18px !important;
+        }
+
+        .MuiSvgIcon-root {
+            filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(284deg) brightness(107%) contrast(103%);
+        }
+    }
+
+    &__border {
+        &--unset {
             border: unset;
         }
-        &--gray-radius{
+
+        &--gray-radius {
             border: 1px solid rgba(35, 35, 36, 0.322) !important;
-            border-radius: 25px;
+            border-radius: 5px;
         }
     }
 
@@ -175,7 +192,7 @@
     &__filter {
         &--white {
             filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(284deg) brightness(107%) contrast(103%);
-            ;
+            
         }
     }
 }

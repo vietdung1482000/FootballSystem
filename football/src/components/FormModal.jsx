@@ -12,6 +12,8 @@ import PaypalCheckoutButton from "./PaypalButton";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from 'moment';
+import icon_success from '../img/icon/icon-success.svg';
+
 import {
   Button,
   Dialog,
@@ -27,11 +29,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Stack from "@mui/material/Stack";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { Loading } from "./layout/Loading";
 
-const product = {
-  description: "test",
-  price: 19,
-};
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -65,14 +64,11 @@ function BootstrapDialogTitle(props) {
   );
 }
 function FormModal(props) {
-
+  const { dataSan } = props;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [nameField, setNameField] = useState("");
-  const [phoneBusiness, setPhoneBusiness] = useState("");
-  const [address, setAddress] = useState("");
   const [presetDate, setPresetDate] = useState(new Date());
   const [age, setAge] = useState("");
   const [job, setJob] = useState("");
@@ -80,23 +76,27 @@ function FormModal(props) {
   const [submit, setSubmit] = useState(false);
   const [data, setData] = useState({});
   const [check, setCheck] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hoanthanh, setHoanThanh] = useState(false);
 
-  const NgayGio = moment(presetDate).format("YYYY/MM/DD HH:MM")
+  const NgayGio = moment(presetDate).format("YYYY/MM/DD HH:mm")
+  const time = moment(presetDate).format("HH:mm")
+  const timeArray = time.split(':');
+  const timeCheck = parseInt(timeArray[0])
+
   useEffect(() => {
-    if (props.modalState) {
+    if (open) {
       setSubmit(false);
       setName("");
       setEmail("");
       setPhone("");
-      setNameField("");
-      setPhoneBusiness("");
-      setAddress("");
       setPresetDate("");
       setAge("");
       setJob("");
       setType("");
     }
-  }, [props.modalState]);
+  }, [open]);
 
   useEffect(() => {
     if (check) {
@@ -104,14 +104,19 @@ function FormModal(props) {
     }
   }, [check]);
 
+  const product = {
+    description: `đặt sân ${dataSan.nameField}`,
+    price: timeCheck >= 17 ? parseInt((parseInt(dataSan.price) + parseInt(dataSan.extra_price)) / 24000) : parseInt(parseInt(dataSan.price) / 24000),
+  };
+
   const onSubmit = async () => {
+    setLoading(true)
     const colRef = collection(db, "datsan");
     await addDoc(colRef, data)
       .then(() => {
         setCheck(false);
-        if (props.onChangeModal) {
-          props.onChangeModal(true);
-        }
+        setLoading(false)
+        setHoanThanh(true)
       })
       .catch((err) => {
         alert(err.message);
@@ -192,9 +197,9 @@ function FormModal(props) {
       name: currentUser.displayName,
       email: currentUser.email,
       phone: currentUser.phoneNumber,
-      nameField: nameField,
-      phoneBusiness: phoneBusiness,
-      address: address,
+      nameField: dataSan.nameField,
+      phoneBusiness: dataSan.phone,
+      address: dataSan.address,
       presetDate: NgayGio,
       age: age,
       job: job,
@@ -203,9 +208,11 @@ function FormModal(props) {
     });
     setSubmit(true);
   };
+
   const onChangeVl = (value) => {
     setCheck(value);
   };
+
   const renderBodyModal = () => {
     if (submit === false) {
       return (
@@ -254,7 +261,10 @@ function FormModal(props) {
                   label="Số Điện Thoại"
                   variant="outlined"
                   className="bases__margin--bottom10 w-100"
-                  value={currentUser.phoneNumber}
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                  }}
                 />
 
                 {/* 3) TextField */}
@@ -277,16 +287,14 @@ function FormModal(props) {
                   label="Tên Sân"
                   variant="outlined"
                   className="bases__margin--bottom10 w-100"
-                  onChange={(e) => setNameField(e.target.value)}
-                  value={nameField}
+                  value={dataSan.nameField}
                 />
                 <TextField
                   placeholder="Nhập Số Điện Thoại"
                   label="Số Điện Thoại"
                   variant="outlined"
                   className="bases__margin--bottom10 w-100"
-                  onChange={(e) => setPhoneBusiness(e.target.value)}
-                  value={phoneBusiness}
+                  value={dataSan.phone}
                 />
 
                 {/* 3) TextField */}
@@ -295,13 +303,12 @@ function FormModal(props) {
                   label="Địa Chỉ"
                   variant="outlined"
                   className="bases__margin--bottom15 w-100"
-                  onChange={(e) => setAddress(e.target.value)}
-                  value={address}
+                  value={dataSan.address}
                 />
                 <LocalizationProvider dateAdapter={AdapterDateFns} >
                   <Stack spacing={3}>
                     <DateTimePicker
-                    className="bases__margin--bottom10"
+                      className="bases__margin--bottom10"
                       renderInput={(props) => <TextField {...props} />}
                       label="Ngày Đặt"
                       value={presetDate}
@@ -328,94 +335,131 @@ function FormModal(props) {
       );
     } else {
       return (
-        <>
-          <h4 className="bases__margin--top50 bases__padding--left100">
-            Thông tin thanh toán
-          </h4>
-          <div className="container bases__padding--left150 bases__margin--bottom50">
-            <div className="row">
-              <div className="col-3 bases__text--bold base__text--16">
-                Tên Sân
+        <div className="bases__width--500">
+          {hoanthanh === false ? <>
+            <h4 className="bases__margin--top50">
+              Thông tin thanh toán
+            </h4>
+            <div className="container bases__margin--bottom50">
+              <div className="row">
+                <div className="col bases__text--bold base__text--16">
+                  Tên Sân:
+                </div>
+
+                <div className="col bases__margin--bottom10">{dataSan.nameField}</div>
               </div>
 
-              <div className="col">{nameField}</div>
+              <div className="row">
+                <div className="col bases__text--bold base__text--16">
+                  Địa chỉ:
+                </div>
+                <div className="col bases__margin--bottom10">{dataSan.address}</div>
+              </div>
+
+              <div className="row">
+                <div className="col bases__text--bold base__text--16">
+                  Ngày đặt :
+                </div>
+                <div className="col bases__margin--bottom10">
+                  Ngày {NgayGio}
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col bases__text--bold base__text--16">Giá:</div>
+                <div className="col bases__margin--bottom10">{dataSan.price}</div>
+              </div>
+
+              {timeCheck >= 17 ? <>
+                <div className="row">
+                  <div className="bases__text--bold bases__text--red base__text--16"> Lưu ý:</div>
+                  <div className="bases__margin--bottom10 bases__text--red">
+                    Bạn đang đặt sân vào khung giờ vàng hoặc buổi tối. Điều này sẽ khiến giá tiền ban đầu bị thay đổi. Hãy kiểm tra thật kỹ trước khi thực hiện !!!
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col bases__text--bold base__text--16 bases__text--red">Giá khung giờ đặc biệt:</div>
+                  <div className="col bases__margin--bottom10 bases__text--red">{parseInt(dataSan.price) + parseInt(dataSan.extra_price)} vnd</div>
+                </div>
+              </> : <></>}
+
+              <div className="row">
+                <div className="col bases__text--bold base__text--16">
+                  Người đặt:
+                </div>
+                <div className="col bases__margin--bottom10">{currentUser.displayName}</div>
+              </div>
+
+              <div className="row">
+                <div className="col bases__text--bold base__text--16">
+                  email:
+                </div>
+                <div className="col bases__margin--bottom10">{currentUser.email}</div>
+              </div>
+
+              <div className="row">
+                <div className="col bases__text--bold base__text--16">
+                  Số điện thoại liên hệ:
+                </div>
+                <div className="col bases__margin--bottom10">
+                  {phone}
+                </div>
+              </div>
             </div>
 
-            <div className="row">
-              <div className="col-3 bases__text--bold base__text--16">
-                Địa chỉ
-              </div>
-              <div className="col">{address}</div>
+            <div className="paypal-button-container d-flex justify-content-center">
+              <PaypalCheckoutButton
+                product={product}
+                check={(value) => {
+                  onChangeVl(value);
+                }}
+              />
+              <button
+                className="button-cancle bases__margin--left50"
+                onClick={handleClose}
+              >
+                Hủy Thanh toán
+              </button>
+            </div>
+          </> : <>
+            <h4 className="bases__margin--top20 text-center">
+              Thanh toán thành công
+            </h4>
+            <div className=" d-flex justify-content-center bases__margin--top10">
+              <img className="bases__width--150" src={icon_success} alt="" />
             </div>
 
-            <div className="row">
-              <div className="col-3 bases__text--bold base__text--16">
-                Ngày đặt
-              </div>
-              <div className="col">
-                Ngày {NgayGio}
-              </div>
+            <div className=" d-flex justify-content-center">
+              <button
+                className="button-cancle bases__margin--top50"
+                onClick={handleClose}
+              >
+                Đóng
+              </button>
             </div>
+          </>}
 
-            <div className="row">
-              <div className="col-3 bases__text--bold base__text--16">Giá</div>
-              <div className="col">250.000 vnd</div>
-            </div>
-
-            <div className="row">
-              <div className="col-3 bases__text--bold base__text--16">
-                Người đặt
-              </div>
-              <div className="col">{currentUser.displayName}</div>
-            </div>
-
-            <div className="row">
-              <div className="col-3 bases__text--bold base__text--16">
-                email
-              </div>
-              <div className="col">{currentUser.email}</div>
-            </div>
-
-            <div className="row">
-              <div className="col-3 bases__text--bold base__text--16">
-                Số điện thoại liên hệ
-              </div>
-              <div className="col">
-                {currentUser.phoneNumber ? currentUser.phoneNumber : phone}
-              </div>
-            </div>
-          </div>
-
-          <div className="paypal-button-container d-flex justify-content-center">
-            <PaypalCheckoutButton
-              product={product}
-              check={(value) => {
-                onChangeVl(value);
-              }}
-            />
-            <button
-              className="button-cancle bases__margin--left50"
-              onClick={props.openModal}
-            >
-              Cancle
-            </button>
-          </div>
-        </>
+        </div>
       );
     }
+
   };
-  const [open, setOpen] = React.useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
+    setHoanThanh(false)
   };
 
   const { currentUser } = useContext(AuthContext);
   return (
     <div>
-      <p onClick={handleClickOpen}>Đặt Sân</p>
+      <Loading loader={loading} />
+      <button onClick={handleClickOpen} className="pages__detail-button bases__margin--top15 bases__margin--right30"> Đặt Sân</button>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"

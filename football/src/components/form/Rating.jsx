@@ -4,10 +4,10 @@ import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import React, { useState, useEffect, useContext } from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import rate from '../../img/rate.jpg'
 import { AuthContext } from '../../context/AuthContext';
+import { Loading } from '../layout/Loading';
 
 const styleModal = {
     position: 'absolute',
@@ -29,6 +29,7 @@ export default function Rating(props) {
     const [isCalldone, setIsCalldone] = useState();
     const [openMoadal, setOpenMoadal] = useState(false);
     const { currentUser } = useContext(AuthContext)
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -40,7 +41,8 @@ export default function Rating(props) {
                 anning: '',
                 comment: '',
             })
-            handleOpen()
+            setLoading(false);
+            handleOpen();
         }
     }, [isSuccess]);
 
@@ -120,7 +122,7 @@ export default function Rating(props) {
         }
         const dataUpdate = [...data, newRate]
         const FootBallData = doc(db, "business", props.business_id)
-
+        setLoading(true)
         updateDoc(FootBallData, {
             rating: dataUpdate,
             rate: (Number(sumpRate) + Number(dataDetail.rate)) / 2
@@ -131,6 +133,7 @@ export default function Rating(props) {
 
     return (
         <div className="components__rating">
+            <Loading loader={loading} />
             {modalAlert()}
             <div className='d-flex bases__margin--top15 bases__margin--left15'>
                 <img src={currentUser.photoURL ?? avatar} alt="" className='bases__avatar' />

@@ -54,8 +54,7 @@ function App() {
                 </ProtectedRoute>
               } />
             </Route>
-            <Route path="/year/:year/month/:month" element={<Calender />} />
-            <Route path="calender" element={<Calender />} />
+            <Route path="calender/:business_id" element={<Calender />} />
           </Routes>
           {/* <Footer /> */}
         </BrowserRouter>

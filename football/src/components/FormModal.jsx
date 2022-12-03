@@ -1,7 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import Modal from "react-modal";
-import { useForm } from "react-hook-form";
-import DatePicker from "react-datepicker";
 import { db } from "../firebase";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -9,19 +6,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import InputLabel from "@mui/material/InputLabel";
-import NativeSelect from "@mui/material/NativeSelect";
 import { AuthContext } from "../context/AuthContext";
-import {
-  ModalCancel,
-  ModalSubmit,
-  ModalFooter,
-  InputSpan,
-  InputContainer,
-  ModalBody,
-  ModalHeader,
-} from "../StyledComponent/index";
 import { addDoc, collection } from "firebase/firestore";
 import PaypalCheckoutButton from "./PaypalButton";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import moment from 'moment';
 import {
   Button,
   Dialog,
@@ -35,7 +25,9 @@ import {
   TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Choice from "./Choice";
+import Stack from "@mui/material/Stack";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
 const product = {
   description: "test",
   price: 19,
@@ -73,8 +65,7 @@ function BootstrapDialogTitle(props) {
   );
 }
 function FormModal(props) {
-  const { register, handleSubmit } = useForm();
-  const [startDate, setStartDate] = useState(new Date());
+
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -82,8 +73,7 @@ function FormModal(props) {
   const [nameField, setNameField] = useState("");
   const [phoneBusiness, setPhoneBusiness] = useState("");
   const [address, setAddress] = useState("");
-  const [presetDate, setPresetDate] = useState("");
-  const [presetTime, setPresetTime] = useState("");
+  const [presetDate, setPresetDate] = useState(new Date());
   const [age, setAge] = useState("");
   const [job, setJob] = useState("");
   const [type, setType] = useState("");
@@ -91,6 +81,7 @@ function FormModal(props) {
   const [data, setData] = useState({});
   const [check, setCheck] = useState(false);
 
+  const NgayGio = moment(presetDate).format("YYYY/MM/DD HH:MM")
   useEffect(() => {
     if (props.modalState) {
       setSubmit(false);
@@ -101,7 +92,6 @@ function FormModal(props) {
       setPhoneBusiness("");
       setAddress("");
       setPresetDate("");
-      setPresetTime("");
       setAge("");
       setJob("");
       setType("");
@@ -205,8 +195,7 @@ function FormModal(props) {
       nameField: nameField,
       phoneBusiness: phoneBusiness,
       address: address,
-      presetDate: presetDate,
-      presetTime: presetTime,
+      presetDate: NgayGio,
       age: age,
       job: job,
       type: type,
@@ -214,7 +203,6 @@ function FormModal(props) {
     });
     setSubmit(true);
   };
-
   const onChangeVl = (value) => {
     setCheck(value);
   };
@@ -310,32 +298,25 @@ function FormModal(props) {
                   onChange={(e) => setAddress(e.target.value)}
                   value={address}
                 />
-                <TextField
-                  placeholder="Nhập Ngày Đặt"
-                  label="Ngày Đặt"
-                  variant="outlined"
-                  className="bases__margin--bottom15 w-100"
-                  type="number"
-                  onChange={(e) => setPresetDate(e.target.value)}
-                  value={presetDate}
-                />
-                <TextField
-                  placeholder="Nhập Giờ Đặt"
-                  label="Địa Chỉ"
-                  variant="outlined"
-                  className="bases__margin--bottom15 w-100"
-                  type="number"
-                  onChange={(e) => setPresetTime(e.target.value)}
-                  value={presetTime}
-                />
-                {/* Radio Buttons */}
+                <LocalizationProvider dateAdapter={AdapterDateFns} >
+                  <Stack spacing={3}>
+                    <DateTimePicker
+                    className="bases__margin--bottom10"
+                      renderInput={(props) => <TextField {...props} />}
+                      label="Ngày Đặt"
+                      value={presetDate}
+                      onChange={(newValue) => {
+                        setPresetDate(newValue);
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
                 {Checkbox()}
-
                 <Button
                   variant="contained"
                   color="primary"
                   type="submit"
-                  className="bases__margin--bottom20 w-100 bases__margin--top30"
+                  className="bases__margin--bottom10 w-100 bases__margin--top30"
                   onClick={submitForm}
                 >
                   Đặt Sân
@@ -372,7 +353,7 @@ function FormModal(props) {
                 Ngày đặt
               </div>
               <div className="col">
-                Ngày {presetDate} vào lúc {presetTime} giờ
+                Ngày {NgayGio}
               </div>
             </div>
 

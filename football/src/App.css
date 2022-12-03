@@ -14,7 +14,9 @@
     align-items: center;
     background-color: rgba(0, 0, 0, 0.9);
   }
-  
+  .select_chon_doi{
+    height: 50px;
+  }
   @media screen and (max-width: 768px) {
     .box-primary {
       display: none;

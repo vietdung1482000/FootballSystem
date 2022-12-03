@@ -94,7 +94,6 @@ function MatchModal(props) {
       phoneBusiness: phoneBusiness,
       address: address,
       presetDate1: presetDate1,
-      presetTime1: presetTime1,
       age: age,
       job: job,
       createBy: currentUser.uid,
@@ -192,43 +191,16 @@ function MatchModal(props) {
     return (
       <>
         <FormControl className="bases__margin--top10 w-100">
-          <InputLabel
-            id="filled-select-currency"
-            select
-            label="Select"
-            helperText="Please select your currency"
-            variant="filled"
-          >
-            Chọn Đội
-          </InputLabel>
-          <Select
-            defaultValue=""
-            onChange={(e) => setName1({ name: e.target.value })}
-          >
-            {data.map((item) => {
-              if (item.data.age?.age || item.data.job?.job) {
-                const resultAge = item.data.age?.age.toString();
-                const resultJob = item.data.job?.job.toString();
-                if (age.age === resultAge) {
-                   <MenuItem value={item.data.name} >{item.data.name}</MenuItem>
-                } else {
-                  return "";
-                }
-              } else {
-                return "";
-              }
-            })}
-          </Select>
 
-          {/* <select defaultValue="" onChange={(e) => setName1({ name: e.target.value })} value={name} name="cars" id="cars">
+          <select defaultValue="" onChange={(e) => setName1({ name: e.target.value })}  className="select_chon_doi" >
+          <option value="" disabled selected>Chọn Đội</option>
             {data.map((item) => {
               if (item.data.age?.age || item.data.job?.job) {
                 const resultAge = item.data.age?.age.toString();
                 const resultJob = item.data.job?.job.toString();
                 if (age.age === resultAge && job.job === resultJob) {
-                  console.log('item.data.name', item.data.name);
                   return (
-                    <option value={item.data.name}>{item.data.name}</option>
+                    <option value={item.data.name} placeholder="Chọn Đội">{item.data.name}</option>
                   );
                 } else {
                   return "";
@@ -237,7 +209,7 @@ function MatchModal(props) {
                 return "";
               }
             })}
-          </select> */}
+          </select>
 
           <FormHelperText></FormHelperText>
         </FormControl>
@@ -276,34 +248,6 @@ function MatchModal(props) {
               }
             })}
           </Select>
-        </FormControl>
-        <FormControl className="bases__margin--top10 w-100">
-          <InputLabel
-            id="filled-select-currency"
-            select
-            label="Select"
-            helperText="Please select your currency"
-            variant="filled"
-          >
-            Chọn Giờ Đặt
-          </InputLabel>
-          <Select
-            defaultValue=""
-            onChange={(e) => setPresetTime1({ presetTime: e.target.value })}
-          >
-            {data.map((item) => {
-              if (name1.name === item.data.name) {
-                return (
-                  <MenuItem value={item.data.presetTime}>
-                    {item.data.presetTime}
-                  </MenuItem>
-                );
-              } else {
-                return "";
-              }
-            })}
-          </Select>
-          <FormHelperText></FormHelperText>
         </FormControl>
       </>
     );

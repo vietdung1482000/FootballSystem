@@ -12,8 +12,11 @@ import { CalenderDateDayContainerActive, CalenderDateDayContainerDisable, Calend
 import { weekArray, gridArray } from '../../constant/index'
 import { Link, useParams } from "react-router-dom"
 import MatchModal from '../../components/MatchModal';
+import MapModal from '../../components/map/ModalMap'
 import { Box } from '@mui/material';
-
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 import next from '../../img/next.png'
 import left from '../../img/left.png'
@@ -32,7 +35,18 @@ import { collection, getDocs } from 'firebase/firestore'
 import HoverRating from '../../components/HoverRating';
 import { db } from '../../firebase';
 import SuggestionFootball from '../../components/layout/SuggestionFootball';
-
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 820,
+    height: 600,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 0,
+  };
 
 function Calender() {
     const [state, setState] = React.useState({
@@ -40,7 +54,6 @@ function Calender() {
     });
     const { isShowDetailRate } = state;
     const { business_id } = useParams();
-    console.log("sss",business_id)
     const [data, setData] = useState([]);
     const [dataDetail, setDataDetail] = useState([]);
     const [isSucess, setIsSucess] = useState();
@@ -55,7 +68,6 @@ function Calender() {
                     id: doc.id,
                 }))
                 setData(datsans)
-                console.log("aaa",datsans)
                 setIsSucess(true)
             })
             .catch(error => console.log(error.message))
@@ -66,14 +78,14 @@ function Calender() {
     useEffect(() => {
         if (isSucess) {
             data.map((item) => {
-                console.log("item", item)
-                if (item.id === business_id) {
-                    setDataDetail(item.data)
+                if (item.id) {
+                    // setDataDetail(item.data)
+                    setDataDetail({...item.data,id:item.id})
                 }
             })
         }
     }, [isSucess]);
-
+    console.log("itemID111111111111", dataDetail.id)
     const tempDataSuggest = [
         {
             tensan: 'sân bóng nguyễn hữu thọ',
@@ -131,7 +143,6 @@ function Calender() {
         const slider = document.getElementById('slider');
         slider.scrollLeft = slider.scrollLeft - 300
     }
-
     const sliderRight = () => {
         const slider = document.getElementById('slider');
         slider.scrollLeft = slider.scrollLeft + 300
@@ -140,7 +151,6 @@ function Calender() {
         const slider = document.getElementById('football');
         slider.scrollLeft = slider.scrollLeft - 300
     }
-
     const footballRight = () => {
         const slider = document.getElementById('football');
         slider.scrollLeft = slider.scrollLeft + 300
@@ -156,6 +166,7 @@ function Calender() {
     const [selectedMonth, setSelectedMonth] = useState(0);
     const [modalState, setModalState] = useState(false);
     const [matchModal, setMatchModal] = useState(false)
+    const [mapModal, setMapModal] = useState(false)
     const [closeModal, setCloseModal] = useState(false)
 
     const { addAppointment } = bindActionCreators(actionCreators, dispatch)
@@ -202,6 +213,14 @@ function Calender() {
         setMatchModal(!matchModal)
     }
 
+    const openMapModal = () => {
+        setMapModal(!mapModal)
+    }
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const onModalSubmit = data => {
         const date = data.Date + '-' + (selectedMonth + 1) + '-' + selectedYear
         const dataByDate = {
@@ -213,15 +232,16 @@ function Calender() {
     };
 
     return (
-        <Box  sx={{
-          marginTop:"100px"
-          }}>
+
+        <Box sx={{
+            marginTop: "100px"
+        }}>
             <CalendarContainer>
                 <div className="pages__detail bases__margin--horizontal110">
                     <div className=" bases__margin--top130 bases__margin--bottom30 bases__font--35 bases__text--bold"> Thông tin sân bóng</div>
 
                     <div className="d-flex">
-                        <img src={detail} alt="" className='bases__height--450 bases__width--650' />
+                        <img src={dataDetail.img} alt="" className='bases__height--450 bases__width--650' />
                         <div className="bases__margin--left50 ">
                             <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">{dataDetail.nameField}</div>
                             <div className="d-flex bases__padding--top10">
@@ -265,17 +285,33 @@ function Calender() {
 
                             </div>}
 
-                            <div className="bases__padding--top15"> <img src={location} alt="" />&ensp; {dataDetail.address}</div>
+                            <Button onClick={handleOpen}><img src={location} alt="" />&ensp;{dataDetail.address}</Button>
+                            <Modal
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                            >
+                                <Box sx={style}>
+                                    <MapModal />
+                                </Box>
+                            </Modal>
+                            {/* <div className="bases__padding--top15"> <img src={location} alt="" />&ensp; {dataDetail.address} 
+           
+                                
+                            </div> */}
                             <div className="bases__padding--top15"> <img src={phone} alt="" />&ensp; 090 423 94 85</div>
                             <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; {dataDetail.timeOpen} -{dataDetail.timeClose}</div>
                             <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
                             <div>{dataDetail.detail}</div>
                             <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">{dataDetail.price}&ensp; ({dataDetail.extra_price}) </span> </div>
-                            <Link to={`/calender/detail/${business_id}`}>
+                            <Link to="/calender">
                                 <button className="pages__detail-button bases__margin--top15">Đặt sân</button>
                             </Link>
                         </div>
                     </div>
+
+
 
                     <div className=" bases__margin--top80 bases__margin--bottom30 bases__font--35 bases__text--bold"> Thông tin chi tiết</div>
                     <div>
@@ -383,7 +419,7 @@ function Calender() {
                 openModal={openModal}
                 onModalSubmit={onModalSubmit}
                 dateRange={endIndex}
-                onChangeModal={(value) => {onChangeModal(value)}}
+                onChangeModal={(value) => { onChangeModal(value) }}
             />
             <MatchModal
                 modalState={matchModal}

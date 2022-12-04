@@ -11,7 +11,7 @@ import next from '../../img/next.png'
 import left from '../../img/left.png'
 import up from '../../img/up.png'
 import down from '../../img/down.png'
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import { db } from "../../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -26,7 +26,8 @@ export default function DetailPage() {
     const [dataDetail, setDataDetail] = useState([]);
     const [isSucess, setIsSucess] = useState();
     const [recall, setRecallData] = useState(false);
-
+    
+    console.log("business", business_id)
     const getData = () => {
         const getFootBallData = collection(db, "business");
         getDocs(getFootBallData)
@@ -48,13 +49,13 @@ export default function DetailPage() {
         if (isSucess) {
             data.map((item) => {
                 if (item.id === business_id) {
-                    setDataDetail(item.data)
+                    setDataDetail({...item.data,id:item.id})
                     setIsSucess(false)
+                    
                 }
             })
         }
     }, [isSucess]);
-
     useEffect(() => {
         if (recall) {
             recallData()
@@ -147,7 +148,7 @@ export default function DetailPage() {
         <div className="pages__detail bases__margin--horizontal110">
             <div className=" bases__margin--top130 bases__margin--bottom30 bases__font--35 bases__text--bold"> Thông tin sân bóng</div>
             <div className="d-flex">
-                <img src={detail} alt="" className='bases__height--450 bases__width--650' />
+                <img src={dataDetail.img} alt="" className='bases__height--450 bases__width--650' />
                 <div className="bases__margin--left50 ">
                     <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">{dataDetail.nameField}</div>
                     <div className="d-flex bases__padding--top10">
@@ -197,7 +198,9 @@ export default function DetailPage() {
                     <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
                     <div>{dataDetail.detail}</div>
                     <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">{dataDetail.price}&ensp; ({dataDetail.extra_price}) </span> </div>
-                    <button className="pages__detail-button bases__margin--top15">Đặt sân</button>
+                    <button className="pages__detail-button bases__margin--top15">
+                        <Link className="pages__detail-button-link" to={`/calender/${business_id}`}>Đặt sân</Link>
+                    </button>
                 </div>
             </div>
 

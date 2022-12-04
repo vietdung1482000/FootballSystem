@@ -174,7 +174,7 @@ function MatchModal(props) {
             {
               data.map((item) => {
                 if (item.data.age?.age || item.data.job?.job) {
-                  console.log('item', item);
+                  // console.log('item', item);
                   const resultAge = item.data.age?.age.toString();
                   const resultJob = item.data.job?.job.toString();
                   if (age.age === resultAge && job.job === resultJob) {

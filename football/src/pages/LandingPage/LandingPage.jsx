@@ -4,9 +4,12 @@ import Location from '../../img/location.png'
 import Calender from '../../img/calendar.png'
 import Match from '../../img/archery-match.png'
 import SuggestionFootball from '../../components/layout/SuggestionFootball'
-import { useState } from 'react';
 import { db } from '../../firebase';
-import { useEffect } from 'react';
+import { useState, useContext } from 'react'
+import { AuthContext } from "../../context/AuthContext.js"
+import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimestamp, getDoc } from "firebase/firestore";
+import { Link, useParams } from 'react-router-dom';
+
 
 const Landing = styled.div`
   width: 100%;
@@ -48,6 +51,41 @@ const Landing = styled.div`
 
       &:hover {
         background: #116e4f;
+      }
+    }
+  }
+
+  .listSanBong {
+    margin:0 auto;
+
+    h1 {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 40px;
+      line-height: 60px;
+      text-align: center;
+      margin-top: 50px;
+      color: #000000;
+      text-transform: capitalize;
+    }
+    .ds {
+      display: flex;
+      margin: 0 auto;
+      justify-content: center;
+
+      img {
+        cursor: pointer;
+        width: 300px;
+        height: 400px;
+      }
+      .userChatInfo {
+        span {
+          margin: 0 auto;
+          display: flex;
+          justify-content: center;
+          margin-top: 15px;
+        }
       }
     }
   }
@@ -124,6 +162,68 @@ const Landing = styled.div`
 `
 
 export default function LandingPage() {
+  const [userName, setUserName] = useState("")
+  const [user, setUser] = useState(null)
+  const [err, setErr] = useState(false)
+  const { currentUser } = useContext(AuthContext);
+  let { business_id } =useParams()
+
+  const handleSearch = async () => {
+    const q = query(collection(db, "business"), where("nameField", "==", userName));
+
+    try {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setUser(doc.data())
+      });
+
+    } catch (err) {
+      setErr(true)
+    }
+  }
+  console.log("user", user)
+
+  // const handleSelect = async () => {
+
+  //   const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+
+  //   try {
+  //     const res = await getDoc(doc(db, "chats", combinedId));
+
+  //     if (!res.exists()) {
+  //       //create chat in chats collection
+  //       await setDoc(doc(db, "chats", combinedId), { messages: [] });
+
+  //       // create user chats
+  //       await updateDoc(doc(db, "userChats", currentUser.uid), {
+  //         [combinedId + ".userInfo"]: {
+  //           uid: user.uid,
+  //           displayName: user.displayName,
+  //           photoURL: user.photoURL
+  //         },
+  //         [combinedId + ".date"]: serverTimestamp()
+  //       });
+
+  //       await updateDoc(doc(db, "userChats", user.uid), {
+  //         [combinedId + ".userInfo"]: {
+  //           uid: currentUser.uid,
+  //           displayName: currentUser.displayName,
+  //           photoURL: currentUser.photoURL
+  //         },
+  //         [combinedId + ".date"]: serverTimestamp()
+  //       });
+  //     }
+  //   } catch (err) { }
+  //   console.log("user", user)
+  //   setUser(null)
+  //   setUserName("")
+
+  // }
+
+  const handleKey = e => {
+    e.code === "Enter" && handleSearch()
+  }
+
 
 
   const tempDataSuggest = [
@@ -177,8 +277,26 @@ export default function LandingPage() {
       </div>
 
       <div className="_input">
-        <input type="text" placeholder='Nhập tên sân bóng' />
+        <input type="text" placeholder='Nhập tên sân bóng' onKeyDown={handleKey} value={userName} onChange={e => setUserName(e.target.value)} />
         <button>Tìm kiếm</button>
+      </div>
+
+
+      <div className="listSanBong">
+        <h1>danh sách sân bóng</h1>
+        <div className="ds">
+          {err && <span>User not found!</span>}
+          {user && (<div className="userChat">
+
+            {/* {user && (<div className="userChat" onClick={handleSelect}> */}
+            <Link to="">
+              <img src={user.img} alt="" />
+              <div className="userChatInfo">
+                <span>{user.nameField}</span>
+              </div>
+            </Link>
+          </div>)}
+        </div>
       </div>
 
       <div className="_service">

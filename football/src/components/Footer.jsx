@@ -8,7 +8,7 @@ const FootballFooter = styled.div`
     background: #184F3C;
     width: 100%;
     height: 300px;
-    margin-top: 50px;
+    margin-top: 200px;
     display: flex;
 
     ._logo {

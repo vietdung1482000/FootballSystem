@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "@mui/material/Link";
 import { AuthContext } from "../context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import { db } from "../firebase";
 import {
   AppBar,
   Avatar,
@@ -20,6 +21,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Menu } from "@mui/icons-material";
 import CustomizedDialogs from "./CustomizedDialogs";
+import { Navigate } from "react-router-dom";
+import { async } from "@firebase/util";
+import { collection, getDocs } from "firebase/firestore";
 
 const theme = createTheme({
   palette: {
@@ -34,8 +38,25 @@ const theme = createTheme({
 });
 
 export default function MenuHeader() {
+  const [data, setData] = useState([]);
 
   const { currentUser } = useContext(AuthContext);
+  const getData = () => {
+    const getdataDatSan = collection(db, "users");
+    getDocs(getdataDatSan)
+      .then((response) => {
+        const datsans = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        setData(datsans);
+      })
+      .catch((error) => console.log(error.message));
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <React.Fragment>
       <AppBar sx={{ background: "white" }}>
@@ -60,9 +81,19 @@ export default function MenuHeader() {
               <Link underline="none" href="/match" color="#757575">
                 Thi Đấu
               </Link>
-              <Link underline="none" href="/calender" color="#757575">
-                Lịch Thi Đấu
-              </Link>
+              {data.map((item) => {
+                  if (
+                    currentUser &&
+                    item.data.uid === currentUser.uid &&
+                    item.data.rule === "admin"
+                  ) {
+                    return (
+                      <Link underline="none" href="/calender" color="#757575">
+                        Lịch Thi Đấu
+                      </Link>
+                    );
+                  }
+              })}
             </Box>
             {currentUser === null ? (
               <ThemeProvider theme={theme}>
@@ -99,7 +130,7 @@ export default function MenuHeader() {
                     },
                   }}
                 >
-                    <CustomizedDialogs/>
+                  <CustomizedDialogs />
                   <Typography
                     variant="h7"
                     component="h7"
@@ -117,6 +148,9 @@ export default function MenuHeader() {
                       <Avatar src={currentUser?.photoURL} />
                     </IconButton>
                   </Tooltip>
+                  <Button onClick={async () => await auth.signOut()}>
+                    SignOut
+                  </Button>
                 </Box>
               </ThemeProvider>
             )}

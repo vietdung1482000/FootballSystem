@@ -208,7 +208,7 @@ function Calender() {
                     <div>{dataDetail.detail}</div>
                     <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">{dataDetail.price} VND &ensp;  (Cộng thêm {dataDetail.extra_price} vào các khung giờ đặc biệt) </span> </div>
                     <div className='d-flex'>
-                        <FormModal  dataSan={dataDetail}/>
+                        <FormModal dataSan={dataDetail} />
                         <MatchModal />
                     </div>
                 </div>

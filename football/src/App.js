@@ -14,6 +14,7 @@ import Calender from "./pages/Calender/Calender";
 import moment from 'moment';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import MenuHeader from "./components/MenuHeader";
+import ModalMap from "./components/map/ModalMap";
 import { CssBaseline } from "@mui/material";
 import "./App.css";
 
@@ -31,6 +32,7 @@ function App() {
 
   return (
     <div className="app">
+      {/* <ModalMap /> */}
       <PayPalScriptProvider
         options={{ "client-id": 'AX_hA27L2deyQ_ejBbJ3XoU-feZ6_I3-gkjgm_7wuSWQYp1HmQVC-bNCLrprUn88PaXAxTCOwjKRwy7i' }}
       >
@@ -53,11 +55,11 @@ function App() {
               } />
             </Route>
             <Route path="calender/:business_id" element={<Calender />} />
+            <Route path="calender" element={<Calender />} />
           </Routes>
-          {/* <Footer /> */}
+          <Footer />
         </BrowserRouter>
       </PayPalScriptProvider>
-
 
     </div>
   );

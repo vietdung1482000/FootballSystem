@@ -56,10 +56,11 @@ export default function DetailPage() {
     }, []);
 
     useEffect(() => {
-        if (business_id !== oldParams) {
+        if(business_id !== oldParams){
             window.location.reload();
-            setOldParams(business_id)
+            setOldParams(business_id);
         }
+       
     }, [business_id, oldParams]);
 
     useEffect(() => {

@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import HoverRating from '../../components/HoverRating';
 import { Loading } from '../../components/layout/Loading';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 function Calender() {
@@ -28,6 +28,7 @@ function Calender() {
     const [dataDetail, setDataDetail] = useState([]);
     const { business_id } = useParams();
     const [loading, setLoading] = useState(false);
+    const [dataCalender, setDataCalender] = useState([]);
 
     const getData = () => {
         setLoading(true);
@@ -44,6 +45,9 @@ function Calender() {
             })
             .catch(error => console.log(error.message))
     }
+
+
+
     useEffect(() => {
         getData()
     }, []);
@@ -58,6 +62,27 @@ function Calender() {
             })
         }
     }, [isSucess]);
+
+    useEffect(() => {
+        if (dataDetail.nameField) {
+            getDataCalender()
+        }
+    }, [dataDetail.nameField]);
+
+    const getDataCalender = () => {
+        setLoading(true);
+        const getFootBallData = collection(db, "datsan");
+        const queryCalender = query(getFootBallData, where("nameField", "==", dataDetail.nameField))
+        getDocs(queryCalender)
+            .then(response => {
+                const datsans = response.docs.map(doc => ({
+                    data: doc.data(),
+                }))
+                setDataCalender(datsans)
+                setLoading(false);
+            })
+            .catch(error => console.log(error.message))
+    }
 
     $(function ($) {
         function SchedulePlan(element) {
@@ -85,26 +110,9 @@ function Calender() {
         };
 
         SchedulePlan.prototype.scheduleReset = function () {
-            const mq = this.mq();
-            if (mq == 'desktop' && !this.element.hasClass('js-full')) {
-                //in this case you are on a desktop version (first load or resize from mobile)
-                this.eventSlotHeight = this.eventsGroup.eq(0).children('.top-info').outerHeight();
-                this.element.addClass('js-full');
-                this.placeEvents();
-                this.element.hasClass('modal-is-open') && this.checkEventModal();
-            } else if (mq == 'mobile' && this.element.hasClass('js-full')) {
-                //in this case you are on a mobile version (first load or resize from desktop)
-                this.element.removeClass('js-full loading');
-                this.eventsGroup.children('ul').add(this.singleEvents).removeAttr('style');
-                this.eventsWrapper.children('.grid-line').remove();
-                this.element.hasClass('modal-is-open') && this.checkEventModal();
-            } else if (mq == 'desktop' && this.element.hasClass('modal-is-open')) {
-                //on a mobile version with modal open - need to resize/move modal window
-                this.checkEventModal('desktop');
-                this.element.removeClass('loading');
-            } else {
-                this.element.removeClass('loading');
-            }
+            this.eventSlotHeight = this.eventsGroup.eq(0).children('.top-info').outerHeight();
+            this.element.addClass('js-full');
+            this.placeEvents();
         };
 
         SchedulePlan.prototype.placeEvents = function () {
@@ -122,7 +130,6 @@ function Calender() {
                 });
             });
 
-            this.element.removeClass('loading');
         };
 
         SchedulePlan.prototype.mq = function () {
@@ -150,43 +157,7 @@ function Calender() {
         }
     });
 
-    const tempdataSan = [
-        {
-            tensan: 'san A',
-        },
-        {
-            tensan: 'san B',
-        },
-        {
-            tensan: 'san C',
-        },
-        {
-            tensan: 'san D',
-        },
-    ];
-
-    const tempdataSanB = [
-        {
-            tensan: 'san A',
-            gio: '19:00',
-            nguoidat: 'quang'
-        },
-        {
-            tensan: 'san B',
-            gio: '18  :00',
-            nguoidat: 'minh'
-        },
-        {
-            tensan: 'san C',
-            gio: '16:30',
-            nguoidat: 'kha',
-        },
-        {
-            tensan: 'san D',
-            gio: '17:00',
-            nguoidat: 'ngoc',
-        },
-    ]
+    const dataEvent = dataCalender.filter((dataSearch) => dataSearch.data.presetDate.indexOf(moment(presetDate).format("YYYY/MM/DD")) > -1)
 
     return (
 
@@ -206,9 +177,8 @@ function Calender() {
                     <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; {dataDetail.timeOpen} -{dataDetail.timeClose}</div>
                     <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
                     <div>{dataDetail.detail}</div>
-                    <div className="bases__padding--top15"> <span className="bases__text--bold bases__font--20" >Giá</span> &ensp;<span className="bases__text--bold bases__text--green bases__font--20">{dataDetail.price} VND &ensp;  (Cộng thêm {dataDetail.extra_price} vào các khung giờ đặc biệt) </span> </div>
                     <div className='d-flex'>
-                        <FormModal dataSan={dataDetail} />
+                        <FormModal dataSan={dataDetail} recallAPI={getDataCalender} />
                         <MatchModal />
                     </div>
                 </div>
@@ -219,8 +189,8 @@ function Calender() {
                         value={presetDate}
                         onChange={(newValue) => {
                             setPresetDate(newValue);
+                            getDataCalender();
                         }}
-                        maxDate={new Date()}
                         renderInput={(params) => <TextField className='bases__text--white' {...params} />}
                     />
                 </LocalizationProvider>
@@ -270,21 +240,21 @@ function Calender() {
                     <div className="events">
                         <ul className="d-flex">
                             {
-                                tempdataSan.map((item, key) => {
+                                dataDetail.SoLuongSan?.map((item, key) => {
                                     return (
                                         <li className="events-group" key={key}>
-                                            <div className="top-info"><span>Saan {item.tensan}</span></div>
+                                            <div className="top-info"><span>{item.SoLuongSan}</span></div>
                                             <ul>
-                                                {tempdataSanB.map((san, index) => {
-                                                    if (san.tensan === item.tensan) {
-                                                        const time = san.gio;
+                                                {dataEvent.map((event, index) => {
+                                                    if (event.data.san === item.SoLuongSan) {
+                                                        const time = moment(event.data.presetDate).format("HH:mm");
                                                         const timeArray = time.split(':');
                                                         const timeEnd = `${parseInt(timeArray[0]) + 1}:${timeArray[1]}`
                                                         return (
-                                                            <li key={index} className="single-event" data-start={san.gio} data-end={timeEnd} data-event="event-1">
+                                                            <li key={index} className="single-event" data-start={time} data-end={timeEnd} data-event="event-1">
                                                                 <a href="#0">
-                                                                    <em className="event-name">{san.gio}- {timeEnd}</em>
-                                                                    <em className="event-name">{san.nguoidat}</em>
+                                                                    <em className="event-name">{time}- {timeEnd}</em>
+                                                                    <em className="event-name">{event.data.name}</em>
                                                                 </a>
                                                             </li>
                                                         )
@@ -295,6 +265,7 @@ function Calender() {
                                     )
                                 })
                             }
+
                         </ul>
                     </div>
                     <div className="cover-layer" />

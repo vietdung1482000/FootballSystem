@@ -1,0 +1,36 @@
+.components {
+    &__choice {
+        min-height: 34px;
+
+        input {
+            &:focus {
+                outline: unset !important;
+                border: 1px solid blue !important;
+            }
+
+            appearance: none;
+            -webkit-appearance: none;
+            border: 1px solid black;
+            width: 16px;
+            height: 16px;
+
+            &[type='checkbox'] {
+                border-radius: 2px;
+
+                &:checked {
+                    background: url('../../img/icon/checkbox-checked.svg') 50% no-repeat !important;
+                    border: 1px solid red;
+                }
+            }
+
+            &[type='radio'] {
+                border-radius: 50%;
+
+                &:checked {
+                    background: url('../../img/icon/checkbox-checked.svg') 50% no-repeat !important;
+                    border: 1px solid red;
+                }
+            }
+        }
+    }
+}

@@ -16,6 +16,9 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Football from "./pages/Detail/Football";
 import MenuHeader from "./components/MenuHeader";
 import ModalMap from "./components/map/ModalMap";
+import { CssBaseline } from "@mui/material";
+import "./App.css";
+
 function App() {
 
   const { currentUser } = useContext(AuthContext);
@@ -35,6 +38,7 @@ function App() {
         options={{ "client-id": 'AX_hA27L2deyQ_ejBbJ3XoU-feZ6_I3-gkjgm_7wuSWQYp1HmQVC-bNCLrprUn88PaXAxTCOwjKRwy7i' }}
       >
         <BrowserRouter>
+        <CssBaseline />
           <MenuHeader />
           <Routes>
             <Route path="" element={<HomePage />} />
@@ -58,12 +62,6 @@ function App() {
           <Footer />
         </BrowserRouter>
       </PayPalScriptProvider>
-
-      {/* //      list ảnh thông tin sân bóng, 
-//      log ra thông tin ở calender,
-//      trên menu có lịch thi đấu chỉ xuất hiện của mỗi sân
-//      thêm cái thông tin ở trên cái calender
-//      tìm kiếm sân bóng */}
 
     </div>
   );

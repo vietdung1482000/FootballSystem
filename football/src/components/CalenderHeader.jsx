@@ -8,6 +8,8 @@ import {
   GroupBtn
 } from '../StyledComponent/index'
 import { yearOptions, monthOptions } from '../constant/index'
+import MatchModal from './MatchModal'
+import FormModal from './FormModal'
 
 
 function CalenderHeader(props) {
@@ -48,8 +50,8 @@ function CalenderHeader(props) {
         </div>
       </DropdownContainer>
       <GroupBtn>
-        <AppointmentButton onClick={openModal}>Create Appointment</AppointmentButton>
-        <MatchButton onClick={openModalMatch}>Match</MatchButton>
+        <AppointmentButton> <FormModal/></AppointmentButton>
+        <MatchButton ><MatchModal/></MatchButton>
       </GroupBtn>
     </CalenderHeaderContainer>
   )

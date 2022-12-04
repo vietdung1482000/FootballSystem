@@ -2,14 +2,14 @@
     &__suggestionFootball {
         width: 300px;
         height: 439px;
-        background: url('../../img/football.png') ;
-        background-size: cover;
+        margin-right: 20px !important;
+        background-size: cover!important;
         box-shadow: none !important;
+        border-radius: 25px;
+        margin-bottom: 20px;
         .information{
             height: 185px;
-            width: 290px;
-            margin-left: 14px;
-            margin-bottom: 14px;
+            width: 300px;
             border-bottom-left-radius: 2rem;
             border-bottom-right-radius: 2rem;
             background:  rgba(5, 35, 25, 0.8) !important;

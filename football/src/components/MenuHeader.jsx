@@ -57,9 +57,6 @@ export default function MenuHeader() {
               <Link href="/" underline="none" color="#757575">
                 Trang Chủ
               </Link>
-              <Link underline="none" href="/football-pitches" color="#757575">
-                Sân bóng
-              </Link>
               <Link underline="none" href="/match" color="#757575">
                 Thi Đấu
               </Link>

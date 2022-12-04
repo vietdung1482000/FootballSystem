@@ -25,6 +25,7 @@ export default function DetailPage() {
     });
     const { isShowDetailRate } = state;
     const { business_id } = useParams();
+    const [oldParams, setOldParams] = useState(business_id);
     const [data, setData] = useState([]);
     const [dataDetail, setDataDetail] = useState([]);
     const [isSucess, setIsSucess] = useState();
@@ -49,9 +50,17 @@ export default function DetailPage() {
             })
             .catch(error => console.log(error.message))
     }
+
     useEffect(() => {
         getData()
     }, []);
+
+    useEffect(() => {
+        if (business_id !== oldParams) {
+            window.location.reload();
+            setOldParams(business_id)
+        }
+    }, [business_id, oldParams]);
 
     useEffect(() => {
         if (isSucess) {
@@ -66,7 +75,7 @@ export default function DetailPage() {
 
     useEffect(() => {
         if (recall) {
-            recallData()
+            recallData(data)
         }
     }, [recall]);
 
@@ -78,34 +87,6 @@ export default function DetailPage() {
     const handleChageRate = (value) => {
         setRecallData(value)
     }
-
-    const tempDataSuggest = [
-        {
-            tensan: 'sân bóng nguyễn hữu thọ',
-            location: ' 250 Nguyễn hữu thọ',
-            rate: 5
-        },
-        {
-            tensan: 'sân bóng nguyễn hữu thọ',
-            location: ' 250 Nguyễn hữu thọ',
-            rate: 4
-        },
-        {
-            tensan: 'sân bóng nguyễn hữu thọ',
-            location: ' 250 Nguyễn hữu thọ',
-            rate: 3
-        },
-        {
-            tensan: 'sân bóng nguyễn hữu thọ',
-            location: ' 250 Nguyễn hữu thọ',
-            rate: 5
-        },
-        {
-            tensan: 'sân bóng nguyễn hữu thọ',
-            location: ' 250 Nguyễn hữu thọ',
-            rate: 4
-        },
-    ]
 
     const tempDataImage = [
         {
@@ -154,10 +135,10 @@ export default function DetailPage() {
 
     return (
         <div className="pages__detail bases__margin--horizontal110">
-             <Loading loader={loading} />
+            <Loading loader={loading} />
             <div className=" bases__margin--top130 bases__margin--bottom30 bases__font--35 bases__text--bold"> Thông tin sân bóng</div>
             <div className="d-flex">
-                <img src={detail} alt="" className='bases__height--450 bases__width--650' />
+                <img src={dataDetail.imageURL} alt="" className='bases__height--450 bases__width--650' />
                 <div className="bases__margin--left50 ">
                     <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">{dataDetail.nameField}</div>
                     <div className="d-flex bases__padding--top10">
@@ -293,10 +274,10 @@ export default function DetailPage() {
             <div className="d-flex align-items-center">
                 <img src={left} onClick={footballLeft} alt="" className="pages__detail-btn" />
                 <div id="football" className="bases__margin--bottom20 pages__detail-img ">
-                    {tempDataSuggest.map((data, index) => {
+                    {data.map((item, index) => {
                         return (
-                            <div className="bases__margin--left20" key={index}>
-                                <SuggestionFootball detail={data} />
+                            <div className="_cardImg" key={index}>
+                                <SuggestionFootball detail={item} />
                             </div>
                         )
                     })}

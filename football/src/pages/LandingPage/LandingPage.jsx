@@ -7,6 +7,10 @@ import SuggestionFootball from '../../components/layout/SuggestionFootball'
 import { useState } from 'react';
 import { db } from '../../firebase';
 import { useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { Loading } from '../../components/layout/Loading';
+import Clear from '../../img/close.png'
+
 
 const Landing = styled.div`
   width: 100%;
@@ -125,60 +129,51 @@ const Landing = styled.div`
 
 export default function LandingPage() {
 
+  const [data, setData] = useState([]);
+  const [dataSearch, setDataSearch] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [valueSearch, setValueSearch] = useState("");
 
-  const tempDataSuggest = [
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 4
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 3
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-  ]
+  const getData = () => {
+    setLoading(true);
+    const getFootBallData = collection(db, 'business')
+    getDocs(getFootBallData)
+      .then(response => {
+        const datsans = response.docs.map(doc => ({
+          data: doc.data(),
+          id: doc.id,
+        }))
+        setData(datsans)
+        setDataSearch(datsans)
+        setLoading(false);
+      })
+  }
+  useEffect(() => {
+    getData()
+  }, []);
+
+  const searchData = () => {
+    const search = data.filter((dataSearch) => dataSearch.data.nameField.toLowerCase().indexOf(valueSearch.toLowerCase()) > -1)
+    setDataSearch(search)
+  }
+
+  const clearDataSearch = () => {
+    setValueSearch("");
+    getData();
+  }
 
   return (
     <Landing>
+      <Loading loader={loading} />
       <div className="_title">
         FOOTBALL <br />
         NỀN TẢNG ĐẶT SÂN - TÌM ĐỐI
       </div>
 
       <div className="_input">
-        <input type="text" placeholder='Nhập tên sân bóng' />
-        <button>Tìm kiếm</button>
+        <input className='bases__input--outline' type="text" placeholder='Nhập tên sân bóng' value={valueSearch} onChange={(e) => setValueSearch(e.target.value)} />
+        <button onClick={searchData}>Tìm kiếm</button>
+        <img onClick={clearDataSearch} className='bases__width--20 bases__margin--left380 bases__p--cursor' src={Clear} alt="" />
       </div>
 
       <div className="_service">
@@ -207,10 +202,10 @@ export default function LandingPage() {
       <div className="_suggest">
         <h1>Gợi ý sân bóng</h1>
         <div id="football" className="_card">
-          {tempDataSuggest.map((data, index) => {
+          {dataSearch.map((item, index) => {
             return (
               <div className="_cardImg" key={index}>
-                <SuggestionFootball detail={data} />
+                <SuggestionFootball detail={item} />
               </div>
             )
           })}

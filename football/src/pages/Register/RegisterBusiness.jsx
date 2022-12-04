@@ -1,227 +1,448 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import BG from '../../img/bg.png'
-import addAvatar from '../../img/addAvatar.png';
-import { useNavigate } from 'react-router-dom';
-import { collection, addDoc } from "firebase/firestore"
-import { db } from "../../firebase";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import BG from "../../img/bg.png";
+import { useNavigate } from "react-router-dom";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { auth, db, storage } from "../../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { Stack } from "@mui/system";
+import { Fab, Input, TextField } from "@mui/material";
+import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
+import moment from "moment";
+import { AuthContext } from "../../context/AuthContext";
+import { Add } from "@mui/icons-material";
 
 const ResBusiness = styled.div`
+  width: 100%;
+  .resBusiness {
     width: 100%;
-    .resBusiness {
-        width: 100%;
-        position: relative;
-        .form {
-            position: absolute;
-            width: 670px;
-            height: auto;
-            left: 325px;
-            top: 68px;
-            z-index: 99;
-            background: #FFFFFF;
+    position: relative;
+    .form {
+      position: absolute;
+      width: 45%;
+      height: auto;
+      left: 100px;
+      top: 150px;
+      z-index: 99;
+      background: #ffffff;
+      box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
+      border-radius: 30px;
+      .bgc {
+        padding: 5px;
+        background: #119468;
+        border-radius: 25px 25px 0px 0px;
+        p {
+          font-family: "Poppins";
+          font-style: normal;
+          font-weight: 700;
+          font-size: 20px;
+          line-height: 30px;
+          display: flex;
+          align-items: center;
+          color: #ffffff;
+          margin-left: 30px;
+          margin-top: 15px;
+        }
+      }
+
+      .content {
+        p {
+          font-family: "Poppins";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 24px;
+          display: flex;
+          align-items: center;
+          margin-left: 40px;
+          color: rgba(0, 0, 0, 0.6);
+        }
+
+        ._detail {
+          padding: 15px;
+          background: #ffffff;
+          box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
+          border-radius: 10px;
+          width: 600px;
+        }
+        form {
+          width: 100%;
+          margin-left: 10px;
+          padding: 10px;
+          .left {
+            float: left;
+            .input_left {
+              width: 100%;
+            }
+          }
+          .right {
+            float: right;
+            margin-right: 15px;
+            .input_right {
+              width: 65%;
+            }
+          }
+          input {
+            padding: 15px;
+            background: #ffffff;
             box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
-            border-radius: 30px;
+            border-radius: 10px;
+            margin: 20px;
+            margin-left: 50px;
+            width: 600px;
+          }
 
-            .bgc {
-                padding: 5px;
-                background: #119468;
-                border-radius: 25px 25px 0px 0px;
-                p{
-                    font-family: 'Poppins';
-                    font-style: normal;
-                    font-weight: 700;
-                    font-size: 20px;
-                    line-height: 30px;
-                    display: flex;
-                    align-items: center;
-                    color: #FFFFFF;
-                    margin-left: 30px;
-                    margin-top: 15px;
-                }
-            }
+          textarea {
+            margin-top: 20px;
+            margin-left: 50px;
+            background: #ffffff;
+            box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            padding: 20px;
+            width: 600px;
+          }
 
-            .content {
-                p {
-                    font-family: 'Poppins';
-                    font-style: normal;
-                    font-weight: 400;
-                    font-size: 16px;
-                    line-height: 24px;
-                    display: flex;
-                    align-items: center;
-                    margin-left: 40px;
-                    color: rgba(0, 0, 0, 0.6);
-                }
-
-                ._detail {
-                    margin-left: 50px;
-                    padding: 20px 40px;
-                    background: #FFFFFF;
-                    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
-                    border-radius: 30px;
-                }
-                form {
-                    width: 100%;
-                    margin-left: 10px;
-                    padding: 10px;
-                    .left{
-                        float: left;
-                        width: 50%;
-                    }
-                    .right {
-                        width: 50%;
-                        float: right;
-                    }
-                    input {
-                        padding: 15px;
-                        background: #FFFFFF;
-                        box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
-                        border-radius: 30px;
-                        margin: 20px;
-                    }
-
-                    textarea {
-                        margin-top: 20px;
-                        margin-left: 30px;
-                        background: #FFFFFF;
-                        box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
-                        border-radius: 30px;
-                        padding: 20px;
-                    }
-
-                    select {
-                        width: 100px;
-                    }
-                    .lg {
-                        img {
-                            width: 80px;
-                            margin-top: 20px;
-                            margin-left: 20px;
-
-                        }
-                    }
-                }
-            }
-
-        }
-
-        .bg {
-            position: absolute;
-            height: 680px;
-            left: 1024px;
-            top: 100px;
+          select {
+            width: 100px;
+          }
+          .lg {
             img {
-                width: 100%;
-                height: 100%;
+              width: 80px;
+              margin-top: 20px;
+              margin-left: 20px;
             }
+          }
         }
+      }
     }
-`
+
+    .bg {
+      position: absolute;
+      height: 680px;
+      left: 1024px;
+      top: 100px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+`;
 const Button = styled.button`
-    width: 350px;
-    background: #119468;
-    color: white;
-    padding: 15px;
-    font-weight: bold;
-    border: none;
-    margin-top: 20px;
-    margin-left: 20%;
-    border-radius: 25px;
-    cursor: pointer;
+  width: 350px;
+  background: #119468;
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+  border: none;
+  margin-top: 20px;
+  margin-left: 20%;
+  border-radius: 25px;
+  cursor: pointer;
 
-    :hover{
-       background-color: #82ccdd;
-    }
-`
-
+  :hover {
+    background-color: #82ccdd;
+  }
+`;
 
 export default function RegisterBusiness() {
+  const [inputList, setInputList] = useState([{ SoLuongSan: "", Gia: "" }]);
 
-    // const db = getFirestore()
-    const [err, setErr] = useState(false);
-    const navigate = useNavigate();
+  // handle input change
+  const handleInputChange = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...inputList];
+    list[index][name] = value;
+    setInputList(list);
+  };
 
-    const [nameField, setNameField] = useState("");
-    const [phone, setPhone] = useState("");
-    const [infoField,setInfoField] = useState("");
-    // const file = e.target[3].files[0];
-    const [nameSingleField,setNameSingleField] = useState("");
-    const [timeOpen, setTimeOpen] = useState("");
-    const [timeClose, setTimeClose] = useState("");
-    const [address, setAddress] = useState("");
-    const [detail, setDetail] = useState("")
+  // handle click event of the Remove button
+  const handleRemoveClick = (index) => {
+    const list = [...inputList];
+    list.splice(index, 1);
+    setInputList(list);
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const colRef = collection(db, "business")
-        await addDoc(colRef, {
-            nameField: nameField,
-            phone: phone,
-            infoField: infoField,
-            nameSingleField: nameSingleField,
-            timeOpen: timeOpen,
-            timeClose: timeClose,
-            address: address,
-            detail: detail,
-            raing: [],
-            rate: 5
-        })
-        .then(()=> {
-            alert("Register success <3");
+  // handle click event of the Add button
+  const handleAddClick = () => {
+    setInputList([...inputList, { SoLuongSan: "", Gia: "" }]);
+  };
+  console.log("inputList", inputList);
+  // const db = getFirestore()
+  const [err, setErr] = useState(false);
+  const navigate = useNavigate();
+
+  const [nameField, setNameField] = useState("");
+  const [phone, setPhone] = useState("");
+  const [infoField, setInfoField] = useState("");
+  const [nameSingleField, setNameSingleField] = useState("");
+  const [timeOpen, setTimeOpen] = useState(new Date());
+  const [timeClose, setTimeClose] = useState(new Date());
+  const [address, setAddress] = useState("");
+  const [detail, setDetail] = useState("");
+  const [abc, stetAbc] = useState(false);
+  const [files, setFiles] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [giaphuthu, setgiaphuthu] = useState("");
+
+
+  const fileRef = useRef();
+  const handleChange = (e) => {
+    setFiles([...e.target.files]);
+    fileRef.current.value = null;
+  };
+  useEffect(() => {
+    if (abc) {
+      submitData();
+      stetAbc(false);
+    }
+  }, [abc]);
+
+  const { currentUser } = useContext(AuthContext);
+  const ngaymo = moment(timeOpen).format("HH");
+  const ngaydong = moment(timeClose).format("HH");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const displayName = e.target[0].value;
+    const email = e.target[1].value;
+    const password = e.target[2].value;
+    const file = e.target[3].files[0];
+    const rule = "admin";
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const storageRef = ref(storage, displayName, rule);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        (error) => {
+          setErr(true);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(res.user, {
+              rule,
+              displayName,
+              photoURL: downloadURL,
+            });
+
+            await setDoc(doc(db, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
+              email,
+              photoURL: downloadURL,
+              rule,
+            });
             navigate("/login");
-        })
-        .catch(err => {
-            alert(err.message)
-        })
-        setNameField('')
-        setPhone('')
-        setInfoField('')
-        setNameSingleField('')
-        setTimeOpen('')
-        setTimeClose('')
-        setAddress('')
-        setDetail('')
-    };
+          });
+        }
+      );
+      stetAbc(true);
+    } catch (err) {
+      setErr(true);
+    }
+  };
+  const uploadFileWithProgress = (files, subFolder, imageName, setProgress) => {
+    return new Promise((resolve, reject) => {
+      const storageRef = ref(storage, subFolder + '/' + imageName);
+      const upload = uploadBytesResumable(storageRef, files);
+      upload.on(
+        'state_changed',
+        (snapShot) => {
+          const progress =
+            (snapShot.bytesTransferred / snapShot.totalBytes) * 100;
+          setProgress(progress);
+        },
+      (error) => {
+        reject(error);
+      },
+      async () => {
+        try {
+          const url = await getDownloadURL(storageRef);
+          resolve(url);
+        } catch (error) {
+          reject(error);
+        }
+      }
+    );
+  });
+}
+  const submitData = async () => {
+    try {
+      const url = await uploadFileWithProgress(
+        files,
+        setProgress
+      );
+      const colRef = collection(db, "business");
+      await addDoc(colRef, {
+        id: currentUser.uid,
+        nameField: nameField,
+        phone: phone,
+        infoField: infoField,
+        timeOpen: ngaymo,
+        timeClose: ngaydong,
+        address: address,
+        detail: detail,
+        raing: [],
+        rate: 5,
+        SoLuongSan: inputList,
+        imageURL:url,
+        giaphuthu:giaphuthu,
+      })
+      .then(() => {
+        alert("Register success <3");
+        navigate("/login");
+      })
+    }catch (error) {
+      alert(error.message);
+      console.log(error);
+    }
+    setNameField("");
+    setPhone("");
+    setInfoField("");
+    setNameSingleField("");
+    setTimeOpen("");
+    setTimeClose("");
+    setAddress("");
+    setDetail("");
+  };
 
-    return (
-        <ResBusiness>
-            <div className="resBusiness">
-                <div className="form">
-                    <div className='bgc'>
-                        <p>Thông Tin</p>
+  return (
+    <ResBusiness>
+      <div className="resBusiness">
+        <div className="form">
+          <div className="bgc">
+            <p>Đăng Kí Tài Khoản Sân</p>
+          </div>
+          <div className="content">
+            <form onSubmit={handleSubmit}>
+              <div>
+                <input type="text" placeholder="Tên của bạn" />
+                <input type="email" placeholder="Nhập địa chỉ email" />
+                <input type="password" placeholder="Nhập mật khẩu" />
+                <input type="file" id="file" />
+                <input
+                  type="text"
+                  placeholder="Số điện thoại"
+                  onChange={(e) => setPhone(e.target.value)}
+                  value={phone}
+                />
+                <input
+                  type="text"
+                  placeholder="Tên sân bóng"
+                  onChange={(e) => setNameField(e.target.value)}
+                  value={nameField}
+                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <Stack spacing={3}>
+                    <DesktopTimePicker
+                      className="dongho bases__margin--bottom30"
+                      label="Giờ Mở Cửa"
+                      value={timeOpen}
+                      onChange={(newValue) => {
+                        setTimeOpen(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <Stack spacing={3}>
+                    <DesktopTimePicker
+                      className="dongho1"
+                      label="Giờ Đóng Cửa"
+                      value={timeClose}
+                      onChange={(newValue) => {
+                        setTimeClose(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+                <input
+                  type="text"
+                  placeholder="Địa chỉ"
+                  onChange={(e) => setAddress(e.target.value)}
+                  value={address}
+                />
+                <input
+                  type="file"
+                  multiple
+                  inputRef={fileRef}
+                  onChange={handleChange}
+                />
+                <textarea
+                  placeholder="Giới thiệu"
+                  width="48"
+                  height="48"
+                  type="text"
+                  onChange={(e) => setInfoField(e.target.value)}
+                  value={infoField}
+                />
+                {/* <input style={{ display: "none" }} type="file" id="file" /> */}
+                <textarea
+                  type="text"
+                  onChange={(e) => setDetail(e.target.value)}
+                  value={detail}
+                  className="_detail"
+                  placeholder="Chi tiết"
+                  id=""
+                  cols="60"
+                  rows="10"
+                ></textarea>{" "}
+              </div>
+              <input
+                  type="number"
+                  placeholder="Nhập Giá Phụ Thu"
+                  onChange={(e) => setgiaphuthu(e.target.value)}
+                  value={giaphuthu}
+                />
+              {inputList.map((x, i) => {
+                return (
+                  <div className="SLS">
+                    <div className="left">
+                      <input
+                        name="SoLuongSan"
+                        placeholder="Nhập Số Sân"
+                        value={x.SoLuongSan}
+                        onChange={(e) => handleInputChange(e, i)}
+                        className="input_left"
+                      />
                     </div>
-                    <div className="content">
-                        <p>Nhập thông tin sân bóng</p>
-                        <form onSubmit={handleSubmit}>
-                            <div className="left">
-                                <input type="text" placeholder="Tên sân bóng" onChange={(e)=> setNameField(e.target.value)} value={nameField} />
-                                <input type="text" placeholder="Số điện thoại" onChange={(e)=> setPhone(e.target.value)} value={phone} />
-                                <textarea placeholder='Giới thiệu' width="48" height="48" type="text" onChange={(e)=> setInfoField(e.target.value)} value={infoField} />
-                                <input style={{ display: "none" }} type="file" id="file" />
-                                <div className="lg">
-                                    <label htmlFor="file">
-                                        <img src={addAvatar} alt="" />
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="right">
-                                <input type="text" placeholder="Tên từng sân" onChange={(e)=> setNameSingleField(e.target.value)} value={nameSingleField} />
-                                <input type="text" placeholder="Thời gian mở" onChange={(e)=> setTimeOpen(e.target.value)} value={timeOpen} />
-                                <input type="text" placeholder="Thời gian đóng" onChange={(e)=> setTimeClose(e.target.value)} value={timeClose} />
-                                <input type="text" placeholder="Địa chỉ" onChange={(e)=> setAddress(e.target.value)} value={address} />
-                            </div>
-
-                            <textarea type="text" onChange={(e)=> setDetail(e.target.value)} value={detail} className="_detail" placeholder='Chi tiết' id="" cols="60" rows="10"></textarea> <br />
-                            <Button>Hoàn Tất</Button>
-                            {err && <span>Đã xảy ra lỗi!</span>}
-                        </form>
+                    <div className="right">
+                      <input
+                        name="Gia"
+                        placeholder="Nhập Giá"
+                        value={x.Gia}
+                        onChange={(e) => handleInputChange(e, i)}
+                        className="input_right"
+                        type="number"
+                        min="1"
+                                    />
+                      <RemoveIcon
+                        onClick={() => handleRemoveClick(i)}
+                      ></RemoveIcon>
+                      <AddIcon onClick={handleAddClick}></AddIcon>
                     </div>
-                </div>
-                <div className="bg">
-                    <img src={BG} alt="" />
-                </div>
-            </div>
-        </ResBusiness>
-    )
+                  </div>
+                );
+              })}
+
+              <br />
+              <Button>Hoàn Tất</Button>
+              {err && <span>Đã xảy ra lỗi!</span>}
+            </form>
+          </div>
+        </div>
+        <div className="bg">
+          <img src={BG} alt="" />
+        </div>
+      </div>
+    </ResBusiness>
+  );
 }

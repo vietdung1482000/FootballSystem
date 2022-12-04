@@ -7,7 +7,18 @@
     padding: 30px;
     overflow: auto;
   }
-  
+  .dongho{
+    background: #ffffff;
+    width: 600px;  
+    right: -50px;
+    top: 10px;
+    margin-bottom: 100px;
+  }
+  .dongho1{
+    background: #ffffff;
+    width: 600px;  
+    right: -50px;
+  }
   .box-primary {
     display: flex;
     justify-content: center;

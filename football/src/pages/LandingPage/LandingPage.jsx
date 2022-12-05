@@ -4,11 +4,12 @@ import Location from '../../img/location.png'
 import Calender from '../../img/calendar.png'
 import Match from '../../img/archery-match.png'
 import SuggestionFootball from '../../components/layout/SuggestionFootball'
+import { useState } from 'react';
 import { db } from '../../firebase';
-import { useState, useContext } from 'react'
-import { AuthContext } from "../../context/AuthContext.js"
-import { collection, query, where, getDocs, setDoc, doc, updateDoc, serverTimestamp, getDoc } from "firebase/firestore";
-import { Link, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { Loading } from '../../components/layout/Loading';
+import Clear from '../../img/close.png'
 
 
 const Landing = styled.div`
@@ -51,41 +52,6 @@ const Landing = styled.div`
 
       &:hover {
         background: #116e4f;
-      }
-    }
-  }
-
-  .listSanBong {
-    margin:0 auto;
-
-    h1 {
-      font-family: 'Poppins';
-      font-style: normal;
-      font-weight: 600;
-      font-size: 40px;
-      line-height: 60px;
-      text-align: center;
-      margin-top: 50px;
-      color: #000000;
-      text-transform: capitalize;
-    }
-    .ds {
-      display: flex;
-      margin: 0 auto;
-      justify-content: center;
-
-      img {
-        cursor: pointer;
-        width: 300px;
-        height: 400px;
-      }
-      .userChatInfo {
-        span {
-          margin: 0 auto;
-          display: flex;
-          justify-content: center;
-          margin-top: 15px;
-        }
       }
     }
   }
@@ -162,141 +128,52 @@ const Landing = styled.div`
 `
 
 export default function LandingPage() {
-  const [userName, setUserName] = useState("")
-  const [user, setUser] = useState(null)
-  const [err, setErr] = useState(false)
-  const { currentUser } = useContext(AuthContext);
-  let { business_id } =useParams()
 
-  const handleSearch = async () => {
-    const q = query(collection(db, "business"), where("nameField", "==", userName));
+  const [data, setData] = useState([]);
+  const [dataSearch, setDataSearch] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [valueSearch, setValueSearch] = useState("");
 
-    try {
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setUser(doc.data())
-      });
-
-    } catch (err) {
-      setErr(true)
-    }
+  const getData = () => {
+    setLoading(true);
+    const getFootBallData = collection(db, 'business')
+    getDocs(getFootBallData)
+      .then(response => {
+        const datsans = response.docs.map(doc => ({
+          data: doc.data(),
+          id: doc.id,
+        }))
+        setData(datsans)
+        setDataSearch(datsans)
+        setLoading(false);
+      })
   }
-  console.log("user", user)
+  useEffect(() => {
+    getData()
+  }, []);
 
-  // const handleSelect = async () => {
-
-  //   const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
-
-  //   try {
-  //     const res = await getDoc(doc(db, "chats", combinedId));
-
-  //     if (!res.exists()) {
-  //       //create chat in chats collection
-  //       await setDoc(doc(db, "chats", combinedId), { messages: [] });
-
-  //       // create user chats
-  //       await updateDoc(doc(db, "userChats", currentUser.uid), {
-  //         [combinedId + ".userInfo"]: {
-  //           uid: user.uid,
-  //           displayName: user.displayName,
-  //           photoURL: user.photoURL
-  //         },
-  //         [combinedId + ".date"]: serverTimestamp()
-  //       });
-
-  //       await updateDoc(doc(db, "userChats", user.uid), {
-  //         [combinedId + ".userInfo"]: {
-  //           uid: currentUser.uid,
-  //           displayName: currentUser.displayName,
-  //           photoURL: currentUser.photoURL
-  //         },
-  //         [combinedId + ".date"]: serverTimestamp()
-  //       });
-  //     }
-  //   } catch (err) { }
-  //   console.log("user", user)
-  //   setUser(null)
-  //   setUserName("")
-
-  // }
-
-  const handleKey = e => {
-    e.code === "Enter" && handleSearch()
+  const searchData = () => {
+    const search = data.filter((dataSearch) => dataSearch.data.nameField.toLowerCase().indexOf(valueSearch.toLowerCase()) > -1)
+    setDataSearch(search)
   }
 
-
-
-  const tempDataSuggest = [
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 4
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 3
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-    {
-      tensan: 'sân bóng nguyễn hữu thọ',
-      location: ' 250 Nguyễn hữu thọ',
-      rate: 5
-    },
-  ]
+  const clearDataSearch = () => {
+    setValueSearch("");
+    getData();
+  }
 
   return (
     <Landing>
+      <Loading loader={loading} />
       <div className="_title">
         FOOTBALL <br />
         NỀN TẢNG ĐẶT SÂN - TÌM ĐỐI
       </div>
 
       <div className="_input">
-        <input type="text" placeholder='Nhập tên sân bóng' onKeyDown={handleKey} value={userName} onChange={e => setUserName(e.target.value)} />
-        <button>Tìm kiếm</button>
-      </div>
-
-
-      <div className="listSanBong">
-        <h1>danh sách sân bóng</h1>
-        <div className="ds">
-          {err && <span>User not found!</span>}
-          {user && (<div className="userChat">
-
-            {/* {user && (<div className="userChat" onClick={handleSelect}> */}
-            <Link to="">
-              <img src={user.img} alt="" />
-              <div className="userChatInfo">
-                <span>{user.nameField}</span>
-              </div>
-            </Link>
-          </div>)}
-        </div>
+        <input className='bases__input--outline' type="text" placeholder='Nhập tên sân bóng' value={valueSearch} onChange={(e) => setValueSearch(e.target.value)} />
+        <button onClick={searchData}>Tìm kiếm</button>
+        <img onClick={clearDataSearch} className='bases__width--20 bases__margin--left380 bases__p--cursor' src={Clear} alt="" />
       </div>
 
       <div className="_service">
@@ -325,10 +202,10 @@ export default function LandingPage() {
       <div className="_suggest">
         <h1>Gợi ý sân bóng</h1>
         <div id="football" className="_card">
-          {tempDataSuggest.map((data, index) => {
+          {dataSearch.map((item, index) => {
             return (
               <div className="_cardImg" key={index}>
-                <SuggestionFootball detail={data} />
+                <SuggestionFootball detail={item} />
               </div>
             )
           })}

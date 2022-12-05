@@ -64,7 +64,7 @@ function BootstrapDialogTitle(props) {
   );
 }
 function FormModal(props) {
-  const { dataSan } = props;
+  const { dataSan, recallAPI } = props;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -73,6 +73,9 @@ function FormModal(props) {
   const [age, setAge] = useState("");
   const [job, setJob] = useState("");
   const [type, setType] = useState("");
+  const [san, setSan] = useState("");
+  const [product, setProduct] = useState({});
+  const [giaSan, setGiaSan] = useState();
   const [submit, setSubmit] = useState(false);
   const [data, setData] = useState({});
   const [check, setCheck] = useState(false);
@@ -95,6 +98,7 @@ function FormModal(props) {
       setAge("");
       setJob("");
       setType("");
+      setSan("");
     }
   }, [open]);
 
@@ -104,10 +108,21 @@ function FormModal(props) {
     }
   }, [check]);
 
-  const product = {
-    description: `đặt sân ${dataSan.nameField}`,
-    price: timeCheck >= 17 ? parseInt((parseInt(dataSan.price) + parseInt(dataSan.extra_price)) / 24000) : parseInt(parseInt(dataSan.price) / 24000),
-  };
+  useEffect(() => {
+    if (san) {
+      {
+        dataSan.SoLuongSan.map((item) => {
+          if (san === item.SoLuongSan) {
+            setGiaSan(item.Gia)
+            setProduct({
+              description: `đặt sân ${dataSan.nameField}`,
+              price: timeCheck >= 17 ? parseInt((parseInt(item.Gia) + parseInt(dataSan.extra_price)) / 24000) : parseInt(parseInt(item.Gia) / 24000),
+            })
+          }
+        })
+      }
+    }
+  }, [san]);
 
   const onSubmit = async () => {
     setLoading(true)
@@ -129,26 +144,6 @@ function FormModal(props) {
         <>
           <FormControl className="bases__margin--bottom10 w-100">
             <FormLabel>Chọn Tuổi</FormLabel>
-            {/* <Choice
-              items={[
-                {
-                  id: 'radio_1',
-                  text: '12 đến 17 Tuổi',
-                  value: '12',
-                },
-                {
-                  id: 'radio_2',
-                  text: '18 đến 25 Tuổi',
-                  value: '18',
-                },
-                {
-                  id: 'radio_3',
-                  text: 'Khác',
-                  value: 'Khác',
-                },
-              ]}
-              type="radio"
-            /> */}
             <RadioGroup
               defaultValue=""
               row
@@ -205,6 +200,7 @@ function FormModal(props) {
       job: job,
       type: type,
       createBy: currentUser.uid,
+      san: san,
     });
     setSubmit(true);
   };
@@ -289,6 +285,40 @@ function FormModal(props) {
                   className="bases__margin--bottom10 w-100"
                   value={dataSan.nameField}
                 />
+                <FormControl className="bases__margin--bottom10 w-100">
+                  <InputLabel
+                    id="filled-select-currency"
+                    select
+                    label="Select"
+                    helperText="Please select your currency"
+                    variant="filled"
+                  >
+                    Chọn Sân
+                  </InputLabel>
+                  <Select onChange={(e) => setSan(e.target.value)}>
+                    {dataSan.SoLuongSan?.map((item) => {
+                      return <MenuItem
+                        value={item.SoLuongSan}
+                        onChange={(e) => setSan(e.target.value)}
+                      >
+                        {item.SoLuongSan}
+                      </MenuItem>
+                    })}
+                  </Select>
+
+                  <FormHelperText></FormHelperText>
+                  {/* <select>
+                    {
+                      dataSan.SoLuongSan?.map((item) => {
+                        return <option
+                          value={item.SoLuongSan}
+                          onChange={(e) => setSan(e.target.value)}
+                        >
+                          {item.SoLuongSan}
+                        </option >
+                      })}
+                  </select> */}
+                </FormControl>
                 <TextField
                   placeholder="Nhập Số Điện Thoại"
                   label="Số Điện Thoại"
@@ -367,7 +397,7 @@ function FormModal(props) {
 
               <div className="row">
                 <div className="col bases__text--bold base__text--16">Giá:</div>
-                <div className="col bases__margin--bottom10">{dataSan.price}</div>
+                <div className="col bases__margin--bottom10">{giaSan}</div>
               </div>
 
               {timeCheck >= 17 ? <>
@@ -380,7 +410,7 @@ function FormModal(props) {
 
                 <div className="row">
                   <div className="col bases__text--bold base__text--16 bases__text--red">Giá khung giờ đặc biệt:</div>
-                  <div className="col bases__margin--bottom10 bases__text--red">{parseInt(dataSan.price) + parseInt(dataSan.extra_price)} vnd</div>
+                  <div className="col bases__margin--bottom10 bases__text--red">{parseInt(giaSan) + parseInt(dataSan.extra_price)} vnd</div>
                 </div>
               </> : <></>}
 
@@ -453,6 +483,9 @@ function FormModal(props) {
   const handleClose = () => {
     setOpen(false);
     setHoanThanh(false)
+    if (recallAPI) {
+      recallAPI();
+    }
   };
 
   const { currentUser } = useContext(AuthContext);

@@ -13,7 +13,6 @@ import Footer from "./components/Footer";
 import Calender from "./pages/Calender/Calender";
 import moment from 'moment';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import Football from "./pages/Detail/Football";
 import MenuHeader from "./components/MenuHeader";
 import ModalMap from "./components/map/ModalMap";
 import { CssBaseline } from "@mui/material";
@@ -33,7 +32,6 @@ function App() {
 
   return (
     <div className="app">
-      {/* <ModalMap /> */}
       <PayPalScriptProvider
         options={{ "client-id": 'AX_hA27L2deyQ_ejBbJ3XoU-feZ6_I3-gkjgm_7wuSWQYp1HmQVC-bNCLrprUn88PaXAxTCOwjKRwy7i' }}
       >
@@ -47,7 +45,6 @@ function App() {
             <Route path="selectModule" element={<SelectModule />} />
             <Route path="resbusiness" element={<RegisterBusiness />} />
             <Route path="match" element={<LandingPage />} />
-            <Route path="football-pitches" element={< Football />} />
             <Route path="detail/:business_id" element={<DetailPage />} />
             <Route path="chat">
               <Route index element={

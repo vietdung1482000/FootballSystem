@@ -27,6 +27,9 @@ export default function Football() {
     getData()
   }, []);
 
+  console.log("data", data.id)
+
+
   return (
     <div>
       <Loading loader={loading} />
@@ -41,6 +44,7 @@ export default function Football() {
 
       <div className='bases__margin--left50 row'>
         {data.map((foootball, index) => {
+          console.log("football", foootball.id)
           return (
 
             <div className="components__item-container bases__margin--left80 bases__margin--bottom80 col-3" key={index} >

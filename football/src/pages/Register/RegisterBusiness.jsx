@@ -213,7 +213,7 @@ export default function RegisterBusiness() {
     const email = e.target[1].value;
     const password = e.target[2].value;
     const file = e.target[3].files[0];
-    const rule = "admin";
+    const rule = "business";
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const storageRef = ref(storage, displayName, rule);

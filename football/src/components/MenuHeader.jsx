@@ -85,7 +85,7 @@ export default function MenuHeader() {
                   if (
                     currentUser &&
                     item.data.uid === currentUser.uid &&
-                    item.data.rule === "admin"
+                    item.data.rule === "business"
                   ) {
                     return (
                       <Link underline="none" href="/calender" color="#757575">

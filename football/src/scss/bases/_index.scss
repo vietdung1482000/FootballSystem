@@ -5,6 +5,12 @@
         }
     }
 
+    &__input {
+        &--outline {
+            outline: none !important;
+        }
+    }
+
     &__avatar {
         vertical-align: middle;
         width: 50px;
@@ -106,7 +112,7 @@
     }
 
     &__margin {
-        @for $i from 0 through 250 {
+        @for $i from 0 through 500 {
             &--left#{$i} {
                 margin-left: #{$i}px !important;
             }

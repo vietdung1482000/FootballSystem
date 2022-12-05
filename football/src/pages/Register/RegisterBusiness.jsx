@@ -293,7 +293,7 @@ export default function RegisterBusiness() {
         rate: 5,
         SoLuongSan: inputList,
         imageURL:url,
-        giaphuthu:giaphuthu,
+        extra_price:giaphuthu,
       })
       .then(() => {
         alert("Register success <3");

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import BG from '../../img/bg.png';
 
@@ -74,7 +75,9 @@ export default function HomePage() {
           <h2 className="football">FOOTBALL</h2>
           <h2>NỀN TẢNG ĐẶT SÂN - TÌM ĐỐI</h2>
           <p>Ở đây là phần thông tin thêm</p>
-          <Button>Tìm hiểu thêm</Button>
+          <Link  to={`/match`} underline="none" >
+            <Button>Tìm hiểu thêm</Button>
+          </Link>
         </div>
         <div className="bg">
           <img src={BG} alt="" />

@@ -17,6 +17,7 @@ import MenuHeader from "./components/MenuHeader";
 import ModalMap from "./components/map/ModalMap";
 import { CssBaseline } from "@mui/material";
 import "./App.css";
+import Manager from "./pages/Manager/Manager";
 
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
             <Route path="resbusiness" element={<RegisterBusiness />} />
             <Route path="match" element={<LandingPage />} />
             <Route path="detail/:business_id" element={<DetailPage />} />
+            <Route path="manager/:business_id" element={<Manager/>} />
             <Route path="chat">
               <Route index element={
                 <ProtectedRoute>

@@ -23,7 +23,7 @@ import { Menu } from "@mui/icons-material";
 import CustomizedDialogs from "./CustomizedDialogs";
 import { Navigate } from "react-router-dom";
 import { async } from "@firebase/util";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, query, where } from "firebase/firestore";
 
 const theme = createTheme({
   palette: {
@@ -39,8 +39,33 @@ const theme = createTheme({
 
 export default function MenuHeader() {
   const [data, setData] = useState([]);
+  const [business, setBusinessID] = useState([]);
 
   const { currentUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      getDataBusiness();
+    }
+  }, [currentUser]);
+
+  const getDataBusiness = () => {
+    const getFootBallData = collection(db, 'business')
+    const queryCalender = query(getFootBallData, where("manager", "==", `${currentUser.uid}`))
+    getDocs(queryCalender)
+      .then(response => {
+        const datsans = response.docs.map(doc => ({
+          data: doc.data(),
+          id: doc.id,
+        }))
+        setBusinessID(datsans)
+      })
+  }
+
   const getData = () => {
     const getdataDatSan = collection(db, "users");
     getDocs(getdataDatSan)
@@ -53,9 +78,6 @@ export default function MenuHeader() {
       })
       .catch((error) => console.log(error.message));
   };
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <React.Fragment>
@@ -82,17 +104,17 @@ export default function MenuHeader() {
                 Thi Đấu
               </Link>
               {data.map((item) => {
-                  if (
-                    currentUser &&
-                    item.data.uid === currentUser.uid &&
-                    item.data.rule === "business"
-                  ) {
-                    return (
-                      <Link underline="none" href="/calender" color="#757575">
-                        Lịch Thi Đấu
-                      </Link>
-                    );
-                  }
+                if (
+                  currentUser &&
+                  item.data.uid === currentUser.uid &&
+                  (item.data.rule === "admin" || item.data.rule === "business")
+                ) {
+                  return (
+                    <Link underline="none" href={`/calender/${business[0]?.id}`} color="#757575">
+                      Lịch Thi Đấu
+                    </Link>
+                  );
+                }
               })}
             </Box>
             {currentUser === null ? (

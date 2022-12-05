@@ -31,29 +31,33 @@ export default function Manager() {
     const [newdoanhThu, setNewDoanhThu] = useState();
     const [editDoanhThu, setEditDoanhThu] = useState(false);
     const [dataDoanhThu, setDataDoanhThu] = useState({});
+    const [listenEvent, setListenEvent] = useState(false);
 
     useEffect(() => {
         getData()
     }, []);
 
     useEffect(() => {
-        const doanhThuThangNay = dataCalender.filter((dataSearch) => moment(dataSearch.data.presetDate).format("M").indexOf(moment(presetDate).format("M")) > -1)
-        const tongDoanhThu = parseInt(doanhThuThangNay.length ?? 0) * 250000;
-        const doanhThuThang = parseInt(tongDoanhThu ?? 0) / parseInt(doanhThu ?? 10000000) * 100;
+        if (listenEvent === true) {
+            const doanhThuThangNay = dataCalender.filter((dataSearch) => moment(dataSearch.data.presetDate).format("M").indexOf(moment(presetDate).format("M")) > -1)
+            const tongDoanhThu = parseInt(doanhThuThangNay.length ?? 0) * 250000;
+            const doanhThuThang = parseInt(tongDoanhThu ?? 0) / parseInt(doanhThu ?? 10000000) * 100;
 
-        const lastMonht = parseInt(moment(presetDate).format("M") ?? 1) - 1;
+            const lastMonht = parseInt(moment(presetDate).format("M") ?? 1) - 1;
 
-        const dataDoanhThuThangTruoc = dataCalender.filter((dataSearch) => moment(dataSearch.data.presetDate).format("M").indexOf(lastMonht.toString()) > -1)
-        const tongDoanhThuThangTruoc = parseInt(dataDoanhThuThangTruoc.length ?? 0) * 250000;
-        const doanhThuThangTruoc = parseInt(tongDoanhThuThangTruoc ?? 0) / parseInt(doanhThu ?? 10000000) * 100;
+            const dataDoanhThuThangTruoc = dataCalender.filter((dataSearch) => moment(dataSearch.data.presetDate).format("M").indexOf(lastMonht.toString()) > -1)
+            const tongDoanhThuThangTruoc = parseInt(dataDoanhThuThangTruoc.length ?? 0) * 250000;
+            const doanhThuThangTruoc = parseInt(tongDoanhThuThangTruoc ?? 0) / parseInt(doanhThu ?? 10000000) * 100;
 
-        setDataDoanhThu({
-            thangnay: doanhThuThang,
-            thangtruoc: doanhThuThangTruoc,
-            tongthangnay: tongDoanhThu,
-            tongthangtruoc: tongDoanhThuThangTruoc
-        })
-    }, [doanhThu, presetDate]);
+            setDataDoanhThu({
+                thangnay: doanhThuThang,
+                thangtruoc: doanhThuThangTruoc,
+                tongthangnay: tongDoanhThu,
+                tongthangtruoc: tongDoanhThuThangTruoc
+            });
+            setListenEvent(false)
+        }
+    }, [listenEvent]);
 
     useEffect(() => {
         if (isSucess) {
@@ -71,8 +75,6 @@ export default function Manager() {
             getDataCalender()
         }
     }, [dataDetail.nameField]);
-
-    console.log(dataDetail);
 
     const getData = () => {
         setLoading(true);
@@ -101,6 +103,7 @@ export default function Manager() {
                 }))
                 setDataCalender(datsans)
                 setLoading(false);
+                setListenEvent(true)
             })
             .catch(error => console.log(error.message))
     }
@@ -149,6 +152,7 @@ export default function Manager() {
                         value={presetDate}
                         onChange={(newValue) => {
                             setPresetDate(newValue);
+                            setListenEvent(true)
                         }}
                         renderInput={(params) => <TextField className='bases__text--white' {...params} />}
                     />

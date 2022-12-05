@@ -157,7 +157,7 @@ export default function MenuHeader() {
                     variant="h7"
                     component="h7"
                     sx={{
-                      marginTop: "10%",
+                      marginTop: "5%",
                     }}
                   >
                     <Link underline="none" color="#212121">

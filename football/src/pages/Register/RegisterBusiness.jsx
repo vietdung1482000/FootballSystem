@@ -21,13 +21,11 @@ const ResBusiness = styled.div`
   width: 100%;
   .resBusiness {
     width: 100%;
-    position: relative;
     .form {
-      position: absolute;
       width: 45%;
       height: auto;
-      left: 100px;
-      top: 150px;
+      margin-left: 100px;
+      margin-top: 150px;
       z-index: 99;
       background: #ffffff;
       box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.25);
@@ -213,7 +211,7 @@ export default function RegisterBusiness() {
     const email = e.target[1].value;
     const password = e.target[2].value;
     const file = e.target[3].files[0];
-    const rule = "admin";
+    const rule = "business";
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const storageRef = ref(storage, displayName, rule);
@@ -272,6 +270,7 @@ export default function RegisterBusiness() {
     );
   });
 }
+
   const submitData = async () => {
     try {
       const url = await uploadFileWithProgress(
@@ -280,7 +279,7 @@ export default function RegisterBusiness() {
       );
       const colRef = collection(db, "business");
       await addDoc(colRef, {
-        id: currentUser.uid,
+        manager: currentUser.uid,
         nameField: nameField,
         phone: phone,
         infoField: infoField,

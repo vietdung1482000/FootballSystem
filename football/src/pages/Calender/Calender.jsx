@@ -21,6 +21,7 @@ import { Loading } from '../../components/layout/Loading';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { AuthContext } from '../../context/AuthContext';
+import ModalMap from '../../components/map/ModalMap';
 
 function Calender() {
     const [presetDate, setPresetDate] = useState(new Date());
@@ -164,7 +165,6 @@ function Calender() {
     return (
 
         <div className='pages__calender bases__margin--top100'>
-
             <Loading loader={loading} />
             <div className="d-flex bases__margin--left75 bases__margin--right75 bases__margin--bottom75">
                 <img src={detail} alt="" className='bases__height--450 bases__width--650' />
@@ -277,7 +277,10 @@ function Calender() {
                     <div className="cover-layer" />
                 </div>
             </div>
-
+            
+            <div>
+                <ModalMap />
+            </div>
         </div >
     )
 }

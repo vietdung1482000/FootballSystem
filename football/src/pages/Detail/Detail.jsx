@@ -243,7 +243,6 @@ export default function DetailPage() {
                     Bóng đá là môn thể thao vua được nhiều người trên toàn thế giới yêu thích. Cùng với sự phát triển của bóng đá, các sân cỏ bóng đá nhân tạo mọc lên ngày càng nhiều, phổ biến và quen thuộc.
                 </div>
             </div>
-
             <div className=" bases__margin--top80 bases__margin--bottom30 bases__font--35 bases__text--bold"> Đánh giá sân bóng</div>
             <div>
                 <Rating business_id={business_id} handleRecall={(value) => handleChageRate(value)} />

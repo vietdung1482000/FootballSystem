@@ -33,7 +33,6 @@ function App() {
 
   return (
     <div className="app">
-      {/* <ModalMap /> */}
       <PayPalScriptProvider
         options={{ "client-id": 'AX_hA27L2deyQ_ejBbJ3XoU-feZ6_I3-gkjgm_7wuSWQYp1HmQVC-bNCLrprUn88PaXAxTCOwjKRwy7i' }}
       >

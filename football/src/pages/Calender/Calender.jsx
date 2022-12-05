@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import moment from 'moment';
 import $ from 'jquery';
 import location from '../../img/icon/location.svg'
@@ -8,7 +8,7 @@ import detail from '../../img/detail.png'
 
 
 import FormModal from '../../components/FormModal'
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import MatchModal from '../../components/MatchModal';
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -20,6 +20,7 @@ import HoverRating from '../../components/HoverRating';
 import { Loading } from '../../components/layout/Loading';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
+import { AuthContext } from '../../context/AuthContext';
 
 function Calender() {
     const [presetDate, setPresetDate] = useState(new Date());
@@ -29,6 +30,8 @@ function Calender() {
     const { business_id } = useParams();
     const [loading, setLoading] = useState(false);
     const [dataCalender, setDataCalender] = useState([]);
+    const { currentUser } = useContext(AuthContext);
+
 
     const getData = () => {
         setLoading(true);
@@ -156,7 +159,6 @@ function Calender() {
             return timeStamp;
         }
     });
-
     const dataEvent = dataCalender.filter((dataSearch) => dataSearch.data.presetDate.indexOf(moment(presetDate).format("YYYY/MM/DD")) > -1)
 
     return (
@@ -177,10 +179,14 @@ function Calender() {
                     <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; {dataDetail.timeOpen} -{dataDetail.timeClose}</div>
                     <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
                     <div>{dataDetail.detail}</div>
-                    <div className='d-flex'>
+
+                    {currentUser && dataDetail && currentUser.uid === dataDetail.manager ? <Link to={`/manager/${business_id}`}>
+                        <button className="pages__detail-button bases__margin--top15">Quản Lý</button>
+                    </Link> : <div className='d-flex'>
                         <FormModal dataSan={dataDetail} recallAPI={getDataCalender} />
                         <MatchModal />
-                    </div>
+                    </div>}
+
                 </div>
             </div>
             <div class="bases__header-table">

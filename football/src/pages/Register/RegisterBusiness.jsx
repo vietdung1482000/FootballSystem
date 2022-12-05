@@ -272,6 +272,7 @@ export default function RegisterBusiness() {
     );
   });
 }
+
   const submitData = async () => {
     try {
       const url = await uploadFileWithProgress(
@@ -280,7 +281,7 @@ export default function RegisterBusiness() {
       );
       const colRef = collection(db, "business");
       await addDoc(colRef, {
-        id: currentUser.uid,
+        manager: currentUser.uid,
         nameField: nameField,
         phone: phone,
         infoField: infoField,

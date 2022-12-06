@@ -122,7 +122,7 @@ export default function Manager() {
                     <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
                     <div>{dataDetail.detail}</div>
 
-                    <div className='d-flex'>
+                    {/* <div className='d-flex'>
                         <TextField
                             placeholder="Doanh Thu mong muốn hàng tháng"
                             label="Doanh Thu mong muốn"
@@ -143,7 +143,7 @@ export default function Manager() {
                                 <img onClick={() => { setEditDoanhThu(false); setDoanhThu(10000000); setNewDoanhThu(10000000) }} className='bases__width--30 bases__height--30 bases__margin--left25 bases__margin--top25 bases__p--cursor' src={Clear} alt="" />
                             </>
                         }
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div class="pages__manager--header">

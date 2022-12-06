@@ -18,6 +18,7 @@ import ModalMap from "./components/map/ModalMap";
 import { CssBaseline } from "@mui/material";
 import "./App.css";
 import Manager from "./pages/Manager/Manager";
+import CustomizedTables from "./components/admin";
 
 function App() {
 
@@ -41,7 +42,7 @@ function App() {
           <MenuHeader />
           <Routes>
             <Route path="" element={<HomePage />} />
-            <Route path="login" element={<Login />} />
+            <Route path="login" element={<CustomizedTables />} />
             <Route path="register" element={<Register />} />
             <Route path="selectModule" element={<SelectModule />} />
             <Route path="resbusiness" element={<RegisterBusiness />} />

@@ -19,6 +19,7 @@ import { CssBaseline } from "@mui/material";
 import "./App.css";
 import Manager from "./pages/Manager/Manager";
 import CustomizedTables from "./components/admin";
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
 
@@ -42,7 +43,9 @@ function App() {
           <MenuHeader />
           <Routes>
             <Route path="" element={<HomePage />} />
-            <Route path="login" element={<CustomizedTables />} />
+            <Route path="admin" element={<CustomizedTables/>} />
+            <Route path="errorPage" element={<ErrorPage/>} />
+            <Route path="login" element={<Login/>} />
             <Route path="register" element={<Register />} />
             <Route path="selectModule" element={<SelectModule />} />
             <Route path="resbusiness" element={<RegisterBusiness />} />

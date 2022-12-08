@@ -147,7 +147,7 @@ function FormModal(props) {
             <RadioGroup
               defaultValue=""
               row
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => setAge({ age: e.target.value })}
             >
               <FormControlLabel
                 value="12"

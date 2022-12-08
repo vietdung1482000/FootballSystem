@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 
 const FormContainer = styled.div`
@@ -118,7 +119,24 @@ export default function Login() {
 
     const [err, setErr] = useState(false);
     const navigate = useNavigate();
-    
+    const [data, setData] = React.useState([]);
+  
+    const getData = () => {
+      const getdataDatSan = collection(db, "users");
+      getDocs(getdataDatSan)
+        .then((response) => {
+          const datsans = response.docs.map((doc) => ({
+            data: doc.data(),
+            id: doc.id,
+          }));
+          setData(datsans);
+        })
+        .catch((error) => console.log(error.message));
+    };
+    React.useEffect(() => {
+      getData();
+    }, []);
+  
     const handleSubmit = async (e) => {
         e.preventDefault();
         const email = e.target[0].value;
@@ -126,7 +144,15 @@ export default function Login() {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            navigate("/");
+                data.map((item) => {
+                    if(item.data.rule === "business" && item.data.status === false){
+                        navigate("/errorPage");
+                    } else if(item.data.rule === "admin") {
+                        navigate("/admin");
+                    } else {
+                        navigate("/");
+                    }
+                })
         } catch (err) {
             setErr(true);
         }

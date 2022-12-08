@@ -192,15 +192,17 @@ function MatchModal(props) {
       <>
         <FormControl className="bases__margin--top10 w-100">
 
-          <select defaultValue="" onChange={(e) => setName1({ name: e.target.value })}  className="select_chon_doi" >
-          <option value="" disabled selected>Chọn Đội</option>
-            {data.map((item) => {
+          <select  onChange={(e) => setName1({ name: e.target.value })}  className="select_chon_doi" >
+          <option disabled selected>Chọn Đội</option>
+            {/* {data.map((item) => {
+              console.log('item.data.age?.age ',typeof item.data.age?.age === typeof age.age);
+              console.log('item.data.job?.job', typeof item.data.job?.job);
               if (item.data.age?.age || item.data.job?.job) {
-                const resultAge = item.data.age?.age.toString();
-                const resultJob = item.data.job?.job.toString();
-                if (age.age === resultAge && job.job === resultJob) {
+                // const resultAge = item.data.age?.age.toString();
+                // const resultJob = item.data.job?.job.toString();  
+                if (age.age ===  item.data.age?.age && job.job === item.data.job?.job) {
                   return (
-                    <option value={item.data.name} placeholder="Chọn Đội">{item.data.name}</option>
+                    <option>{item.data.name}</option>
                   );
                 } else {
                   return "";
@@ -208,7 +210,7 @@ function MatchModal(props) {
               } else {
                 return "";
               }
-            })}
+            })} */}
           </select>
 
           <FormHelperText></FormHelperText>

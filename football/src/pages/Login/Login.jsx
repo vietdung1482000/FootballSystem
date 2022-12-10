@@ -143,16 +143,8 @@ export default function Login() {
         const password = e.target[1].value;
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-                data.map((item) => {
-                    if(item.data.rule === "business" && item.data.status === false){
-                        navigate("/errorPage");
-                    } else if(item.data.rule === "admin") {
-                        navigate("/admin");
-                    } else {
+            await signInWithEmailAndPassword(auth, email, password);        
                         navigate("/");
-                    }
-                })
         } catch (err) {
             setErr(true);
         }

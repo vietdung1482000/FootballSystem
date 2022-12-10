@@ -79,196 +79,106 @@ export default function MenuHeader() {
       .catch((error) => console.log(error.message));
   };
   return (
-    data.map((item) => {
-      if(item.data.rule !== "business" && item.data.status !== false) {
-        return (
-          <React.Fragment>
-      <AppBar sx={{ background: "white" }}>
-        <Toolbar>
-          <>
-            <Box
-              sx={{
-                paddingRight: "50%",
-                margin: "auto",
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                typography: "body1",
-                "& > :not(style) + :not(style)": {
-                  ml: 2,
-                },
-              }}
-            >
-              <Link href="/" underline="none" color="#757575">
-                Trang Chủ
-              </Link>
-              <Link underline="none" href="/match" color="#757575">
-                Thi Đấu
-              </Link>
-              {data.map((item) => {
-                if (
-                  currentUser &&
-                  item.data.uid === currentUser.uid &&
-                  (item.data.rule === "admin" || item.data.rule === "business")
-                ) {
-                  return (
-                    <Link underline="none" href={`/calender/${business[0]?.id}`} color="#757575">
-                      Lịch Thi Đấu
-                    </Link>
-                  );
-                }
-              })}
-            </Box>
-            {currentUser === null ? (
-              <ThemeProvider theme={theme}>
-                <Button
-                  sx={{ marginLeft: "auto" }}
-                  variant="contained"
-                  color="neutral"
-                >
-                  <Link href="/login" underline="none" color="#fafafa">
-                    Đăng Nhập
+    <React.Fragment>
+    <AppBar sx={{ background: "white" }}>
+      <Toolbar>
+        <>
+          <Box
+            sx={{
+              paddingRight: "50%",
+              margin: "auto",
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              typography: "body1",
+              "& > :not(style) + :not(style)": {
+                ml: 2,
+              },
+            }}
+          >
+            <Link href="/" underline="none" color="#757575">
+              Trang Chủ
+            </Link>
+            <Link underline="none" href="/match" color="#757575">
+              Thi Đấu
+            </Link>
+            {data.map((item) => {
+              if (
+                currentUser &&
+                item.data.uid === currentUser.uid &&
+                (item.data.rule === "admin" || item.data.rule === "business")
+              ) {
+                return (
+                  <Link underline="none" href={`/calender/${business[0]?.id}`} color="#757575">
+                    Lịch Thi Đấu
                   </Link>
-                </Button>
-                <Button
-                  sx={{ marginLeft: "10px" }}
-                  variant="contained"
-                  color="neutral"
-                >
-                  <Link underline="none" href="/selectModule" color="#fafafa">
-                    Đăng Ký
-                  </Link>
-                </Button>
-              </ThemeProvider>
-            ) : (
-              <ThemeProvider theme={theme}>
-                <Box
+                );
+              }
+            })}
+          </Box>
+          {currentUser === null ? (
+            <ThemeProvider theme={theme}>
+              <Button
+                sx={{ marginLeft: "auto" }}
+                variant="contained"
+                color="neutral"
+              >
+                <Link href="/login" underline="none" color="#fafafa">
+                  Đăng Nhập
+                </Link>
+              </Button>
+              <Button
+                sx={{ marginLeft: "10px" }}
+                variant="contained"
+                color="neutral"
+              >
+                <Link underline="none" href="/selectModule" color="#fafafa">
+                  Đăng Ký
+                </Link>
+              </Button>
+            </ThemeProvider>
+          ) : (
+            <ThemeProvider theme={theme}>
+              <Box
+                sx={{
+                  margin: "auto",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  typography: "body1",
+                  "& > :not(style) + :not(style)": {
+                    ml: 2,
+                  },
+                }}
+              >
+                <CustomizedDialogs />
+                <Typography
+                  variant="h7"
+                  component="h7"
                   sx={{
-                    margin: "auto",
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "center",
-                    typography: "body1",
-                    "& > :not(style) + :not(style)": {
-                      ml: 2,
-                    },
+                    marginTop: "5%",
                   }}
                 >
-                  <CustomizedDialogs />
-                  <Typography
-                    variant="h7"
-                    component="h7"
-                    sx={{
-                      marginTop: "5%",
-                    }}
-                  >
-                    <Link underline="none" color="#212121">
-                      {" "}
-                      {currentUser?.displayName}
-                    </Link>
-                  </Typography>
-                  <Tooltip>
-                    <IconButton sx={{ p: 0 }}>
-                      <Avatar src={currentUser?.photoURL} />
-                    </IconButton>
-                  </Tooltip>
-                  <Button onClick={async () => await auth.signOut()}>
-                    SignOut
-                  </Button>
-                </Box>
-              </ThemeProvider>
-            )}
-          </>
-        </Toolbar>
-      </AppBar>
-    </React.Fragment>
-        ) 
-      } else {
-        return (
-          <React.Fragment>
-          <AppBar sx={{ background: "white" }}>
-            <Toolbar>
-              <>
-              <Box
-              sx={{
-                paddingRight: "50%",
-                margin: "auto",
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                typography: "body1",
-                "& > :not(style) + :not(style)": {
-                  ml: 2,
-                },
-              }}
-            >
-            </Box>
-                {currentUser === null ? (
-                  <ThemeProvider theme={theme}>
-                    <Button
-                      sx={{ marginLeft: "auto" }}
-                      variant="contained"
-                      color="neutral"
-                    >
-                      <Link href="/login" underline="none" color="#fafafa">
-                        Đăng Nhập
-                      </Link>
-                    </Button>
-                    <Button
-                      sx={{ marginLeft: "10px" }}
-                      variant="contained"
-                      color="neutral"
-                    >
-                      <Link underline="none" href="/selectModule" color="#fafafa">
-                        Đăng Ký
-                      </Link>
-                    </Button>
-                  </ThemeProvider>
-                ) : (
-                  <ThemeProvider theme={theme}>
-                    <Box
-                      sx={{
-                        margin: "auto",
-                        display: "flex",
-                        flexWrap: "wrap",
-                        justifyContent: "center",
-                        typography: "body1",
-                        "& > :not(style) + :not(style)": {
-                          ml: 2,
-                        },
-                      }}
-                    >
-                      <CustomizedDialogs />
-                      <Typography
-                        variant="h7"
-                        component="h7"
-                        sx={{
-                          marginTop: "5%",
-                        }}
-                      >
-                        <Link underline="none" color="#212121">
-                          {" "}
-                          {currentUser?.displayName}
-                        </Link>
-                      </Typography>
-                      <Tooltip>
-                        <IconButton sx={{ p: 0 }}>
-                          <Avatar src={currentUser?.photoURL} />
-                        </IconButton>
-                      </Tooltip>
-                      <Button onClick={async () => await auth.signOut()}>
-                        SignOut
-                      </Button>
-                    </Box>
-                  </ThemeProvider>
-                )}
-              </>
-            </Toolbar>
-          </AppBar>
-        </React.Fragment>
-        )
-      }
-    })
+                  <Link underline="none" color="#212121">
+                    {" "}
+                    {currentUser?.displayName}
+                  </Link>
+                </Typography>
+                <Tooltip>
+                  <IconButton sx={{ p: 0 }}>
+                    <Avatar src={currentUser?.photoURL} />
+                  </IconButton>
+                </Tooltip>
+                <Button onClick={async () => await auth.signOut()}>
+                  SignOut
+                </Button>
+              </Box>
+            </ThemeProvider>
+          )}
+        </>
+      </Toolbar>
+    </AppBar>
+  </React.Fragment>
    
   );
 }

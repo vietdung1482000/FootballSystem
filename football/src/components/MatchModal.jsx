@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
@@ -14,6 +14,10 @@ import {
   DialogTitle,
   FormHelperText,
   IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   MenuItem,
   Select,
   TextField,
@@ -25,6 +29,13 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
 
+import PropTypes from "prop-types";
+import Avatar from "@mui/material/Avatar";
+import PersonIcon from "@mui/icons-material/Person";
+import AddIcon from "@mui/icons-material/Add";
+import Typography from "@mui/material/Typography";
+import { blue } from "@mui/material/colors";
+import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -59,6 +70,128 @@ function BootstrapDialogTitle(props) {
   );
 }
 
+
+function SimpleDialog(props) {
+  const { onClose, open } = props;
+  const [data, setData] = useState([]);
+  const [rowSelection, setRowSelection] = useState({});
+
+  console.log('rowSelection', rowSelection);
+  const handleClose1 = () => {
+    onClose(rowSelection);
+  };
+
+
+
+  const getData = () => {
+    const getdataDatSan = collection(db, "datsan");
+    getDocs(getdataDatSan)
+      .then((response) => {
+        const datsans = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        setData(datsans);
+      })
+      .catch((error) => console.log(error.message));
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const data123 = data.map((item) => ({
+    id:item.id,
+    nameField: item.data.nameField,
+    address: item.data.address,
+    name: item.data.name,
+    phone: item.data.phone,
+    email: item.data.email,
+    job: item.data.job.job,
+    age: item.data.age.age,
+    san: item.data.san,
+    presetDate: item.data.presetDate,
+    type: item.data.type.type,
+  }));
+  const abc = data123.filter((item) => {
+    if (("item.data", item.type === 20)) {
+      return item;
+    }
+    return "";
+  });
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "nameField", //access nested data with dot notation
+        header: "Tên Sân",
+      },
+      {
+        accessorKey: "address",
+        header: "Địa Chỉ",
+      },
+      {
+        accessorKey: "name", //normal accessorKey
+        header: "Tên Đội Bóng",
+      },
+      {
+        accessorKey: "phone",
+        header: "Số Điện Thoại",
+      },
+      {
+        accessorKey: "email",
+        header: "Địa chỉ mail",
+      },
+      {
+        accessorKey: "age",
+        header: "Tuổi",
+      },
+      {
+        accessorKey: "job",
+        header: "Ngành Nghề",
+      },
+      {
+        accessorKey: "san",
+        header: "Số Sân",
+      },
+      {
+        accessorKey: "presetDate",
+        header: "Ngày Đặt",
+      },
+    ],
+    []
+  );
+  return (
+    <Dialog  open={open}>
+      <DialogTitle>Set backup account</DialogTitle>
+      <List sx={{ pt: 0 }}>
+        <MaterialReactTable
+          className="width-table"
+          columns={columns}
+          data={abc}
+          enableMultiRowSelection={false} //use radio buttons instead of checkboxes
+          enableRowSelection
+          getRowId={(row) => row.id} //give each row a more useful id
+          muiTableBodyRowProps={({ row }) => ({
+            //add onClick to row to select upon clicking anywhere in the row
+            onClick: row.getToggleSelectedHandler(),
+            sx: { cursor: 'pointer' },
+            
+          })}
+          onRowSelectionChange={setRowSelection} //connect internal row selection state to your own
+          state={{ rowSelection }} 
+        />
+        <Button onClose={handleClose1} >abdef</Button>
+      </List>
+    </Dialog>
+  );
+}
+
+SimpleDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+};
+
 function MatchModal(props) {
   const { register, handleSubmit } = useForm();
   const [data, setData] = useState([]);
@@ -78,11 +211,19 @@ function MatchModal(props) {
   const [confirm, setconfirm] = useState("");
   const { currentUser } = useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState([1]);
+  const [open1, setOpen1] = React.useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
+    setOpen1(true);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleClose1 = (value) => {
+    setOpen1(false);
+    setSelectedValue(value);
   };
   const onSubmit = async (data) => {
     const colRef = collection(db, "ghepdoi");
@@ -127,7 +268,11 @@ function MatchModal(props) {
       <>
         <FormControl className="bases__margin--bottom10 w-100">
           <FormLabel>Chọn Tuổi</FormLabel>
-          <RadioGroup defaultValue="" row onChange={(e) => setAge({ age: e.target.value })}>
+          <RadioGroup
+            defaultValue=""
+            row
+            onChange={(e) => setAge({ age: e.target.value })}
+          >
             <FormControlLabel
               value="12"
               control={<Radio />}
@@ -144,7 +289,11 @@ function MatchModal(props) {
         </FormControl>
         <FormControl className="bases__margin--bottom10 w-100">
           <FormLabel>Chọn nghề Nghiệp</FormLabel>
-          <RadioGroup defaultValue="" row onChange={(e) => setJob({ job: e.target.value })}>
+          <RadioGroup
+            defaultValue=""
+            row
+            onChange={(e) => setJob({ job: e.target.value })}
+          >
             <FormControlLabel
               value="Sinh Viên"
               control={<Radio />}
@@ -163,22 +312,6 @@ function MatchModal(props) {
     );
   };
 
-  const getData = () => {
-    const getdataDatSan = collection(db, "datsan");
-    getDocs(getdataDatSan)
-      .then((response) => {
-        const datsans = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        setData(datsans);
-      })
-      .catch((error) => console.log(error.message));
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
   let createWith = "";
   data.map((item) => {
     if (name1.name === item.data.name) {
@@ -190,35 +323,23 @@ function MatchModal(props) {
   const LoadName = () => {
     return (
       <>
-        <FormControl className="bases__margin--top10 w-100">
-
-          <select  onChange={(e) => setName1({ name: e.target.value })}  className="select_chon_doi" >
-          <option disabled selected>Chọn Đội</option>
-            {/* {data.map((item) => {
-              console.log('item.data.age?.age ',typeof item.data.age?.age === typeof age.age);
-              console.log('item.data.job?.job', typeof item.data.job?.job);
-              if (item.data.age?.age || item.data.job?.job) {
-                // const resultAge = item.data.age?.age.toString();
-                // const resultJob = item.data.job?.job.toString();  
-                if (age.age ===  item.data.age?.age && job.job === item.data.job?.job) {
-                  return (
-                    <option>{item.data.name}</option>
-                  );
-                } else {
-                  return "";
-                }
-              } else {
-                return "";
-              }
-            })} */}
-          </select>
-
-          <FormHelperText></FormHelperText>
-        </FormControl>
+        <div>
+          <Typography variant="subtitle1" component="div">
+            Selected: {selectedValue}
+          </Typography>
+          <br />
+          <Button variant="outlined" onClick={handleClickOpen}>
+            Open simple dialog
+          </Button>
+          <SimpleDialog
+            selectedValue={selectedValue}
+            open={open1}
+            onClose={handleClose1}
+          />
+        </div>
       </>
     );
   };
-
 
   const LoadGioDatSan = () => {
     return (
@@ -335,9 +456,15 @@ function MatchModal(props) {
       </div>
     );
   };
+
   return (
     <div>
-      <button onClick={handleClickOpen} className="pages__detail-button bases__margin--top15 bases__margin--right30">Ghép Đội</button>
+      <button
+        onClick={handleClickOpen}
+        className="pages__detail-button bases__margin--top15 bases__margin--right30"
+      >
+        Ghép Đội
+      </button>
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"

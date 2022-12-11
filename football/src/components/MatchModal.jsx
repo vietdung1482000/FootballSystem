@@ -60,6 +60,8 @@ function BootstrapDialogTitle(props) {
 }
 
 function MatchModal(props) {
+  const { dataSan, recallAPI } = props;
+
   const { register, handleSubmit } = useForm();
   const [data, setData] = useState([]);
 
@@ -68,9 +70,6 @@ function MatchModal(props) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   // const file = e.target[3].files[0];
-  const [nameField, setNameField] = useState("");
-  const [phoneBusiness, setPhoneBusiness] = useState("");
-  const [address, setAddress] = useState("");
   const [presetDate1, setPresetDate1] = useState("");
   const [presetTime1, setPresetTime1] = useState("");
   const [age, setAge] = useState("");
@@ -83,6 +82,9 @@ function MatchModal(props) {
   };
   const handleClose = () => {
     setOpen(false);
+    if (recallAPI) {
+      recallAPI();
+    }
   };
   const onSubmit = async (data) => {
     const colRef = collection(db, "ghepdoi");
@@ -90,9 +92,9 @@ function MatchModal(props) {
       name: currentUser.displayName,
       email: currentUser.email,
       phone: currentUser.phoneNumber,
-      nameField: nameField,
-      phoneBusiness: phoneBusiness,
-      address: address,
+      nameField: dataSan.nameField,
+      phoneBusiness: dataSan.phone,
+      address: dataSan.address,
       presetDate1: presetDate1,
       age: age,
       job: job,
@@ -110,9 +112,6 @@ function MatchModal(props) {
     setName("");
     setEmail("");
     setPhone("");
-    setNameField("");
-    setPhoneBusiness("");
-    setAddress("");
     setPresetDate1("");
     setPresetTime1("");
     setAge("");
@@ -296,16 +295,14 @@ function MatchModal(props) {
               label="Tên Sân"
               variant="outlined"
               className="bases__margin--bottom10 w-100"
-              onChange={(e) => setNameField(e.target.value)}
-              value={nameField}
+              value={dataSan.nameField}
             />
             <TextField
               placeholder="Nhập Số Điện Thoại"
               label="Số Điện Thoại"
               variant="outlined"
               className="bases__margin--bottom10 w-100"
-              onChange={(e) => setPhoneBusiness(e.target.value)}
-              value={phoneBusiness}
+              value={dataSan.phone}
             />
 
             {/* 3) TextField */}
@@ -314,8 +311,7 @@ function MatchModal(props) {
               label="Địa Chỉ"
               variant="outlined"
               className="bases__margin--bottom15 w-100"
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
+              value={dataSan.address}
             />
             {/* Radio Buttons */}
             {CheckBox()}

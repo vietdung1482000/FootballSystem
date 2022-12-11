@@ -184,7 +184,7 @@ function Calender() {
                         <button className="pages__detail-button bases__margin--top15">Quản Lý</button>
                     </Link> : <div className='d-flex'>
                         <FormModal dataSan={dataDetail} recallAPI={getDataCalender} />
-                        <MatchModal />
+                        <MatchModal dataSan={dataDetail} recallAPI={getDataCalender} />
                     </div>}
 
                 </div>

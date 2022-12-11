@@ -8,7 +8,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from "react-router-dom"
 import { db } from "../../firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { Loading } from '../../components/layout/Loading';
 import moment from 'moment';
 import location from '../../img/icon/location.svg'
@@ -18,10 +18,27 @@ import detail from '../../img/detail.png'
 import pen from '../../img/pen.png'
 import Clear from '../../img/close.png'
 import check from '../../img/check-mark.png'
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+
+const styleModal = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 700,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4
+};
 
 export default function Manager() {
     const [presetDate, setPresetDate] = useState(new Date());
     const [isSucess, setIsSucess] = useState(false);
+    const [alert, setAlert] = useState(false);
     const [data, setData] = useState([]);
     const [dataDetail, setDataDetail] = useState([]);
     const { business_id } = useParams();
@@ -32,6 +49,29 @@ export default function Manager() {
     const [editDoanhThu, setEditDoanhThu] = useState(false);
     const [dataDoanhThu, setDataDoanhThu] = useState({});
     const [listenEvent, setListenEvent] = useState(false);
+    const [openMoadal, setOpenMoadal] = useState(false);
+    const [inputList, setInputList] = useState([{ SoLuongSan: "", Gia: "" }]);
+    const [dataEdit, setDataEdit] = useState([]);
+
+    const handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...inputList];
+        list[index][name] = value;
+        setInputList(list);
+    };
+
+    // handle click event of the Remove button
+    const handleRemoveClick = (index) => {
+        const list = [...inputList];
+        list.splice(index, 1);
+        setInputList(list);
+    };
+
+    // handle click event of the Add button
+    const handleAddClick = () => {
+        setInputList([...inputList, { SoLuongSan: "", Gia: "" }]);
+    };
+
 
     useEffect(() => {
         getData()
@@ -64,7 +104,9 @@ export default function Manager() {
             data.map((item) => {
                 if (item.id === business_id) {
                     setDataDetail(item.data)
+                    setDataEdit(item.data)
                     setIsSucess(false)
+                    setInputList(item.data.SoLuongSan)
                 }
             })
         }
@@ -75,6 +117,7 @@ export default function Manager() {
             getDataCalender()
         }
     }, [dataDetail.nameField]);
+
 
     const getData = () => {
         setLoading(true);
@@ -88,6 +131,7 @@ export default function Manager() {
                 setData(datsans)
                 setIsSucess(true)
                 setLoading(false);
+                setAlert(false);
             })
             .catch(error => console.log(error.message))
     }
@@ -108,6 +152,120 @@ export default function Manager() {
             .catch(error => console.log(error.message))
     }
 
+    const handleOpen = () => setOpenMoadal(true);
+    const handleClose = () => {
+        setOpenMoadal(false)
+        getData();
+    };
+
+    const handleChangeDataEdit = (field, value) => {
+        setDataEdit((prevState) => ({
+            ...prevState,
+            [field]: value,
+        }));
+    }
+
+    const editData = () => {
+
+        const FootBallData = doc(db, "business", business_id)
+        setLoading(true)
+        updateDoc(FootBallData, {
+            nameField: dataEdit.nameField,
+            phone: dataEdit.phone,
+            address: dataEdit.address,
+            detail: dataEdit.detail,
+            SoLuongSan: inputList,
+        }).then(() => {
+            setLoading(false)
+            setAlert(true);
+        })
+    }
+
+    const modalEdit = () => {
+        return (
+            <div>
+                <Modal
+                    open={openMoadal}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={styleModal}>
+                        {alert === false ? <>
+                            <div> Tên Sân</div>
+                            <input
+                                value={dataEdit.nameField}
+                                onChange={(e) => handleChangeDataEdit('nameField', e.target.value)}
+                                className="bases__inputList--item w-100"
+                            />
+                            <div> Địa chỉ</div>
+                            <input
+                                value={dataEdit.address}
+                                onChange={(e) => handleChangeDataEdit('address', e.target.value)}
+                                className="bases__inputList--item w-100"
+                            />
+                            <div> Điện thoại</div>
+                            <input
+                                value={dataEdit.phone}
+                                onChange={(e) => handleChangeDataEdit('phone', e.target.value)}
+                                className="bases__inputList--item w-100"
+                            />
+                            <div> Mô tả</div>
+                            <input
+                                value={dataEdit.detail}
+                                onChange={(e) => handleChangeDataEdit('detail', e.target.value)}
+                                className="bases__inputList--item w-100 bases__margin--bottom20"
+                            />
+                            <div className="bases__text--bold bases__margin--bottom10">Danh sách sân</div>
+                            {inputList.map((x, i) => {
+                                return (
+                                    <div className="bases__inputList--form">
+                                        <div className="">
+                                            <div>Sân</div>
+                                            <input
+                                                name="SoLuongSan"
+                                                placeholder="Nhập Số Sân"
+                                                value={x.SoLuongSan}
+                                                onChange={(e) => handleInputChange(e, i)}
+                                                className="bases__inputList--item"
+                                            />
+                                        </div>
+
+                                        <div className="">
+                                            <div>giá</div>
+                                            <input
+                                                name="Gia"
+                                                placeholder="Nhập Giá"
+                                                value={x.Gia}
+                                                onChange={(e) => handleInputChange(e, i)}
+                                                className="bases__inputList--item"
+                                                type="number"
+                                                min="1"
+                                            />
+                                            <RemoveIcon
+                                                onClick={() => handleRemoveClick(i)}
+                                            ></RemoveIcon>
+                                            <AddIcon onClick={handleAddClick}></AddIcon>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                            <div className="d-flex justify-content-center">
+                                <button className="button-oke" onClick={editData}>Hoàn thành</button>
+                                <button className="button-cancle bases__margin--left50" onClick={handleClose}>Đóng</button>
+                            </div>
+                        </> : <>
+                            <img src={check} alt="" className='bases__height--150 bases__width--300' />
+                            <h4 className="text-center bases__margin--bottom30">Update thành công</h4>
+                            <button className="button-oke bases__margin--left80" onClick={handleClose}>Close</button>
+                        </>}
+
+                    </Box>
+                </Modal>
+            </div>
+        );
+    }
+
 
     return (
         <div className="pages__manager bases__margin--top100">
@@ -118,9 +276,11 @@ export default function Manager() {
                     <div className=" bases__margin--top10 bases__font--35 bases__text--bold bases__text--green">{dataDetail.nameField}</div>
                     <div className="bases__padding--top15"> <img src={location} alt="" />&ensp; {dataDetail.address}</div>
                     <div className="bases__padding--top15"> <img src={phone} alt="" />&ensp;  {dataDetail.phone}</div>
-                    <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; {dataDetail.timeOpen} -{dataDetail.timeClose}</div>
+                    <div className="bases__padding--top15"> <img src={clock} alt="" />&ensp; {dataDetail.timeOpen}:00 -{dataDetail.timeClose}:00</div>
                     <div className="bases__padding--top20 bases__margin--left15 bases__text--bold"> Mô tả</div>
                     <div>{dataDetail.detail}</div>
+                    {modalEdit()}
+                    <button onClick={handleOpen} className="pages__detail-button bases__margin--top15">Chỉnh sửa thông tin sân</button>
 
                     {/* <div className='d-flex'>
                         <TextField

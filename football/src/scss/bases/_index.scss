@@ -89,6 +89,7 @@
         margin-right: 75px !important;
         margin-bottom: -33px !important;
         background-color: #119468 !important;
+
         .MuiInputBase-input {
             color: white !important;
             width: 40% !important;
@@ -108,6 +109,24 @@
         &--gray-radius {
             border: 1px solid rgba(35, 35, 36, 0.322) !important;
             border-radius: 5px;
+        }
+    }
+
+    &__inputList {
+        &--form {
+            margin-bottom: 10px !important;
+            display: flex !important;
+        }
+
+        &--item {
+            margin: 5px !important;
+            font-family: inherit !important;
+            font-size: inherit !important;
+            line-height: inherit !important;
+            border: 1px solid !important;
+            border-radius: 7px !important;
+            height: 50px !important;
+            padding: 12px !important;
         }
     }
 
@@ -198,7 +217,7 @@
     &__filter {
         &--white {
             filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(284deg) brightness(107%) contrast(103%);
-            
+
         }
     }
 }

@@ -160,30 +160,30 @@ function SimpleDialog(props) {
     ],
     []
   );
-  return (
-    <Dialog  open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-      <List sx={{ pt: 0 }}>
-        <MaterialReactTable
-          className="width-table"
-          columns={columns}
-          data={abc}
-          enableMultiRowSelection={false} //use radio buttons instead of checkboxes
-          enableRowSelection
-          getRowId={(row) => row.id} //give each row a more useful id
-          muiTableBodyRowProps={({ row }) => ({
-            //add onClick to row to select upon clicking anywhere in the row
-            onClick: row.getToggleSelectedHandler(),
-            sx: { cursor: 'pointer' },
+  // return (
+  //   <Dialog  open={open}>
+  //     <DialogTitle>Set backup account</DialogTitle>
+  //     <List sx={{ pt: 0 }}>
+  //       <MaterialReactTable
+  //         className="width-table"
+  //         columns={columns}
+  //         data={abc}
+  //         enableMultiRowSelection={false} //use radio buttons instead of checkboxes
+  //         enableRowSelection
+  //         getRowId={(row) => row.id} //give each row a more useful id
+  //         muiTableBodyRowProps={({ row }) => ({
+  //           //add onClick to row to select upon clicking anywhere in the row
+  //           onClick: row.getToggleSelectedHandler(),
+  //           sx: { cursor: 'pointer' },
             
-          })}
-          onRowSelectionChange={setRowSelection} //connect internal row selection state to your own
-          state={{ rowSelection }} 
-        />
-        <Button onClose={handleClose1} >abdef</Button>
-      </List>
-    </Dialog>
-  );
+  //         })}
+  //         onRowSelectionChange={setRowSelection} //connect internal row selection state to your own
+  //         state={{ rowSelection }} 
+  //       />
+  //       <Button onClose={handleClose1} >abdef</Button>
+  //     </List>
+  //   </Dialog>
+  // );
 }
 
 SimpleDialog.propTypes = {

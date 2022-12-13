@@ -1,5 +1,12 @@
 {
   "dependencies": {
-    "react-dropzone": "^14.2.3"
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.16",
+    "@mui/material": "^5.10.17",
+    "@tanstack/react-table": "^8.7.0",
+    "material-react-table": "^1.4.0",
+    "react-dropzone": "^14.2.3",
+    "row-selection": "^3.0.2-beta"
   }
 }

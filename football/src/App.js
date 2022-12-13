@@ -20,6 +20,9 @@ import "./App.css";
 import Manager from "./pages/Manager/Manager";
 import CustomizedTables from "./components/admin";
 import ErrorPage from "./components/ErrorPage";
+import DataGridDemo from "./components/ErrorPage";
+import CustomColumnMenu from "./components/ErrorPage";
+import RowContextMenu from "./components/ErrorPage";
 
 function App() {
 
@@ -44,7 +47,7 @@ function App() {
           <Routes>
             <Route path="" element={<HomePage />} />
             <Route path="admin" element={<CustomizedTables/>} />
-            <Route path="errorPage" element={<ErrorPage/>} />
+            <Route path="errorPage" element={<RowContextMenu/>} />
             <Route path="login" element={<Login/>} />
             <Route path="register" element={<Register />} />
             <Route path="selectModule" element={<SelectModule />} />

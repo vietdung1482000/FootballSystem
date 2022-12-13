@@ -8,16 +8,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import InputLabel from "@mui/material/InputLabel";
-
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import {
   DialogTitle,
   FormHelperText,
   IconButton,
   List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   MenuItem,
   Select,
   TextField,
@@ -28,14 +24,8 @@ import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
-
-import PropTypes from "prop-types";
-import Avatar from "@mui/material/Avatar";
-import PersonIcon from "@mui/icons-material/Person";
-import AddIcon from "@mui/icons-material/Add";
-import Typography from "@mui/material/Typography";
-import { blue } from "@mui/material/colors";
-import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
+import { DataGrid } from "@mui/x-data-grid";
+const _ = require('lodash');
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -70,128 +60,6 @@ function BootstrapDialogTitle(props) {
   );
 }
 
-
-function SimpleDialog(props) {
-  const { onClose, open } = props;
-  const [data, setData] = useState([]);
-  const [rowSelection, setRowSelection] = useState({});
-
-  console.log('rowSelection', rowSelection);
-  const handleClose1 = () => {
-    onClose(rowSelection);
-  };
-
-
-
-  const getData = () => {
-    const getdataDatSan = collection(db, "datsan");
-    getDocs(getdataDatSan)
-      .then((response) => {
-        const datsans = response.docs.map((doc) => ({
-          data: doc.data(),
-          id: doc.id,
-        }));
-        setData(datsans);
-      })
-      .catch((error) => console.log(error.message));
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const data123 = data.map((item) => ({
-    id:item.id,
-    nameField: item.data.nameField,
-    address: item.data.address,
-    name: item.data.name,
-    phone: item.data.phone,
-    email: item.data.email,
-    job: item.data.job.job,
-    age: item.data.age.age,
-    san: item.data.san,
-    presetDate: item.data.presetDate,
-    type: item.data.type.type,
-  }));
-  const abc = data123.filter((item) => {
-    if (("item.data", item.type === 20)) {
-      return item;
-    }
-    return "";
-  });
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: "nameField", //access nested data with dot notation
-        header: "Tên Sân",
-      },
-      {
-        accessorKey: "address",
-        header: "Địa Chỉ",
-      },
-      {
-        accessorKey: "name", //normal accessorKey
-        header: "Tên Đội Bóng",
-      },
-      {
-        accessorKey: "phone",
-        header: "Số Điện Thoại",
-      },
-      {
-        accessorKey: "email",
-        header: "Địa chỉ mail",
-      },
-      {
-        accessorKey: "age",
-        header: "Tuổi",
-      },
-      {
-        accessorKey: "job",
-        header: "Ngành Nghề",
-      },
-      {
-        accessorKey: "san",
-        header: "Số Sân",
-      },
-      {
-        accessorKey: "presetDate",
-        header: "Ngày Đặt",
-      },
-    ],
-    []
-  );
-  // return (
-  //   <Dialog  open={open}>
-  //     <DialogTitle>Set backup account</DialogTitle>
-  //     <List sx={{ pt: 0 }}>
-  //       <MaterialReactTable
-  //         className="width-table"
-  //         columns={columns}
-  //         data={abc}
-  //         enableMultiRowSelection={false} //use radio buttons instead of checkboxes
-  //         enableRowSelection
-  //         getRowId={(row) => row.id} //give each row a more useful id
-  //         muiTableBodyRowProps={({ row }) => ({
-  //           //add onClick to row to select upon clicking anywhere in the row
-  //           onClick: row.getToggleSelectedHandler(),
-  //           sx: { cursor: 'pointer' },
-            
-  //         })}
-  //         onRowSelectionChange={setRowSelection} //connect internal row selection state to your own
-  //         state={{ rowSelection }} 
-  //       />
-  //       <Button onClose={handleClose1} >abdef</Button>
-  //     </List>
-  //   </Dialog>
-  // );
-}
-
-SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
-
 function MatchModal(props) {
   const { dataSan, recallAPI } = props;
 
@@ -210,9 +78,11 @@ function MatchModal(props) {
   const [confirm, setconfirm] = useState("");
   const { currentUser } = useContext(AuthContext);
   const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState([1]);
   const [open1, setOpen1] = React.useState(false);
+  const [selectedRows, setSelectedRows] = React.useState("");
 
+  var deepCopy = _.cloneDeep(selectedRows);
+  console.log('deepCopy', deepCopy);
   const handleClickOpen = () => {
     setOpen(true);
     setOpen1(true);
@@ -223,9 +93,8 @@ function MatchModal(props) {
       recallAPI();
     }
   };
-  const handleClose1 = (value) => {
+  const handleClose1 = () => {
     setOpen1(false);
-    setSelectedValue(value);
   };
   const onSubmit = async (data) => {
     const colRef = collection(db, "ghepdoi");
@@ -236,11 +105,11 @@ function MatchModal(props) {
       nameField: dataSan.nameField,
       phoneBusiness: dataSan.phone,
       address: dataSan.address,
-      presetDate1: presetDate1,
-      age: age,
-      job: job,
+      presetDate1: deepCopy.presetDate,
+      age: deepCopy.age,
+      job: deepCopy.job,
       createBy: currentUser.uid,
-      name1: name1,
+      name1: deepCopy.name,
       confirm: "",
       createWith: createWith,
     })
@@ -259,57 +128,8 @@ function MatchModal(props) {
     setJob("");
     setName1("");
   };
-  // console.log('job', job);
-  // console.log('age', age);
 
-  const CheckBox = () => {
-    return (
-      <>
-        <FormControl className="bases__margin--bottom10 w-100">
-          <FormLabel>Chọn Tuổi</FormLabel>
-          <RadioGroup
-            defaultValue=""
-            row
-            onChange={(e) => setAge({ age: e.target.value })}
-          >
-            <FormControlLabel
-              value="12"
-              control={<Radio />}
-              label="12 đến 17 Tuổi"
-            />
-            <FormControlLabel
-              value="18"
-              control={<Radio />}
-              label="18 đến 25 Tuổi"
-            />
-            <FormControlLabel value="khác" control={<Radio />} label="Khác" />
-          </RadioGroup>
-          <FormHelperText></FormHelperText>
-        </FormControl>
-        <FormControl className="bases__margin--bottom10 w-100">
-          <FormLabel>Chọn nghề Nghiệp</FormLabel>
-          <RadioGroup
-            defaultValue=""
-            row
-            onChange={(e) => setJob({ job: e.target.value })}
-          >
-            <FormControlLabel
-              value="Sinh Viên"
-              control={<Radio />}
-              label="Sinh Viên"
-            />
-            <FormControlLabel
-              value="Nhân Viên Văn Phòng"
-              control={<Radio />}
-              label="Nhân Viên Văn Phòng"
-            />
-            <FormControlLabel value="khác" control={<Radio />} label="Khác" />
-          </RadioGroup>
-          <FormHelperText></FormHelperText>
-        </FormControl>
-      </>
-    );
-  };
+
 
   let createWith = "";
   data.map((item) => {
@@ -319,61 +139,7 @@ function MatchModal(props) {
     return createWith;
   });
 
-  const LoadName = () => {
-    return (
-      <>
-        <div>
-          <Typography variant="subtitle1" component="div">
-            Selected: {selectedValue}
-          </Typography>
-          <br />
-          <Button variant="outlined" onClick={handleClickOpen}>
-            Open simple dialog
-          </Button>
-          <SimpleDialog
-            selectedValue={selectedValue}
-            open={open1}
-            onClose={handleClose1}
-          />
-        </div>
-      </>
-    );
-  };
 
-  const LoadGioDatSan = () => {
-    return (
-      <>
-        <FormControl className="bases__margin--top10 w-100">
-          <InputLabel
-            id="filled-select-currency"
-            select
-            label="Select"
-            helperText="Please select your currency"
-            variant="filled"
-          >
-            Chọn Ngày Đặt
-          </InputLabel>
-          <Select
-            defaultValue=""
-            onChange={(e) => setPresetDate1({ presetDate: e.target.value })}
-          >
-            {data.map((item) => {
-              if (name1.name === item.data.name) {
-                return (
-                  <MenuItem value={item.data.presetDate}>
-                    {" "}
-                    {item.data.presetDate}
-                  </MenuItem>
-                );
-              } else {
-                return "";
-              }
-            })}
-          </Select>
-        </FormControl>
-      </>
-    );
-  };
 
   const openForm = () => {
     return (
@@ -434,11 +200,19 @@ function MatchModal(props) {
               className="bases__margin--bottom15 w-100"
               value={dataSan.address}
             />
+            <TextField
+              placeholder="Tên đội"
+              className="bases__margin--bottom10 w-100"
+              value={deepCopy.name}
+            />
+            <TextField
+              placeholder="Ngày Đặt"
+              className="bases__margin--bottom10 w-100"
+              value={deepCopy.presetDate}
+            />
             {/* Radio Buttons */}
-            {CheckBox()}
             {/* Select */}
-            {LoadName()}
-            {LoadGioDatSan()}
+            {LoadDialog()}
             <Button
               variant="contained"
               color="primary"
@@ -452,7 +226,128 @@ function MatchModal(props) {
       </div>
     );
   };
+  const getData = () => {
+    const getdataDatSan = collection(db, "datsan");
+    getDocs(getdataDatSan)
+      .then((response) => {
+        const datsans = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        setData(datsans);
+      })
+      .catch((error) => console.log(error.message));
+  };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const columns = [
+    {
+      field: "nameField", //access nested data with dot notation
+      headerName: "Tên Sân",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "address",
+      headerName: "Địa Chỉ",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "email", //normal field
+      headerName: "Địa chỉ Email",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "name",
+      headerName: "Tên Đội Bóng",
+      width: 150,
+    },
+    {
+      field: "age",
+      headerName: "Tuổi",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "job", //normal field
+      headerName: "Ngành Nghề",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "san",
+      headerName: "Số Sân",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "presetDate",
+      headerName: "Ngày Đặt",
+      width: 150,
+    },
+  ];
+  const data123 = data.map((item) => ({
+    id: item.id,
+    nameField: item.data.nameField,
+    address: item.data.address,
+    name: item.data.name,
+    phone: item.data.phone,
+    email: item.data.email,
+    job: item.data.job.job,
+    age: item.data.age.age,
+    san: item.data.san,
+    presetDate: item.data.presetDate,
+    type: item.data.type.type,
+  }));
+  const abc = data123.filter((item) => {
+    if (
+      ("item.data", item.type === 20 && dataSan.nameField === item.nameField)
+    ) {
+      return item;
+    }
+    return "";
+  });
+  
+
+
+  const LoadDialog = () => {
+    return (
+      <Dialog onclose={handleClose1} open={open1}>
+        <DialogTitle>Danh Sách Đăng kí ghép Đội</DialogTitle>
+        <List sx={{ pt: 0 }}>
+          <div style={{height:500, width : 900}}>
+          <DataGrid
+            columns={columns}
+            rows={abc}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            onSelectionModelChange={(ids) => {
+              const selectedIDs = new Set(ids);
+              const selectedRowss = abc.filter((row) =>
+                selectedIDs.has(row.id),
+              );
+              setSelectedRows(...[...selectedRowss]);
+            }}
+            />
+          </div>
+          <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              className="bases__margin--bottom20 w-50 bases__margin--top30 bases__margin--left150"
+              onClick={handleClose1}
+            >
+              Xác Nhận
+            </Button>
+        </List>
+      </Dialog>
+    );
+  };
   return (
     <div>
       <button
@@ -461,6 +356,7 @@ function MatchModal(props) {
       >
         Ghép Đội
       </button>
+
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"

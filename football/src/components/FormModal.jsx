@@ -82,6 +82,7 @@ function FormModal(props) {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [hoanthanh, setHoanThanh] = useState(false);
+  const [xacnhan, setXacnhan] = useState("");
 
   const NgayGio = moment(presetDate).format("YYYY/MM/DD HH:mm")
   const time = moment(presetDate).format("HH:mm")
@@ -201,6 +202,7 @@ function FormModal(props) {
       type: type,
       createBy: currentUser.uid,
       san: san,
+      xacnhan: "",
     });
     setSubmit(true);
   };

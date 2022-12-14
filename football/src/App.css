@@ -39,3 +39,14 @@
   .width-table{
     width: 1000px;
   }
+  .tendoi {
+    width: 480px;
+  }
+  .iconOpen {
+    margin-left: 20px;
+    height: 60px !important;
+    width: 40px !important;
+  }
+  .colorIconDong {
+    background-color: red !important;
+  }

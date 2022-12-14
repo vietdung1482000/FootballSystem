@@ -104,10 +104,6 @@ export default function CustomizedDialogs() {
     return (
       <>
         {data.map((item) => {
-          console.log(
-            "currentUser.uid",
-            item.data.confirm !== "" && currentUser.uid === item.data.createWith
-          );
           if (
             currentUser.uid === item.data.createWith &&
             item.data.confirm === ""
@@ -116,8 +112,7 @@ export default function CustomizedDialogs() {
               <>
                 <Typography gutterBottom>
                   {item.data.name} muốn ghép đội với bạn vào ngày{" "}
-                  {item.data.presetDate1?.presetDate} vào lúc{" "}
-                  {item.data.presetTime1?.presetTime} tại sân{" "}
+                  {item.data.presetDate1?.presetDate} tại sân{" "}
                   {item.data.nameField}
                   <DialogActions>
                     <Button
@@ -147,8 +142,7 @@ export default function CustomizedDialogs() {
             return (
               <Typography gutterBottom>
                 {item.data.name} đã ghép đội thành công với bạn vào ngày{" "}
-                {item.data.presetDate1?.presetDate} vào lúc{" "}
-                {item.data.presetTime1?.presetTime} tại sân{" "}
+                {item.data.presetDate1?.presetDate} tại sân{" "}
                 {item.data.nameField}
               </Typography>
             );
@@ -159,8 +153,7 @@ export default function CustomizedDialogs() {
             return (
               <Typography gutterBottom>
                 {item.data.name} đã từ chối ghép đội với bạn vào ngày{" "}
-                {item.data.presetDate1?.presetDate} vào lúc{" "}
-                {item.data.presetTime1?.presetTime} tại sân{" "}
+                {item.data.presetDate1?.presetDate} tại sân{" "}
                 {item.data.nameField}
               </Typography>
             );

@@ -107,11 +107,12 @@ export default function Register() {
         const displayName = e.target[0].value;
         const email = e.target[1].value;
         const password = e.target[2].value;
-        const file = e.target[3].files[0];
+        const phoneNumber = e.target[3].value;
+        const file = e.target[4].files[0];
         const rule = "user";
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
-            const storageRef = ref(storage, displayName, rule);
+            const storageRef = ref(storage, displayName, rule, phoneNumber);
             const uploadTask = uploadBytesResumable(storageRef, file);
 
             uploadTask.on(
@@ -123,6 +124,7 @@ export default function Register() {
                         await updateProfile(res.user, {
                             rule,
                             displayName,
+                            phoneNumber,
                             photoURL: downloadURL,
                         });
 
@@ -132,6 +134,7 @@ export default function Register() {
                             email,
                             photoURL: downloadURL,
                             rule,
+                            phoneNumber,
                         });
 
                         await setDoc(doc(db, "userChats", res.user.uid), {});
@@ -154,6 +157,7 @@ export default function Register() {
                     <input type="text" placeholder="Tên của bạn" />
                     <input type="email" placeholder="Nhập địa chỉ email" />
                     <input type="password" placeholder="Nhập mật khẩu" />
+                    <input type="number" placeholder="Nhập số điện thoại" />
                     <input type="file" id="file" />
                     {/* <label htmlFor="file">
                         <img src={addAvatar} alt="" />

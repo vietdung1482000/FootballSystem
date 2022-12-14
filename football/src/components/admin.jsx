@@ -105,7 +105,7 @@ export default function CustomizedTables() {
                     {row.data.displayName}
                   </StyledTableCell>
                   <StyledTableCell>{row.data.email}</StyledTableCell>
-                  <StyledTableCell>{row.data.Sdt}</StyledTableCell>
+                  <StyledTableCell>{row.data.phone}</StyledTableCell>
                   <StyledTableCell>
                     <Typography>
                       {" "}

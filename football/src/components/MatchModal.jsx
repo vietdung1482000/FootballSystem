@@ -9,6 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import InputLabel from "@mui/material/InputLabel";
 import { addDoc, collection, getDocs } from "firebase/firestore";
+import SearchIcon from '@mui/icons-material/Search';
 import {
   DialogTitle,
   FormHelperText,
@@ -25,7 +26,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
 import { DataGrid } from "@mui/x-data-grid";
-const _ = require('lodash');
+const _ = require("lodash");
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -82,7 +83,7 @@ function MatchModal(props) {
   const [selectedRows, setSelectedRows] = React.useState("");
 
   var deepCopy = _.cloneDeep(selectedRows);
-  console.log('deepCopy', deepCopy);
+  console.log("deepCopy", deepCopy);
   const handleClickOpen = () => {
     setOpen(true);
     setOpen1(true);
@@ -129,18 +130,13 @@ function MatchModal(props) {
     setName1("");
   };
 
-
-
   let createWith = "";
   data.map((item) => {
-    if (name1.name === item.data.name) {
+    if (item.data.name) {
       createWith = item.data.createBy;
     }
     return createWith;
   });
-
-
-
   const openForm = () => {
     return (
       <div className="box" onSubmit={handleSubmit(onSubmit)}>
@@ -160,7 +156,7 @@ function MatchModal(props) {
               placeholder="Nhập Số Điện Thoại"
               label="Số Điện Thoại"
               variant="outlined"
-              className="bases__margin--bottom10 w-100"
+              className="bases__margin--bottom10 w-100 "
               value={currentUser.phoneNumber}
             />
 
@@ -200,16 +196,23 @@ function MatchModal(props) {
               className="bases__margin--bottom15 w-100"
               value={dataSan.address}
             />
+            <div >
             <TextField
               placeholder="Tên đội"
-              className="bases__margin--bottom10 w-100"
+              className="bases__margin--bottom10 tendoi"
               value={deepCopy.name}
             />
+            <SearchIcon onClick = {handleClickOpen} className="iconOpen"/>
+            </div>
+            <div>
             <TextField
               placeholder="Ngày Đặt"
-              className="bases__margin--bottom10 w-100"
+              className="bases__margin--bottom10 tendoi"
               value={deepCopy.presetDate}
             />
+             <SearchIcon onClick = {handleClickOpen} className="iconOpen"/>
+            </div>
+           
             {/* Radio Buttons */}
             {/* Select */}
             {LoadDialog()}
@@ -245,24 +248,6 @@ function MatchModal(props) {
 
   const columns = [
     {
-      field: "nameField", //access nested data with dot notation
-      headerName: "Tên Sân",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "address",
-      headerName: "Địa Chỉ",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "email", //normal field
-      headerName: "Địa chỉ Email",
-      width: 150,
-      editable: true,
-    },
-    {
       field: "name",
       headerName: "Tên Đội Bóng",
       width: 150,
@@ -280,15 +265,16 @@ function MatchModal(props) {
       editable: true,
     },
     {
-      field: "san",
+      field: "san", //normal field
       headerName: "Số Sân",
       width: 150,
       editable: true,
     },
     {
-      field: "presetDate",
+      field: "presetDate", //normal field
       headerName: "Ngày Đặt",
       width: 150,
+      editable: true,
     },
   ];
   const data123 = data.map((item) => ({
@@ -303,47 +289,57 @@ function MatchModal(props) {
     san: item.data.san,
     presetDate: item.data.presetDate,
     type: item.data.type.type,
+    xacnhan: item.xacnhan,
   }));
   const abc = data123.filter((item) => {
+    console.log("item", item);
     if (
-      ("item.data", item.type === 20 && dataSan.nameField === item.nameField)
+      item.type === 20 &&
+      dataSan.nameField === item.nameField &&
+      item.xacnhan === undefined
     ) {
       return item;
     }
     return "";
   });
-  
-
 
   const LoadDialog = () => {
     return (
       <Dialog onclose={handleClose1} open={open1}>
         <DialogTitle>Danh Sách Đăng kí ghép Đội</DialogTitle>
         <List sx={{ pt: 0 }}>
-          <div style={{height:500, width : 900}}>
-          <DataGrid
-            columns={columns}
-            rows={abc}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
-            onSelectionModelChange={(ids) => {
-              const selectedIDs = new Set(ids);
-              const selectedRowss = abc.filter((row) =>
-                selectedIDs.has(row.id),
-              );
-              setSelectedRows(...[...selectedRowss]);
-            }}
+          <div style={{ height: 500, width: 900 }}>
+            <DataGrid
+              columns={columns}
+              rows={abc}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
+              onSelectionModelChange={(ids) => {
+                const selectedIDs = new Set(ids);
+                const selectedRowss = abc.filter((row) =>
+                  selectedIDs.has(row.id)
+                );
+                setSelectedRows(...[...selectedRowss]);
+              }}
             />
           </div>
           <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="bases__margin--bottom20 w-50 bases__margin--top30 bases__margin--left150"
-              onClick={handleClose1}
-            >
-              Xác Nhận
-            </Button>
+            variant="contained"
+            color="primary"
+            type="submit"
+            className="bases__margin--bottom20 w-30 bases__margin--top30 bases__margin--left170"
+            onClick={handleClose1}
+          >
+            Xác Nhận
+          </Button>
+          <Button
+            variant="contained"
+            type="submit"
+            className="bases__margin--bottom20 w-30 bases__margin--top30 bases__margin--left50 colorIconDong"
+            onClick={handleClose1}
+          >
+            Đóng
+          </Button>
         </List>
       </Dialog>
     );

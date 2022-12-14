@@ -116,6 +116,7 @@ function MatchModal(props) {
     })
       .then(() => {
         alert("Register success <3");
+        handleClose()
       })
       .catch((err) => {
         alert(err.message);
@@ -308,7 +309,7 @@ function MatchModal(props) {
       <Dialog onclose={handleClose1} open={open1}>
         <DialogTitle>Danh Sách Đăng kí ghép Đội</DialogTitle>
         <List sx={{ pt: 0 }}>
-          <div style={{ height: 500, width: 900 }}>
+          <div style={{ height: 500, width: 600 }}>
             <DataGrid
               columns={columns}
               rows={abc}

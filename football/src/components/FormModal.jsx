@@ -7,7 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import InputLabel from "@mui/material/InputLabel";
 import { AuthContext } from "../context/AuthContext";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import PaypalCheckoutButton from "./PaypalButton";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -83,12 +83,30 @@ function FormModal(props) {
   const [loading, setLoading] = useState(false);
   const [hoanthanh, setHoanThanh] = useState(false);
   const [xacnhan, setXacnhan] = useState("");
-
+  const [getData, setGetData] =  useState([]);
   const NgayGio = moment(presetDate).format("YYYY/MM/DD HH:mm")
   const time = moment(presetDate).format("HH:mm")
   const timeArray = time.split(':');
   const timeCheck = parseInt(timeArray[0])
+  const { currentUser } = useContext(AuthContext);
 
+  const getData12 = () => {
+    const getdataDatSan = collection(db, "users");
+    getDocs(getdataDatSan)
+      .then((response) => {
+        const datsans = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        setGetData(datsans);
+      })
+      .catch((error) => console.log(error.message));
+  };
+  useEffect(() => {
+    getData12();
+  }, []);
+  const dataClone =  getData.find((item) => item.id === currentUser.uid)
+  const phoneUser = dataClone?.data.phone 
   useEffect(() => {
     if (open) {
       setSubmit(false);
@@ -192,7 +210,7 @@ function FormModal(props) {
     setData({
       name: currentUser.displayName,
       email: currentUser.email,
-      phone: currentUser.phoneNumber,
+      phone: phoneUser,
       nameField: dataSan.nameField,
       phoneBusiness: dataSan.phone,
       address: dataSan.address,
@@ -259,10 +277,7 @@ function FormModal(props) {
                   label="Số Điện Thoại"
                   variant="outlined"
                   className="bases__margin--bottom10 w-100"
-                  value={phone}
-                  onChange={(e) => {
-                    setPhone(e.target.value);
-                  }}
+                  value={phoneUser}
                 />
 
                 {/* 3) TextField */}
@@ -490,7 +505,6 @@ function FormModal(props) {
     }
   };
 
-  const { currentUser } = useContext(AuthContext);
   return (
     <div>
       <Loading loader={loading} />

@@ -82,8 +82,25 @@ function MatchModal(props) {
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [selectedRows, setSelectedRows] = React.useState("");
+  const [getData22, setGetData] =  useState([]);
+  const getData12 = () => {
+    const getdataDatSan = collection(db, "users");
+    getDocs(getdataDatSan)
+      .then((response) => {
+        const datsans = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        setGetData(datsans);
+      })
+      .catch((error) => console.log(error.message));
+  };
+  useEffect(() => {
+    getData12();
+  }, []);
+  const dataClone =  getData22.find((item) => item.id === currentUser.uid)
+  const phoneUser = dataClone?.data.phone 
   var deepCopy = _.cloneDeep(selectedRows);
-  console.log("deepCopy", deepCopy);
   const handleClickOpen = () => {
     setOpen(true);
     setOpen1(true);
@@ -102,7 +119,7 @@ function MatchModal(props) {
     await addDoc(colRef, {
       name: currentUser.displayName,
       email: currentUser.email,
-      phone: currentUser.phoneNumber,
+      phone: phoneUser,
       nameField: dataSan.nameField,
       phoneBusiness: dataSan.phone,
       address: dataSan.address,
@@ -161,7 +178,7 @@ function MatchModal(props) {
               label="Số Điện Thoại"
               variant="outlined"
               className="bases__margin--bottom10 w-100 "
-              value={currentUser.phoneNumber}
+              value={phoneUser}
             />
 
             {/* 3) TextField */}
@@ -250,7 +267,7 @@ function MatchModal(props) {
     getDocs(getdataDatSan)
       .then((response) => {
         const datsans = response.docs.map((doc) => ({
-          data1: doc.data(),
+          data: doc.data(),
           id: doc.id,
         }));
         setData1(datsans);
@@ -263,7 +280,7 @@ function MatchModal(props) {
   useEffect(() => {
     getData2();
   }, []);
-
+  
  const columns = [
     {
       field: "name",

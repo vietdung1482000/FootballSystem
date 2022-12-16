@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import _ from 'lodash';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
+import CustomizedTables from '../../components/admin';
+import CustomizedDialogs from '../../components/CustomizedDialogs';
+import { AuthContext } from '../../context/AuthContext';
+import { db } from '../../firebase';
 import BG from '../../img/bg.png';
 
 const HomeStyle = styled.div`
@@ -68,21 +74,83 @@ const Button = styled.button`
 `
 
 export default function HomePage() {
+  const [data, setData] = React.useState([]);
+
+  const getData = () => {
+    const getdataDatSan = collection(db, "users");
+    getDocs(getdataDatSan)
+      .then((response) => {
+        const datsans = response.docs.map((doc) => ({
+          data: doc.data(),
+          id: doc.id,
+        }));
+        setData(datsans);
+      })
+      .catch((error) => console.log(error.message));
+  };
+  React.useEffect(() => {
+    getData();
+  }, []);
+  const { currentUser } = useContext(AuthContext)
+  const loadData = () => {
+  var dataclone = _.cloneDeep(data);
+    if(currentUser) {
+      const data123 = dataclone.find((item) => item.data.uid === currentUser.uid)
+      if(data123?.data.rule === "business" && data123?.data.status === false) {
+        return (
+          
+          <div>
+            <img src="https://giaidieu.com/sites/default/files/ckeditor-images/cach-tang-toc-do-tai-trang-web.jpg" alt="" className='imgeerror'/>
+          </div>
+        )
+      } else if(data123?.data.rule === "admin") {
+        return (
+          <CustomizedTables/>
+        )
+      }
+      else return (
+        <HomeStyle>
+        <div className="_home">
+          <div className="_title">
+            <h2 className="football">FOOTBALL</h2>
+            <h2>NỀN TẢNG ĐẶT SÂN - TÌM ĐỐI</h2>
+            <p>Ở đây là phần thông tin thêm</p>
+            <Link  to={`/match`} underline="none" >
+              <Button>Tìm hiểu thêm</Button>
+            </Link>
+          </div>
+          <div className="bg">
+            <img src={BG} alt="" />
+          </div>
+        </div>
+      </HomeStyle>
+      )
+    }
+    else {
+      return (
+        <HomeStyle>
+        <div className="_home">
+          <div className="_title">
+            <h2 className="football">FOOTBALL</h2>
+            <h2>NỀN TẢNG ĐẶT SÂN - TÌM ĐỐI</h2>
+            <p>Ở đây là phần thông tin thêm</p>
+            <Link  to={`/match`} underline="none" >
+              <Button>Tìm hiểu thêm</Button>
+            </Link>
+          </div>
+          <div className="bg">
+            <img src={BG} alt="" />
+          </div>
+        </div>
+      </HomeStyle>
+      )
+    }
+  
+  }
+
   return (
-    <HomeStyle>
-      <div className="_home">
-        <div className="_title">
-          <h2 className="football">FOOTBALL</h2>
-          <h2>NỀN TẢNG ĐẶT SÂN - TÌM ĐỐI</h2>
-          <p>Ở đây là phần thông tin thêm</p>
-          <Link  to={`/match`} underline="none" >
-            <Button>Tìm hiểu thêm</Button>
-          </Link>
-        </div>
-        <div className="bg">
-          <img src={BG} alt="" />
-        </div>
-      </div>
-    </HomeStyle>
+    <div>
+    {loadData()}
+    </div>
   )
 }

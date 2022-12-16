@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import { AuthContext } from '../context/AuthContext';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+import _ from 'lodash';
 
 const FootballFooter = styled.div`
     background: #184F3C;
@@ -83,31 +87,96 @@ const FootballFooter = styled.div`
 `
 
 export default function Footer() {
-  return (
-    <FootballFooter>
-        <div className="_logo">
-            <p className='symbol'>F</p>
-            <span className='logo'>Football</span>
-        </div>
-        <div className="_content">
-            <ul>
-                <li>Chúng tôi</li>
-                <li>Tài nguyên</li>
-                <li>Thanh toán</li>
-                <li>Cộng đồng</li>
-            </ul>
-            <div className="_icon">
-                <div className="icon">
-                    <FacebookIcon />
-                </div>
-                <div className="icon">
-                    <YouTubeIcon />
-                </div>
-                <div className="icon">
-                    <InstagramIcon />
+    const [data, setData] = React.useState([]);
+
+    const getData = () => {
+      const getdataDatSan = collection(db, "users");
+      getDocs(getdataDatSan)
+        .then((response) => {
+          const datsans = response.docs.map((doc) => ({
+            data: doc.data(),
+            id: doc.id,
+          }));
+          setData(datsans);
+        })
+        .catch((error) => console.log(error.message));
+    };
+    React.useEffect(() => {
+      getData();
+    }, []);
+    const { currentUser } = useContext(AuthContext)
+    const loadData = () => {
+    var dataclone = _.cloneDeep(data);
+      if(currentUser) {
+        const data123 = dataclone.find((item) => item.data.uid === currentUser.uid)
+        if(data123?.data.rule === "business" && data123?.data.status === false) {
+          return (
+            
+      <div></div>
+          )
+        } 
+        else return (
+            <FootballFooter>
+            <div className="_logo">
+                <p className='symbol'>F</p>
+                <span className='logo'>Football</span>
+            </div>
+            <div className="_content">
+                <ul>
+                    <li>Chúng tôi</li>
+                    <li>Tài nguyên</li>
+                    <li>Thanh toán</li>
+                    <li>Cộng đồng</li>
+                </ul>
+                <div className="_icon">
+                    <div className="icon">
+                        <FacebookIcon />
+                    </div>
+                    <div className="icon">
+                        <YouTubeIcon />
+                    </div>
+                    <div className="icon">
+                        <InstagramIcon />
+                    </div>
                 </div>
             </div>
-        </div>
-    </FootballFooter>
+        </FootballFooter>
+        )
+      }
+      else {
+        return (
+            <FootballFooter>
+            <div className="_logo">
+                <p className='symbol'>F</p>
+                <span className='logo'>Football</span>
+            </div>
+            <div className="_content">
+                <ul>
+                    <li>Chúng tôi</li>
+                    <li>Tài nguyên</li>
+                    <li>Thanh toán</li>
+                    <li>Cộng đồng</li>
+                </ul>
+                <div className="_icon">
+                    <div className="icon">
+                        <FacebookIcon />
+                    </div>
+                    <div className="icon">
+                        <YouTubeIcon />
+                    </div>
+                    <div className="icon">
+                        <InstagramIcon />
+                    </div>
+                </div>
+            </div>
+        </FootballFooter>
+        )
+      }
+    
+    }
+  return (
+    <div>
+        {loadData()}
+    </div>
   )
 }

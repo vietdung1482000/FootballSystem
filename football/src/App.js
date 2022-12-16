@@ -47,7 +47,7 @@ function App() {
           <Routes>
             <Route path="" element={<HomePage />} />
             <Route path="admin" element={<CustomizedTables/>} />
-            <Route path="errorPage" element={<RowContextMenu/>} />
+            <Route path="errorPage" element={<ErrorPage/>} />
             <Route path="login" element={<Login/>} />
             <Route path="register" element={<Register />} />
             <Route path="selectModule" element={<SelectModule />} />
@@ -55,13 +55,6 @@ function App() {
             <Route path="match" element={<LandingPage />} />
             <Route path="detail/:business_id" element={<DetailPage />} />
             <Route path="manager/:business_id" element={<Manager/>} />
-            <Route path="chat">
-              <Route index element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              } />
-            </Route>
             <Route path="calender/:business_id" element={<Calender />} />
             <Route path="calender" element={<Calender />} />
           </Routes>

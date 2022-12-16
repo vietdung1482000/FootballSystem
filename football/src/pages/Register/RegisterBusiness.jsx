@@ -212,9 +212,13 @@ export default function RegisterBusiness() {
     const password = e.target[2].value;
     const file = e.target[3].files[0];
     const rule = "business";
+    const phone = e.target[4].value
+    const nameField = e.target[5].value
+    const status = false;
+
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      const storageRef = ref(storage, displayName, rule);
+      const storageRef = ref(storage, displayName, rule, status, phone, nameField);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
@@ -227,6 +231,9 @@ export default function RegisterBusiness() {
               rule,
               displayName,
               photoURL: downloadURL,
+              status,
+              phone,
+              nameField
             });
 
             await setDoc(doc(db, "users", res.user.uid), {
@@ -235,6 +242,9 @@ export default function RegisterBusiness() {
               email,
               photoURL: downloadURL,
               rule,
+              status,
+              phone,
+              nameField
             });
             navigate("/login");
           });
@@ -256,20 +266,20 @@ export default function RegisterBusiness() {
             (snapShot.bytesTransferred / snapShot.totalBytes) * 100;
           setProgress(progress);
         },
-      (error) => {
-        reject(error);
-      },
-      async () => {
-        try {
-          const url = await getDownloadURL(storageRef);
-          resolve(url);
-        } catch (error) {
+        (error) => {
           reject(error);
+        },
+        async () => {
+          try {
+            const url = await getDownloadURL(storageRef);
+            resolve(url);
+          } catch (error) {
+            reject(error);
+          }
         }
-      }
-    );
-  });
-}
+      );
+    });
+  }
 
   const submitData = async () => {
     try {
@@ -287,17 +297,17 @@ export default function RegisterBusiness() {
         timeClose: ngaydong,
         address: address,
         detail: detail,
-        raing: [],
+        rating: [],
         rate: 5,
         SoLuongSan: inputList,
-        imageURL:url,
-        extra_price:giaphuthu,
+        imageURL: url,
+        extra_price: giaphuthu,
       })
-      .then(() => {
-        alert("Register success <3");
-        navigate("/login");
-      })
-    }catch (error) {
+        .then(() => {
+          alert("Register success <3");
+          navigate("/login");
+        })
+    } catch (error) {
       alert(error.message);
       console.log(error);
     }
@@ -396,11 +406,11 @@ export default function RegisterBusiness() {
                 ></textarea>{" "}
               </div>
               <input
-                  type="number"
-                  placeholder="Nhập Giá Phụ Thu"
-                  onChange={(e) => setgiaphuthu(e.target.value)}
-                  value={giaphuthu}
-                />
+                type="number"
+                placeholder="Nhập Giá Phụ Thu"
+                onChange={(e) => setgiaphuthu(e.target.value)}
+                value={giaphuthu}
+              />
               {inputList.map((x, i) => {
                 return (
                   <div className="SLS">
@@ -422,7 +432,7 @@ export default function RegisterBusiness() {
                         className="input_right"
                         type="number"
                         min="1"
-                                    />
+                      />
                       <RemoveIcon
                         onClick={() => handleRemoveClick(i)}
                       ></RemoveIcon>

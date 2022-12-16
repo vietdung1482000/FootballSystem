@@ -356,6 +356,7 @@ function FormModal(props) {
                   <Stack spacing={3}>
                     <DateTimePicker
                       className="bases__margin--bottom10"
+                      minDate={new Date()}
                       renderInput={(props) => <TextField {...props} />}
                       label="Ngày Đặt"
                       value={presetDate}

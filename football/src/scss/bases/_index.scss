@@ -128,6 +128,17 @@
             height: 50px !important;
             padding: 12px !important;
         }
+
+        &--textarea {
+            margin: 5px !important;
+            font-family: inherit !important;
+            font-size: inherit !important;
+            line-height: inherit !important;
+            border: 1px solid !important;
+            border-radius: 7px !important;
+            padding: 12px !important;
+        }
+        
     }
 
     &__margin {

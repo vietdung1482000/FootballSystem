@@ -190,64 +190,67 @@ export default function Manager() {
                 >
                     <Box sx={styleModal}>
                         {alert === false ? <>
-                            <div> Tên Sân</div>
-                            <input
-                                value={dataEdit.nameField}
-                                onChange={(e) => handleChangeDataEdit('nameField', e.target.value)}
-                                className="bases__inputList--item w-100"
-                            />
-                            <div> Địa chỉ</div>
-                            <input
-                                value={dataEdit.address}
-                                onChange={(e) => handleChangeDataEdit('address', e.target.value)}
-                                className="bases__inputList--item w-100"
-                            />
-                            <div> Điện thoại</div>
-                            <input
-                                value={dataEdit.phone}
-                                onChange={(e) => handleChangeDataEdit('phone', e.target.value)}
-                                className="bases__inputList--item w-100"
-                            />
-                            <div> Mô tả</div>
-                            <input
-                                value={dataEdit.detail}
-                                onChange={(e) => handleChangeDataEdit('detail', e.target.value)}
-                                className="bases__inputList--item w-100 bases__margin--bottom20"
-                            />
-                            <div className="bases__text--bold bases__margin--bottom10">Danh sách sân</div>
-                            {inputList.map((x, i) => {
-                                return (
-                                    <div className="bases__inputList--form">
-                                        <div className="">
-                                            <div>Sân</div>
-                                            <input
-                                                name="SoLuongSan"
-                                                placeholder="Nhập Số Sân"
-                                                value={x.SoLuongSan}
-                                                onChange={(e) => handleInputChange(e, i)}
-                                                className="bases__inputList--item"
-                                            />
-                                        </div>
+                            <div className="overflow-auto bases__height--600">
+                                <div> Tên Sân</div>
+                                <input
+                                    value={dataEdit.nameField}
+                                    onChange={(e) => handleChangeDataEdit('nameField', e.target.value)}
+                                    className="bases__inputList--item bases__width--600"
+                                />
+                                <div> Địa chỉ</div>
+                                <input
+                                    value={dataEdit.address}
+                                    onChange={(e) => handleChangeDataEdit('address', e.target.value)}
+                                    className="bases__inputList--item bases__width--600"
+                                />
+                                <div> Điện thoại</div>
+                                <input
+                                    value={dataEdit.phone}
+                                    onChange={(e) => handleChangeDataEdit('phone', e.target.value)}
+                                    className="bases__inputList--item bases__width--600"
+                                />
+                                <div> Mô tả</div>
+                                <textarea
+                                    rows="4" cols="50"
+                                    value={dataEdit.detail}
+                                    onChange={(e) => handleChangeDataEdit('detail', e.target.value)}
+                                    className="bases__inputList--textarea bases__margin--bottom20 bases__width--600"
+                                />
+                                <div className="bases__text--bold bases__margin--bottom10">Danh sách sân</div>
+                                {inputList.map((x, i) => {
+                                    return (
+                                        <div className="bases__inputList--form">
+                                            <div className="">
+                                                <div>Sân</div>
+                                                <input
+                                                    name="SoLuongSan"
+                                                    placeholder="Nhập Số Sân"
+                                                    value={x.SoLuongSan}
+                                                    onChange={(e) => handleInputChange(e, i)}
+                                                    className="bases__inputList--item"
+                                                />
+                                            </div>
 
-                                        <div className="">
-                                            <div>giá</div>
-                                            <input
-                                                name="Gia"
-                                                placeholder="Nhập Giá"
-                                                value={x.Gia}
-                                                onChange={(e) => handleInputChange(e, i)}
-                                                className="bases__inputList--item"
-                                                type="number"
-                                                min="1"
-                                            />
-                                            <RemoveIcon
-                                                onClick={() => handleRemoveClick(i)}
-                                            ></RemoveIcon>
-                                            <AddIcon onClick={handleAddClick}></AddIcon>
+                                            <div className="">
+                                                <div>giá</div>
+                                                <input
+                                                    name="Gia"
+                                                    placeholder="Nhập Giá"
+                                                    value={x.Gia}
+                                                    onChange={(e) => handleInputChange(e, i)}
+                                                    className="bases__inputList--item"
+                                                    type="number"
+                                                    min="1"
+                                                />
+                                                <RemoveIcon
+                                                    onClick={() => handleRemoveClick(i)}
+                                                ></RemoveIcon>
+                                                <AddIcon onClick={handleAddClick}></AddIcon>
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
+                            </div>
                             <div className="d-flex justify-content-center">
                                 <button className="button-oke" onClick={editData}>Hoàn thành</button>
                                 <button className="button-cancle bases__margin--left50" onClick={handleClose}>Đóng</button>

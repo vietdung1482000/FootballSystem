@@ -13,7 +13,7 @@ export default function SuggestionFootball(props) {
                 <div className='title'>
                     <p className='bases__padding--top10'>{detail.data.nameField}</p>
                     <HoverRating value={parseInt(detail.data.rate)} />
-                    <div className='bases__font--14 bases__text--normal bases__padding--vertical10'> <img src={location} alt="" className='bases__filter--white' />&ensp;  {detail.data.address}</div>
+                    <div className='bases__font--14 bases__height--100 bases__text--normal bases__padding--vertical10'> <img src={location} alt="" className='bases__filter--white' />&ensp;  {detail.data.address}</div>
                 </div>
 
                 <Link to={`/detail/${detail.id}`}>

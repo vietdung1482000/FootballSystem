@@ -110,7 +110,7 @@ const Landing = styled.div`
   }
 
   ._suggest{
-    margin-left: 200px;
+    margin-left: 130px;
     h1{
       margin-left: 30px;
       margin-top: 50px;

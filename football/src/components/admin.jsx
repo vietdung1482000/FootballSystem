@@ -84,6 +84,7 @@ export default function CustomizedTables() {
   };
   return (
     <div>
+      <h1 className="header-admin"> Danh Sách Tài Khoản Đăng Kí Sân</h1>
     <TableContainer component={Paper} className="bases__margin--top100">
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
@@ -91,6 +92,7 @@ export default function CustomizedTables() {
             <StyledTableCell>Tên Tài Khoản</StyledTableCell>
             <StyledTableCell>Email</StyledTableCell>
             <StyledTableCell>Số Điện Thoại</StyledTableCell>
+            <StyledTableCell>Tên Sân</StyledTableCell>
             <StyledTableCell>Trạng Thái</StyledTableCell>
             <StyledTableCell>Xử Lý</StyledTableCell>
           </TableRow>
@@ -106,6 +108,7 @@ export default function CustomizedTables() {
                   </StyledTableCell>
                   <StyledTableCell>{row.data.email}</StyledTableCell>
                   <StyledTableCell>{row.data.phone}</StyledTableCell>
+                  <StyledTableCell>{row.data.nameField}</StyledTableCell>
                   <StyledTableCell>
                     <Typography>
                       {" "}
@@ -123,7 +126,7 @@ export default function CustomizedTables() {
                         Confirm(row.id);
                       }}
                     >
-                      Confirm
+                      Xác Nhận
                     </button>
                   </StyledTableCell>
                 </StyledTableRow>

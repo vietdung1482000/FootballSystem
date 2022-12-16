@@ -112,7 +112,7 @@ export default function Footer() {
         if(data123?.data.rule === "business" && data123?.data.status === false) {
           return (
             
-      <div></div>
+      <div>{getData()}</div>
           )
         } 
         else return (

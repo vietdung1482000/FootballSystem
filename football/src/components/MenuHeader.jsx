@@ -83,8 +83,9 @@ export default function MenuHeader() {
     var dataclone = _.cloneDeep(data);
     if(currentUser) {
       const data123 = dataclone.find((item) => item.data.uid === currentUser.uid)
+      console.log('data123?.data.rule === "business" && data123?.data.status === false', data123?.data.rule === "business" && data123?.data.status === false);
       if(data123?.data.rule === "business" && data123?.data.status === false){
-        return (<></>)
+        return (<>{getData()}</>)
       } else {
         return (
           <React.Fragment>

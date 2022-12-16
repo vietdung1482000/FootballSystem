@@ -66,6 +66,7 @@ function MatchModal(props) {
 
   const { register, handleSubmit } = useForm();
   const [data, setData] = useState([]);
+  const [data1, setData1] = useState([]);
 
   const [name, setName] = useState("");
   const [name1, setName1] = useState("");
@@ -81,7 +82,6 @@ function MatchModal(props) {
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [selectedRows, setSelectedRows] = React.useState("");
-
   var deepCopy = _.cloneDeep(selectedRows);
   console.log("deepCopy", deepCopy);
   const handleClickOpen = () => {
@@ -113,9 +113,12 @@ function MatchModal(props) {
       name1: deepCopy.name,
       confirm: "",
       createWith: createWith,
+      id: deepCopy.id
     })
       .then(() => {
         alert("Register success <3");
+        getData2()
+        getData()
         handleClose()
       })
       .catch((err) => {
@@ -242,12 +245,26 @@ function MatchModal(props) {
       })
       .catch((error) => console.log(error.message));
   };
-
+ const getData2 = () => {
+    const getdataDatSan = collection(db, "ghepdoi");
+    getDocs(getdataDatSan)
+      .then((response) => {
+        const datsans = response.docs.map((doc) => ({
+          data1: doc.data(),
+          id: doc.id,
+        }));
+        setData1(datsans);
+      })
+      .catch((error) => console.log(error.message));
+  };
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    getData2();
+  }, []);
 
-  const columns = [
+ const columns = [
     {
       field: "name",
       headerName: "Tên Đội Bóng",
@@ -293,7 +310,6 @@ function MatchModal(props) {
     xacnhan: item.xacnhan,
   }));
   const abc = data123.filter((item) => {
-    console.log("item", item);
     if (
       item.type === 20 &&
       dataSan.nameField === item.nameField &&
